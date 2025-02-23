@@ -1,64 +1,43 @@
 class UserController {
-    static startSession() {
-        const tableNumber = document.getElementById("table-number").value;
-        const userType = document.getElementById("user-type").value;
+    static validateLogin() {
+        const tableNumber = document.getElementById("table-number").value.trim();
+        const isVIP = document.getElementById("vip-toggle").checked;
+        const username = document.getElementById("vip-username").value.trim();
+        const password = document.getElementById("vip-password").value.trim();
+        const loginButton = document.getElementById("login-button");
 
-        if (!tableNumber.trim()) {
+        // Enable login button only when required fields are filled
+        if (tableNumber && (!isVIP || (username && password))) {
+            loginButton.disabled = false;
+        } else {
+            loginButton.disabled = true;
+        }
+    }
+
+    static startSession() {
+        const tableNumber = document.getElementById("table-number").value.trim();
+        const isVIP = document.getElementById("vip-toggle").checked;
+        let user = { table: tableNumber, role: "customer" };
+
+        if (!tableNumber) {
             alert("Please enter your table number.");
             return;
         }
 
-        let user = { table: tableNumber, role: "customer" };
+        if (isVIP) {
+            const username = document.getElementById("vip-username").value.trim();
+            const password = document.getElementById("vip-password").value.trim();
 
-        if (userType === "VIP") {
-            const vipUsername = document.getElementById("vip-username").value.trim();
-            if (!vipUsername) {
-                alert("Please enter your VIP username.");
+            if (!username || !password) {
+                alert("Please enter VIP username and password.");
                 return;
             }
-            user = { ...user, role: "VIP", name: vipUsername };
+
+            user = { ...user, role: "VIP", name: username };
         }
 
         sessionStorage.setItem("currentUser", JSON.stringify(user));
-        window.location.href = "index.html"; 
-    }
-
-    static loadUser() {
-        const user = JSON.parse(sessionStorage.getItem("currentUser"));
-        if (!user) {
-            window.location.href = "login.html";
-            return;
-        }
-
-        document.getElementById("user-info").innerText = user.role === "VIP" 
-            ? `VIP: ${user.name} (Table ${user.table})` 
-            : `Table ${user.table}`;
-
-        if (user.role === "VIP") {
-            document.getElementById("logout-btn").classList.remove("hidden");
-        }
-    }
-
-    static logout() {
-        sessionStorage.removeItem("currentUser");
-        window.location.href = "login.html";
-    }
-
-    static loadMenu() {
-        const menuItems = Menu.getMenu();
-        const menuContainer = document.getElementById("menu-items");
-        menuContainer.innerHTML = "";
-
-        menuItems.forEach(item => {
-            let itemElement = document.createElement("div");
-            itemElement.className = "menu-item";
-            itemElement.innerHTML = `
-                <h3>${item.name}</h3>
-                <p>${item.price} SEK</p>
-                <button onclick="UserController.addToOrder(${item.id})">Add to Order</button>
-            `;
-            menuContainer.appendChild(itemElement);
-        });
+        window.location.href = "index.html"; // Redirect to main page
     }
 
     static changeLanguage() {

@@ -3,35 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Table Login - Flying Dutchman</title>
-    <link rel="stylesheet" href="public/css/styles.css">
+    <title>Welcome - Flying Dutchman</title>
+    <link rel="stylesheet" href="../../public/css/login.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="public/js/userController.js" defer></script>
 </head>
 <body>
     <div class="login-container">
         <h2>Welcome to the Flying Dutchman</h2>
-        
-        <label for="table-number">Enter your Table Number:</label>
-        <input type="number" id="table-number" min="1" required>
-        
-        <label for="user-type">Are you a VIP customer?</label>
-        <select id="user-type">
-            <option value="customer">No</option>
-            <option value="VIP">Yes</option>
+
+        <!-- Language Selection -->
+        <label for="language-selector">Select Language:</label>
+        <select id="language-selector" onchange="UserController.changeLanguage()">
+            <option value="en">English</option>
+            <option value="sv">Svenska</option>
+            <option value="zh">中文</option>
         </select>
 
-        <div id="vip-login" class="hidden">
-            <label for="vip-username">VIP Username:</label>
-            <input type="text" id="vip-username">
+        <!-- Table Number Input -->
+        <label for="table-number">Enter your Table Number:</label>
+        <input type="number" id="table-number" min="1" required>
+
+        <!-- VIP Toggle Switch -->
+        <div class="vip-toggle-container">
+            <label for="vip-toggle">Are you a VIP customer?</label>
+            <label class="switch">
+                <input type="checkbox" id="vip-toggle">
+                <span class="slider"></span>
+            </label>
         </div>
 
-        <button onclick="UserController.startSession()">Enter</button>
+        <!-- VIP Login Fields (Hidden & Disabled by Default) -->
+        <div id="vip-login-fields" class="hidden">
+            <label for="vip-username">VIP Username:</label>
+            <input type="text" id="vip-username" disabled>
+
+            <label for="vip-password">Password:</label>
+            <input type="password" id="vip-password" disabled>
+        </div>
+
+        <!-- Login Button -->
+        <button id="login-button" onclick="UserController.startSession()">Login</button>
     </div>
 
     <script>
-        document.getElementById("user-type").addEventListener("change", function() {
-            document.getElementById("vip-login").classList.toggle("hidden", this.value !== "VIP");
+        document.getElementById("vip-toggle").addEventListener("change", function() {
+            const isChecked = this.checked;
+            document.getElementById("vip-login-fields").classList.toggle("hidden", !isChecked);
+            document.getElementById("vip-username").disabled = !isChecked;
+            document.getElementById("vip-password").disabled = !isChecked;
+            UserController.validateLogin();
+        });
+
+        document.querySelectorAll("input").forEach(input => {
+            input.addEventListener("input", UserController.validateLogin);
         });
     </script>
 </body>
