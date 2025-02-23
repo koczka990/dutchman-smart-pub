@@ -4,7 +4,23 @@ $(document).ready(function () {
   const menuItems = MenuModel.loadMenuItems();
   const menuItemsContainer = $("#menu-items");
   const basketItemsContainer = $("#basket-items");
+  const userInfoContainer = $("#user-info");
   let basket = [];
+
+  // Display user info
+  const tableNumber = localStorage.getItem("tableNumber");
+  const username = localStorage.getItem("username");
+  const balance = localStorage.getItem("balance");
+
+  if (tableNumber) {
+    userInfoContainer.append(`<p>Table Number: ${tableNumber}</p>`);
+  }
+  if (username) {
+    userInfoContainer.append(`<p>Username: ${username}</p>`);
+  }
+  if (balance) {
+    userInfoContainer.append(`<p>Balance: $${parseFloat(balance).toFixed(2)}</p>`);
+  }
 
   // Load and display menu items
   menuItems.forEach((item) => {
@@ -19,7 +35,7 @@ $(document).ready(function () {
           <span class="quantity">0</span>
           <button class="increase-btn">+</button>
         </div>
-      </div>
+      </div> 
     `;
     menuItemsContainer.append(menuItem);
   });
@@ -103,6 +119,7 @@ $(document).ready(function () {
 
   // Logout button
   $("#logout-btn").click(function () {
+    localStorage.clear(); // Clear all stored data
     window.location.href = "index.html";
   });
 });

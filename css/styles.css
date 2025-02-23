@@ -233,3 +233,16 @@ body {
 #basket-items {
   cursor: pointer;
 }
+
+/* User Info Styles */
+#user-info {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+#user-info p {
+  margin: 0.25rem 0;
+}
