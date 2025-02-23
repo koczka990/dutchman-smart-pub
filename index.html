@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flying Dutchman - Order System</title>
+    <link rel="stylesheet" href="public/css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="public/js/userController.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Flying Dutchman</h1>
+        <div id="user-info"></div>
+        <nav>
+            <select id="language-selector" onchange="UserController.changeLanguage()">
+                <option value="en">English</option>
+                <option value="sv">Svenska</option>
+                <option value="zh">中文</option>
+            </select>
+            <button id="logout-btn" class="hidden" onclick="UserController.logout()">Logout</button>
+        </nav>
+    </header>
+
+    <main>
+        <section id="menu">
+            <h2>Menu</h2>
+            <div id="menu-items"></div>
+        </section>
+
+        <section id="order">
+            <h2>Your Order</h2>
+            <ul id="order-list"></ul>
+            <button onclick="UserController.submitOrder()">Place Order</button>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            UserController.loadUser();
+            UserController.loadMenu();
+        });
+    </script>
+</body>
+</html>

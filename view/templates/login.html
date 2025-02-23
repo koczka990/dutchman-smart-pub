@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Login - Flying Dutchman</title>
+    <link rel="stylesheet" href="public/css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="public/js/userController.js" defer></script>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Welcome to the Flying Dutchman</h2>
+        
+        <label for="table-number">Enter your Table Number:</label>
+        <input type="number" id="table-number" min="1" required>
+        
+        <label for="user-type">Are you a VIP customer?</label>
+        <select id="user-type">
+            <option value="customer">No</option>
+            <option value="VIP">Yes</option>
+        </select>
+
+        <div id="vip-login" class="hidden">
+            <label for="vip-username">VIP Username:</label>
+            <input type="text" id="vip-username">
+        </div>
+
+        <button onclick="UserController.startSession()">Enter</button>
+    </div>
+
+    <script>
+        document.getElementById("user-type").addEventListener("change", function() {
+            document.getElementById("vip-login").classList.toggle("hidden", this.value !== "VIP");
+        });
+    </script>
+</body>
+</html>
