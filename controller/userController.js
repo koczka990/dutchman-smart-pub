@@ -37,7 +37,7 @@ class UserController {
         }
 
         sessionStorage.setItem("currentUser", JSON.stringify(user));
-        window.location.href = "index.html"; // Redirect to main page
+        window.location.href = "/index.html"; // Redirect to main page
     }
 
     static changeLanguage() {
