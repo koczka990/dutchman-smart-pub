@@ -1,45 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flying Dutchman - Menu</title>
-    <link rel="stylesheet" href="public/css/styles.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="public/js/userController.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Pub - Login</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
-    <header>
-        <h1>Flying Dutchman</h1>
-        <div id="user-info"></div>
-        <nav>
-            <select id="language-selector" onchange="UserController.changeLanguage()">
-                <option value="en">English</option>
-                <option value="sv">Svenska</option>
-                <option value="zh">中文</option>
-            </select>
-            <button id="logout-btn" class="hidden" onclick="UserController.logout()">Logout</button>
-        </nav>
-    </header>
+  <div class="login-container">
+    <h1>Welcome to Smart Pub</h1>
+    <div class="login-options">
+      <button id="customer-login-btn">Customer Login</button>
+      <button id="employee-login-btn">Employee Login</button>
+    </div>
 
-    <main>
-        <section id="menu">
-            <h2>Menu</h2>
-            <div id="menu-items"></div>
-        </section>
+    <!-- Customer Login Form -->
+    <form id="customer-login-form" class="hidden">
+      <div class="form-group">
+        <label for="table-number">Table Number</label>
+        <input type="number" id="table-number" placeholder="Enter table number" required>
+      </div>
 
-        <section id="order">
-            <h2>Your Order</h2>
-            <ul id="order-list"></ul>
-            <button onclick="UserController.submitOrder()">Place Order</button>
-        </section>
-    </main>
+      <div class="form-group">
+        <label for="vip-toggle">VIP User</label>
+        <label class="toggle-switch">
+          <input type="checkbox" id="vip-toggle">
+          <span class="slider"></span>
+        </label>
+      </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            UserController.loadUser();
-            UserController.loadMenu();
-        });
-    </script>
+      <div id="vip-fields" class="hidden">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" placeholder="Enter username">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter password">
+        </div>
+      </div>
+
+      <button type="submit" id="customer-login-submit" disabled>Login</button>
+    </form>
+
+    <!-- Employee Login Form -->
+    <form id="employee-login-form" class="hidden">
+      <div class="form-group">
+        <label for="employee-username">Username</label>
+        <input type="text" id="employee-username" placeholder="Enter username" required>
+      </div>
+      <div class="form-group">
+        <label for="employee-password">Password</label>
+        <input type="password" id="employee-password" placeholder="Enter password" required>
+      </div>
+
+      <button type="submit" id="employee-login-submit">Login</button>
+    </form>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script type="module" src="js/views/loginView.js"></script>
+  <script type="module" src="js/controllers/loginController.js"></script>
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>
