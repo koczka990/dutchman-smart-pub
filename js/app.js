@@ -43,6 +43,12 @@ if (!Database.load("users")) {
       password: "bar123",
       role: "Bartender",
     },
+    {
+      id: 3,
+      username: "waiter",
+      password: "bar123",
+      role: "Waiter",
+    },
   ];
   UserModel.saveUsers(sampleUsers);
 }
