@@ -1,0 +1,79 @@
+[
+    {
+        "nr": "20001",
+        "articleid": "35001",
+        "articletype": "200",
+        "name": "Pizza",
+        "priceinclvat": "120.00",
+        "category": "Main Course",
+        "packaging": "Box",
+        "producer": "Local Kitchen",
+        "countryoforiginlandname": "Sweden"
+    },
+    {
+        "nr": "20002",
+        "articleid": "35002",
+        "articletype": "200",
+        "name": "Burger",
+        "priceinclvat": "85.00",
+        "category": "Main Course",
+        "packaging": "Wrapper",
+        "producer": "Local Grill",
+        "countryoforiginlandname": "Sweden"
+    },
+    {
+        "nr": "20003",
+        "articleid": "35003",
+        "articletype": "200",
+        "name": "Caesar Salad",
+        "priceinclvat": "75.00",
+        "category": "Starter",
+        "packaging": "Bowl",
+        "producer": "Local Kitchen",
+        "countryoforiginlandname": "Sweden"
+    },
+    {
+        "nr": "20004",
+        "articleid": "35004",
+        "articletype": "200",
+        "name": "Pasta Carbonara",
+        "priceinclvat": "110.00",
+        "category": "Main Course",
+        "packaging": "Plate",
+        "producer": "Local Kitchen",
+        "countryoforiginlandname": "Italy"
+    },
+    {
+        "nr": "20005",
+        "articleid": "35005",
+        "articletype": "200",
+        "name": "Chocolate Mousse",
+        "priceinclvat": "55.00",
+        "category": "Dessert",
+        "packaging": "Cup",
+        "producer": "Local Bakery",
+        "countryoforiginlandname": "France"
+    },
+    {
+        "nr": "20006",
+        "articleid": "35006",
+        "articletype": "150",  
+        "name": "Coca-Cola",
+        "priceinclvat": "25.00",
+        "category": "Beverage",
+        "packaging": "Can",
+        "producer": "Coca-Cola Company",
+        "countryoforiginlandname": "USA"
+    },
+    {
+        "nr": "20007",
+        "articleid": "35007",
+        "articletype": "200",
+        "name": "Sushi Platter",
+        "priceinclvat": "180.00",
+        "category": "Main Course",
+        "packaging": "Tray",
+        "producer": "Sushi Restaurant",
+        "countryoforiginlandname": "Japan"
+    }
+]
