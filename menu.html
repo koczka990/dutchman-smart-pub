@@ -6,10 +6,23 @@
   <title>Smart Pub - Menu</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/menu.css">
 </head>
 <body>
   <div class="menu-container">
     <h1>Menu</h1>
+    <!-- todo: category items should be dynamically inserted here -->
+    <nav id="categoriesFilter">
+      <button onclick="filterMenu('all'); toggleSubcategory('none')">All</button>
+      <button onclick="filterMenu('drink'); toggleSubcategory('drink')">Drinks</button>
+      <button onclick="filterMenu('food'); toggleSubcategory('none')">Food</button>
+      <button onclick="filterMenu('VIP'); toggleSubcategory('none')">VIP</button>
+      <div class="sub-category" id="drink-sub">
+        <button onclick="filterMenu('beer')">Beers</button>
+        <button onclick="filterMenu('wine')">Wines</button>
+        <button onclick="filterMenu('cocktail')">Cocktails/Drinks</button>
+      </div>
+    </nav>
     <div id="user-info">
       <!-- Table number, username, and balance will be dynamically inserted here -->
     </div>
