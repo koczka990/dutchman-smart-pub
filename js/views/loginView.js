@@ -3,61 +3,22 @@ class LoginView {
     this.appContent = document.getElementById("app-content");
   }
 
-  render() {
-    this.appContent.innerHTML = `
-     <div class="login-container">
-       <h1 class="login-text">Welcome to the Dutchman</h1>
-       <div class="login-options">
-         <button id="customer-login-btn" class="login-btn">Customer Login</button>
-         <button id="employee-login-btn" class="login-btn">Employee Login</button>
-       </div>
+  async render(controller) {
+    try {
+      const response = await fetch("js/html/login.html");
+      const html = await response.text();
+      this.appContent.innerHTML = html;
 
-       <!-- Customer Login Form -->
-       <form id="customer-login-form" class="hidden">
-         <div class="form-group">
-           <label for="table-number">Table Number</label>
-           <input type="number" id="table-number" placeholder="Enter table number" required>
-         </div>
+      // Call function to enable tab switching
+      this.setupEventListeners();
 
-         <div class="form-group">
-           <label for="vip-toggle">VIP User</label>
-           <label class="toggle-switch">
-             <input type="checkbox" id="vip-toggle">
-             <span class="slider"></span>
-           </label>
-         </div>
-
-         <div id="vip-fields" class="hidden">
-           <div class="form-group">
-             <label for="username">Username</label>
-             <input type="text" id="username" placeholder="Enter username">
-           </div>
-           <div class="form-group">
-             <label for="password">Password</label>
-             <input type="password" id="password" placeholder="Enter password">
-           </div>
-         </div>
-
-         <button type="submit" id="customer-login-submit" class="login-btn" disabled>Login</button>
-       </form>
-
-       <!-- Employee Login Form -->
-       <form id="employee-login-form" class="hidden">
-         <div class="form-group">
-           <label for="employee-username">Username</label>
-           <input type="text" id="employee-username" placeholder="Enter username" required>
-         </div>
-         <div class="form-group">
-           <label for="employee-password">Password</label>
-           <input type="password" id="employee-password" placeholder="Enter password" required>
-         </div>
-
-         <button type="submit" id="employee-login-submit" class="login-btn">Login</button>
-       </form>
-     </div>
-   `;
-    this.setupEventListeners();
+      this.bindCustomerLogin(controller.handleCustomerLogin.bind(controller));
+      this.bindEmployeeLogin(controller.handleEmployeeLogin.bind(controller));
+    } catch (error) {
+      console.error("Error loading login.html:", error);
+    }
   }
+
   setupEventListeners() {
     // Show Customer Login Form
     $("#customer-login-btn").click(() => {
@@ -111,9 +72,9 @@ class LoginView {
       const password = $("#employee-password").val();
 
       if (username && password) {
-      $("#employee-login-submit").prop("disabled", false);
+        $("#employee-login-submit").prop("disabled", false);
       } else {
-      $("#employee-login-submit").prop("disabled", true);
+        $("#employee-login-submit").prop("disabled", true);
       }
     }
 

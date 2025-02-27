@@ -32,7 +32,7 @@ class App {
     console.log("Switching to view:", view);
     switch (view) {
       case "login":
-        this.loginController.render();
+        this.loginController.render(this.loginController);
         break;
       case "menu":
         this.menuController.render();
