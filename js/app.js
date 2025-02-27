@@ -29,6 +29,7 @@ class App {
   }
 
   loadView(view) {
+    console.log("Switching to view:", view);
     switch (view) {
       case "login":
         this.loginController.render();

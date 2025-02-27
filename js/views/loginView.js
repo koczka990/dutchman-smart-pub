@@ -119,15 +119,27 @@ class LoginView {
 
     // Initial validation check
     validateEmployeeLoginForm();
+
+    // // Handle Customer Login Submit
+    // $("#customer-login-submit").click((event) => {
+    //   event.preventDefault();
+    //   this.handleCustomerLogin(event);
+    // });
+
+    // // Handle Employee Login Submit
+    // $("#employee-login-submit").click((event) => {
+    //   event.preventDefault();
+    //   this.handleEmployeeLogin(event);
+    // });
   }
 
   bindCustomerLogin(handler) {
-    // console.log("Binding Customer Login Event...");
+    console.log("Binding Customer Login");
+    console.log(handler);
     $("#customer-login-form").on("submit", handler);
   }
 
   bindEmployeeLogin(handler) {
-    // console.log("Binding Employee Login Event...");
     $("#employee-login-form").on("submit", handler);
   }
 }
