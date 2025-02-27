@@ -1,0 +1,15 @@
+[
+    {
+      "id": 1,
+      "username": "vip_user",
+      "password": "vip123",
+      "role": "VIP",
+      "balance": 100.0
+    },
+    {
+      "id": 2,
+      "username": "bartender",
+      "password": "bar123",
+      "role": "Bartender"
+    }
+]

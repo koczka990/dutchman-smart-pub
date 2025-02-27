@@ -1,18 +1,18 @@
 import Database from "./database.js";
 
-const OrderModel = {
+class OrderModel {
   // Load orders from the database
-  loadOrders: function () {
+  loadOrders() {
     return Database.load("orders") || [];
-  },
+  }
 
   // Save orders to the database
-  saveOrders: function (orders) {
+  saveOrders(orders) {
     Database.save("orders", orders);
-  },
+  }
 
   // Create a new order
-  createOrder: function (tableNumber, items, isVIP = false) {
+  createOrder(tableNumber, items, isVIP = false) {
     const orders = this.loadOrders();
     const newOrder = {
       id: orders.length + 1,
@@ -25,29 +25,29 @@ const OrderModel = {
     orders.push(newOrder);
     this.saveOrders(orders);
     return newOrder;
-  },
+  }
 
   // Calculate the total price of an order
-  calculateTotal: function (items) {
+  calculateTotal(items) {
     return items.reduce((total, item) => total + item.price * item.quantity, 0);
-  },
+  }
 
   // Update an order
-  updateOrder: function (id, updatedOrder) {
+  updateOrder(id, updatedOrder) {
     const orders = this.loadOrders();
     const index = orders.findIndex((order) => order.id === id);
     if (index !== -1) {
       orders[index] = { ...orders[index], ...updatedOrder };
       this.saveOrders(orders);
     }
-  },
+  }
 
   // Delete an order
-  deleteOrder: function (id) {
+  deleteOrder(id) {
     let orders = this.loadOrders();
     orders = orders.filter((order) => order.id !== id);
     this.saveOrders(orders);
-  },
-};
+  }
+}
 
 export default OrderModel;
