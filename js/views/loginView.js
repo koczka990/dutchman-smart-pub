@@ -72,8 +72,10 @@ class LoginView {
     });
 
     // Toggle VIP Fields
-    $("#vip-toggle").change(() => {
-      if (this.checked) {
+    $("#vip-toggle").change((event) => {
+      console.log("VIP Toggle Changed");
+      console.log(event.target.checked);
+      if (event.target.checked) {
         $("#vip-fields").removeClass("hidden");
       } else {
         $("#vip-fields").addClass("hidden");
@@ -98,15 +100,46 @@ class LoginView {
         $("#customer-login-submit").prop("disabled", true);
       }
     }
+
+    // Validate Employee Login Form
+    $("#employee-username, #employee-password").on("input", () => {
+      validateEmployeeLoginForm();
+    });
+
+    function validateEmployeeLoginForm() {
+      const username = $("#employee-username").val();
+      const password = $("#employee-password").val();
+
+      if (username && password) {
+      $("#employee-login-submit").prop("disabled", false);
+      } else {
+      $("#employee-login-submit").prop("disabled", true);
+      }
+    }
+
+    // Initial validation check
+    validateEmployeeLoginForm();
+
+    // // Handle Customer Login Submit
+    // $("#customer-login-submit").click((event) => {
+    //   event.preventDefault();
+    //   this.handleCustomerLogin(event);
+    // });
+
+    // // Handle Employee Login Submit
+    // $("#employee-login-submit").click((event) => {
+    //   event.preventDefault();
+    //   this.handleEmployeeLogin(event);
+    // });
   }
 
   bindCustomerLogin(handler) {
-    // console.log("Binding Customer Login Event...");
+    console.log("Binding Customer Login");
+    console.log(handler);
     $("#customer-login-form").on("submit", handler);
   }
 
   bindEmployeeLogin(handler) {
-    // console.log("Binding Employee Login Event...");
     $("#employee-login-form").on("submit", handler);
   }
 }
