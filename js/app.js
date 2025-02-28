@@ -1,12 +1,22 @@
 import MenuController from "./controllers/menuController.js";
 import StorageController from "./controllers/storageController.js";
 import LoginController from "./controllers/loginController.js";
+import LanguageSwitcher from "./utils/languageSwitcher.js";
 
 class App {
   constructor() {
     this.loginController = new LoginController(this);
     this.menuController = new MenuController(this);
     this.storageController = new StorageController(this);
+    this.languageSwitcher = new LanguageSwitcher();
+
+    this.languageSwitcher.setLanguage("zh");
+
+    // Initialize the index page
+    $(document).ready(() => {
+      $("#menuBtn").text(this.trans("Menu"));
+      $("#storageBtn").text(this.trans("Storage"));
+    });
 
     this.init();
   }
@@ -43,6 +53,10 @@ class App {
       default:
         console.error("View not found:", view);
     }
+  }
+
+  trans(key) {
+    return this.languageSwitcher.translate(key);
   }
 }
 
