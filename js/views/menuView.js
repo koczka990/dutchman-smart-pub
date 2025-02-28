@@ -12,11 +12,9 @@ class MenuView {
       const html = await response.text();
       this.appContent.innerHTML = html;
 
-      // Fill in the menu
       this.populateMenuItems(foods);
-
-      // Call function to enable tab switching
       this.setupEventListeners();
+      this.setupOrderListDropZone(); // Ensures order list only gets drop events once
     } catch (error) {
       console.error("Error loading menu.html:", error);
     }
@@ -27,30 +25,134 @@ class MenuView {
     if (!menuItems) return;
 
     menuItems.innerHTML = items
-      .map((name) => `<div class="menu-item">${name}</div>`)
+      .map(
+        (name) =>
+          `<div class="menu-item" draggable="true" data-name="${name}">${name}</div>`
+      )
       .join("");
+
+    this.setupMenuItemDragEvents();
   }
 
   setupEventListeners() {
     const foodTab = document.getElementById("food-tab");
     const drinksTab = document.getElementById("drinks-tab");
-    const menuItems = document.getElementById("menu-items");
+    const confirmButton = document.getElementById("confirm-btn");
+    const clearButton = document.getElementById("clear-btn"); // Select clear button
 
     foodTab.addEventListener("click", () => {
       foodTab.classList.add("active");
       drinksTab.classList.remove("active");
-      menuItems.innerHTML = this.foods
-        .map((name) => `<div class="menu-item">${name}</div>`)
-        .join("");
+      this.populateMenuItems(this.foods);
     });
 
     drinksTab.addEventListener("click", () => {
       drinksTab.classList.add("active");
       foodTab.classList.remove("active");
-      menuItems.innerHTML = this.beverages
-        .map((name) => `<div class="menu-item">${name}</div>`)
-        .join("");
+      this.populateMenuItems(this.beverages);
     });
+
+    confirmButton.addEventListener("click", () => {
+      this.confirmOrder();
+    });
+
+    clearButton.addEventListener("click", () => {
+      this.clearOrderList(); // Call function when clicked
+    });
+  }
+
+  setupMenuItemDragEvents() {
+    const menuItems = document.querySelectorAll(".menu-item");
+
+    menuItems.forEach((item) => {
+      item.addEventListener("dragstart", (event) => {
+        event.dataTransfer.setData("text/plain", item.dataset.name);
+      });
+    });
+  }
+
+  setupOrderListDropZone() {
+    const orderList = document.getElementById("order-list");
+
+    orderList.addEventListener("dragover", (event) => {
+      event.preventDefault();
+    });
+
+    orderList.addEventListener("drop", (event) => {
+      event.preventDefault();
+      const itemName = event.dataTransfer.getData("text/plain");
+
+      if (itemName) {
+        this.addItemToOrder(itemName);
+      }
+    });
+  }
+
+  addItemToOrder(itemName) {
+    const orderList = document.getElementById("order-list");
+    let existingItem = [...orderList.children].find(
+      (li) => li.dataset.name === itemName
+    );
+
+    if (existingItem) {
+      let quantitySpan = existingItem.querySelector(".order-btn span");
+      quantitySpan.textContent = parseInt(quantitySpan.textContent) + 1;
+    } else {
+      const listItem = document.createElement("li");
+      listItem.setAttribute("draggable", "true");
+      listItem.setAttribute("data-name", itemName);
+      listItem.innerHTML = `
+        <span>${itemName}</span>
+        <span class="order-btn">
+          <button class="decrease-btn" type="button">-</button>
+          <span>1</span>
+          <button class="increase-btn" type="button">+</button>
+        </span>
+      `;
+
+      orderList.appendChild(listItem);
+      this.setupQuantityButtons(listItem);
+    }
+  }
+  setupQuantityButtons(listItem) {
+    const decreaseBtn = listItem.querySelector(".decrease-btn");
+    const increaseBtn = listItem.querySelector(".increase-btn");
+    const quantitySpan = listItem.querySelector(".order-btn span");
+
+    increaseBtn.addEventListener("click", () => {
+      quantitySpan.textContent = parseInt(quantitySpan.textContent) + 1;
+    });
+
+    decreaseBtn.addEventListener("click", () => {
+      let quantity = parseInt(quantitySpan.textContent);
+      if (quantity > 1) {
+        quantitySpan.textContent = quantity - 1;
+      } else {
+        listItem.remove(); // Remove item if quantity reaches 0
+      }
+    });
+  }
+  confirmOrder() {
+    const orderList = document.getElementById("order-list").children;
+
+    if (orderList.length === 0) {
+      alert("No items in the order. Please add some items before confirming.");
+      return;
+    }
+
+    let orderSummary = "Your Order:\n";
+    [...orderList].forEach((item) => {
+      const itemName = item.dataset.name;
+      const quantity = item.querySelector(".order-btn span").textContent;
+      orderSummary += `- ${itemName} x ${quantity}\n`;
+    });
+
+    alert(orderSummary + "\nOrder Confirmed! ✅");
+  }
+
+  clearOrderList() {
+    const orderList = document.getElementById("order-list");
+    orderList.innerHTML = ""; // Remove all items
   }
 }
 
