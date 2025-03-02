@@ -95,8 +95,6 @@ class LoginView {
   }
 
   bindCustomerLogin(handler) {
-    console.log("Binding Customer Login");
-    console.log(handler);
     $("#customer-login-form").on("submit", handler);
   }
 

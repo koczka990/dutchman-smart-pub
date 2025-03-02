@@ -9,7 +9,6 @@ class UserModel {
     try {
       const response = await fetch("/data/users.json");
       this.users = await response.json();
-      console.log("HEJJHOOOO", this.users);
     } catch (error) {
       console.error("Error loading users:", error);
     }
