@@ -54,7 +54,7 @@ class OrderModel {
 
   // Filter orders by table number
   filterOrdersByTable(tableNumber) {
-    const orders = this.loadOrders();
+    const orders = this.loadOrders(); 
     return orders.filter(order => order.identifier === tableNumber);
   }
 
