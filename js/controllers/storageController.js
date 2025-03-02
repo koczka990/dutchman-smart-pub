@@ -12,7 +12,7 @@ class StorageController {
   async init() {
     await this.model.loadStorageData();
     this.ensureStockValues();
-    this.render();
+    // this.render();
   }
 
   ensureStockValues() {
