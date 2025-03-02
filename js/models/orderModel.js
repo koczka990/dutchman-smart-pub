@@ -12,11 +12,14 @@ class OrderModel {
   }
 
   // Create a new order
-  createOrder(tableNumber, items, isVIP = false) {
+  createOrder(identifier, items, isVIP = false) {
+    if (items.length > 10) {
+      throw new Error("An order can have up to 10 products.");
+    }
     const orders = this.loadOrders();
     const newOrder = {
       id: orders.length + 1,
-      tableNumber,
+      identifier, // can be a user ID or table number
       items,
       isVIP,
       total: this.calculateTotal(items),
@@ -47,6 +50,18 @@ class OrderModel {
     let orders = this.loadOrders();
     orders = orders.filter((order) => order.id !== id);
     this.saveOrders(orders);
+  }
+
+  // Filter orders by table number
+  filterOrdersByTable(tableNumber) {
+    const orders = this.loadOrders();
+    return orders.filter(order => order.identifier === tableNumber);
+  }
+
+  // Filter orders by user ID
+  filterOrdersByUser(userId) {
+    const orders = this.loadOrders();
+    return orders.filter(order => order.identifier === userId);
   }
 }
 
