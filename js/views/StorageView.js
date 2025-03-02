@@ -4,11 +4,7 @@ class StorageView {
   }
 
   render(storageItems) {
-    this.inventory = [...storageItems].map((item) => ({
-      name: item,
-      quantity: Math.floor(Math.random() * 20), // temporary, should be fetched from db
-      reorderThreshold: 5, // can be changed later
-    }));
+    this.inventory = storageItems;
 
     this.appContent.innerHTML = `
       <div class="storage-container">
@@ -53,13 +49,13 @@ class StorageView {
       .map(
         (item) => `
         <tr class="${
-          item.quantity <= item.reorderThreshold ? "low-stock" : ""
+          item.stock <= item.reorderThreshold ? "low-stock" : ""
         }">
             <td>${item.name}</td>
-            <td>${item.quantity}</td>
+            <td>${item.stock}</td>
             <td>
                 ${
-                  item.quantity <= item.reorderThreshold
+                  item.stock <= item.reorderThreshold
                     ? `<button class="reorder-btn" data-item="${item.name}">Reorder</button>`
                     : "✔ In Stock"
                 }
