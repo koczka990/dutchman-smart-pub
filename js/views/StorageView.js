@@ -3,42 +3,22 @@ class StorageView {
     this.appContent = document.getElementById("app-content");
   }
 
-  render(storageItems) {
+  async render(storageItems) {
     this.inventory = storageItems;
 
-    this.appContent.innerHTML = `
-      <div class="storage-container">
-        <h2 class="storage-title">Storage Management</h2>
+    try {
+      const response = await fetch("js/html/storage.html");
+      const html = await response.text();
+      this.appContent.innerHTML = html;
 
-        <!-- Storage Wrapper -->
-        <div class="storage-wrapper">
-          <div class="storage-table">
-            <table>
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Quantity</th>
-                  <th>Reorder</th>
-                </tr>
-              </thead>
-              <tbody id="storage-list">
-              </tbody>
-            </table>
-          </div>
+      // Fill in the table contents
+      this.populateStorageTable();
 
-          <!-- Recent Orders -->
-          <div class="order-history">
-            <h3>Recent Orders</h3>
-            <ul id="order-log">
-              <li>No orders yet.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    `;
-
-    this.populateStorageTable();
-    this.setupEventListeners();
+      // Call function to enable tab switching
+      this.setupEventListeners();
+    } catch (error) {
+      console.error("Error loading login.html:", error);
+    }
   }
 
   populateStorageTable() {

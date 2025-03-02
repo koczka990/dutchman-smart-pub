@@ -3,84 +3,32 @@ class MenuView {
     this.appContent = document.getElementById("app-content");
   }
 
-  render(beverages, foods) {
+  async render(beverages, foods) {
     this.beverages = beverages;
     this.foods = foods;
 
-    this.appContent.innerHTML = `
-      <div class="dashboard-container">
-        <div class="menu-container">
-          <h3>Products</h3>
-          
-          <!-- Tabs for Food & Drinks -->
-          <div class="menu-tabs">
-            <button id="food-tab" class="active">🍔 Food</button>
-            <button id="drinks-tab">🍹 Drinks</button>
-          </div>
-          
-          <!-- Menu Items (Will change when clicking tabs) -->
-          <div class="menus" id="menu-items">
-            ${foods
-              .map((name) => `<div class="menu-item">${name}</div>`)
-              .join("")}
-          </div>
-        </div>
+    try {
+      const response = await fetch("js/html/menu.html");
+      const html = await response.text();
+      this.appContent.innerHTML = html;
 
-        <div class="order-container">
-          <div class="customer-container">
-            <h3>Customer Information</h3>
-            <label for="customer-name">Customer Name:</label>
-            <input type="text" id="customer-name" name="customer-name">
-            <br><br>
-            <label for="table-select">Table Number:</label>
-            <select name="table" id="table-select">
-              <option value="">--Choose a table--</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-            </select>
-          </div>
+      // Fill in the menu
+      this.populateMenuItems(foods);
 
-          <h3>Order Details</h3>  
-          <ul class="order-list" id="order-list">
-            <li>
-              <span>Pizza</span>
-              <span class="order-btn">
-                <button id="decrease-btn" type="button">-</button>
-                <span>1</span>
-                <button id="increase-btn" type="button">+</button>
-              </span>
-            </li>
-            <li>
-              <span>Burger</span>
-              <span class="order-btn">
-                <button id="decrease-btn" type="button">-</button>
-                <span>1</span>
-                <button id="increase-btn" type="button">+</button>
-              </span>
-            </li>
-          </ul>
+      // Call function to enable tab switching
+      this.setupEventListeners();
+    } catch (error) {
+      console.error("Error loading menu.html:", error);
+    }
+  }
 
-          <hr>
-          <h3>Order Summary</h3>
-          <div class="order-summary">
-            <h4><span>Subtotal:</span> <span>$69.90</span></h4>
-            <h4><span>Tax(10%):</span> <span>$6.99</span></h4>
-            <hr>
-            <h4><span>Total:</span> <span>$76.89</span></h4>
-          </div>
+  populateMenuItems(items) {
+    const menuItems = document.getElementById("menu-items");
+    if (!menuItems) return;
 
-          <button id="confirm-btn" type="button">Confirm</button>
-          <button id="clear-btn" type="button">Clear</button>
-        </div>
-      </div> 
-    `;
-
-    // Call function to enable tab switching
-    this.setupEventListeners();
+    menuItems.innerHTML = items
+      .map((name) => `<div class="menu-item">${name}</div>`)
+      .join("");
   }
 
   setupEventListeners() {

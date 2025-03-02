@@ -18,7 +18,7 @@ class LoginController {
 
   // Render the login view and set up event listeners
   render() {
-    this.view.render();
+    this.view.render(this);
     this.view.setupEventListeners();
     this.view.bindCustomerLogin(this.handleCustomerLogin.bind(this));
     this.view.bindEmployeeLogin(this.handleEmployeeLogin.bind(this));
