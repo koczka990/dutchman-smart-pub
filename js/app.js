@@ -10,7 +10,7 @@ class App {
     this.storageController = new StorageController(this);
     this.languageSwitcher = new LanguageSwitcher();
 
-    this.languageSwitcher.setLanguage("zh");
+    this.languageSwitcher.setLanguage("en");
 
     // Initialize the index page
     $(document).ready(() => {
@@ -42,7 +42,7 @@ class App {
     console.log("Switching to view:", view);
     switch (view) {
       case "login":
-        this.loginController.render(this.loginController);
+        this.loginController.render();
         break;
       case "menu":
         this.menuController.render();
