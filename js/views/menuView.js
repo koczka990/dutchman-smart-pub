@@ -32,13 +32,14 @@ class MenuView {
       .join("");
 
     this.setupMenuItemDragEvents();
+    this.setupMenuItemClickEvents(); // Setup click event listeners
   }
 
   setupEventListeners() {
     const foodTab = document.getElementById("food-tab");
     const drinksTab = document.getElementById("drinks-tab");
     const confirmButton = document.getElementById("confirm-btn");
-    const clearButton = document.getElementById("clear-btn"); // Select clear button
+    const clearButton = document.getElementById("clear-btn");
 
     foodTab.addEventListener("click", () => {
       foodTab.classList.add("active");
@@ -57,16 +58,22 @@ class MenuView {
     });
 
     clearButton.addEventListener("click", () => {
-      this.clearOrderList(); // Call function when clicked
+      this.clearOrderList();
     });
   }
 
   setupMenuItemDragEvents() {
-    const menuItems = document.querySelectorAll(".menu-item");
-
-    menuItems.forEach((item) => {
+    document.querySelectorAll(".menu-item").forEach((item) => {
       item.addEventListener("dragstart", (event) => {
         event.dataTransfer.setData("text/plain", item.dataset.name);
+      });
+    });
+  }
+
+  setupMenuItemClickEvents() {
+    document.querySelectorAll(".menu-item").forEach((item) => {
+      item.addEventListener("click", () => {
+        this.addItemToOrder(item.dataset.name);
       });
     });
   }
@@ -81,7 +88,6 @@ class MenuView {
     orderList.addEventListener("drop", (event) => {
       event.preventDefault();
       const itemName = event.dataTransfer.getData("text/plain");
-
       if (itemName) {
         this.addItemToOrder(itemName);
       }
@@ -114,6 +120,7 @@ class MenuView {
       this.setupQuantityButtons(listItem);
     }
   }
+
   setupQuantityButtons(listItem) {
     const decreaseBtn = listItem.querySelector(".decrease-btn");
     const increaseBtn = listItem.querySelector(".increase-btn");
@@ -128,10 +135,11 @@ class MenuView {
       if (quantity > 1) {
         quantitySpan.textContent = quantity - 1;
       } else {
-        listItem.remove(); // Remove item if quantity reaches 0
+        listItem.remove();
       }
     });
   }
+
   confirmOrder() {
     const orderList = document.getElementById("order-list").children;
 
@@ -139,7 +147,6 @@ class MenuView {
       alert("No items in the order. Please add some items before confirming.");
       return;
     }
-
     let orderSummary = "Your Order:\n";
     [...orderList].forEach((item) => {
       const itemName = item.dataset.name;
@@ -151,8 +158,7 @@ class MenuView {
   }
 
   clearOrderList() {
-    const orderList = document.getElementById("order-list");
-    orderList.innerHTML = ""; // Remove all items
+    document.getElementById("order-list").innerHTML = "";
   }
 }
 
