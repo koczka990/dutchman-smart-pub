@@ -58,6 +58,14 @@ class LanguageSwitcher {
       return key;
     }
   }
+
+  getLanguageList() {
+    return this.languageList;
+  }
+
+  getCurrentLanguage() {
+    return LanguageSwitcher.language;
+  }
 }
 
 export default LanguageSwitcher;

@@ -1,5 +1,9 @@
 {
   "Welcome to the Dutchman": "Welcome to the Dutchman",
   "Menu": "Menu",
-  "Storage": "Storage"
+  "Storage": "Storage",
+
+  "en": "English",
+  "sv": "Svenska",
+  "zh": "中文"
 }
