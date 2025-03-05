@@ -1,5 +1,6 @@
 class MenuView {
-  constructor() {
+  constructor(controller) {
+    this.controller = controller;
     this.appContent = document.getElementById("app-content");
   }
 
@@ -142,19 +143,29 @@ class MenuView {
 
   confirmOrder() {
     const orderList = document.getElementById("order-list").children;
+    const tableSelect = document.getElementById("table-select");
+    const tableNumber = tableSelect.value;
+
+    if (!tableNumber) {
+      alert("Please select a table number before confirming the order.");
+      return;
+    }
 
     if (orderList.length === 0) {
       alert("No items in the order. Please add some items before confirming.");
       return;
     }
-    let orderSummary = "Your Order:\n";
+
+    let items = [];
     [...orderList].forEach((item) => {
       const itemName = item.dataset.name;
-      const quantity = item.querySelector(".order-btn span").textContent;
-      orderSummary += `- ${itemName} x ${quantity}\n`;
+      const quantity = parseInt(
+        item.querySelector(".order-btn span").textContent
+      );
+      items.push({ name: itemName, quantity });
     });
 
-    alert(orderSummary + "\nOrder Confirmed! ✅");
+    this.controller.handleConfirmOrder(tableNumber, items);
   }
 
   clearOrderList() {

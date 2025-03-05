@@ -1,5 +1,7 @@
 // Simulate a database using localStorage
 class Database {
+  constructor() {}
+
   // Load data from localStorage
   load(key) {
     console.log("Loading data for key:", key);

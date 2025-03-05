@@ -1,22 +1,33 @@
 import MenuModel from "../models/menuModel.js";
 import MenuView from "../views/menuView.js";
+import OrderModel from "../models/orderModel.js";
 
 class MenuController {
   constructor(app) {
     this.app = app;
-    this.model = new MenuModel();
-    this.view = new MenuView();
+    this.menuView = new MenuView(this);
+    this.menuModel = new MenuModel();
+    this.orderModel = new OrderModel(app.database);
     this.init();
   }
 
   async init() {
-    await this.model.loadMenuData();
+    await this.menuModel.loadMenuData();
   }
 
   render() {
-    const beverages = this.model.getAllBeverages();
-    const foods = this.model.getAllFoods();
-    this.view.render(beverages, foods);
+    const beverages = this.menuModel.getAllBeverages();
+    const foods = this.menuModel.getAllFoods();
+    this.menuView.render(beverages, foods);
+  }
+
+  handleConfirmOrder(tableNumber, items) {
+    try {
+      const order = this.orderModel.createOrder(tableNumber, items);
+      alert(`Order confirmed!\nOrder ID: ${order.id}`);
+    } catch (error) {
+      alert(error.message);
+    }
   }
 }
 

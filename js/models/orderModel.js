@@ -1,14 +1,15 @@
-import Database from "./database.js";
-
 class OrderModel {
+  constructor(database) {
+    this.database = database;
+  }
   // Load orders from the database
   loadOrders() {
-    return Database.load("orders") || [];
+    return this.database.load("orders") || [];
   }
 
   // Save orders to the database
   saveOrders(orders) {
-    Database.save("orders", orders);
+    this.database.save("orders", orders);
   }
 
   // Create a new order
@@ -54,14 +55,14 @@ class OrderModel {
 
   // Filter orders by table number
   filterOrdersByTable(tableNumber) {
-    const orders = this.loadOrders(); 
-    return orders.filter(order => order.identifier === tableNumber);
+    const orders = this.loadOrders();
+    return orders.filter((order) => order.identifier === tableNumber);
   }
 
   // Filter orders by user ID
   filterOrdersByUser(userId) {
     const orders = this.loadOrders();
-    return orders.filter(order => order.identifier === userId);
+    return orders.filter((order) => order.identifier === userId);
   }
 }
 
