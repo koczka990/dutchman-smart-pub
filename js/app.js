@@ -11,6 +11,7 @@ class App {
     this.storageController = new StorageController(this);
     this.languageSwitcher = new LanguageSwitcher();
     this.constructor = new Constructor();
+    this.currentView = null;
 
     this.init();
 
@@ -52,12 +53,14 @@ class App {
         this.languageSwitcher.setLanguage(selectedLanguage);
 
         this.loadContent();
-        // todo - when the language is changed, reload the content of index view and the current view. But right now I don't know the current view.
+        this.loadView(this.currentView);
       })
     });
   }
 
+  // Load the specified view
   loadView(view) {
+    this.currentView = view;
     console.log("Switching to view:", view);
     switch (view) {
       case "login":
