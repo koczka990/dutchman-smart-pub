@@ -55,17 +55,6 @@
         "countryoforiginlandname": "France"
     },
     {
-        "nr": "20006",
-        "articleid": "35006",
-        "articletype": "150",  
-        "name": "Coca-Cola",
-        "priceinclvat": "25.00",
-        "category": "Beverage",
-        "packaging": "Can",
-        "producer": "Coca-Cola Company",
-        "countryoforiginlandname": "USA"
-    },
-    {
         "nr": "20007",
         "articleid": "35007",
         "articletype": "200",

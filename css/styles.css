@@ -152,11 +152,16 @@ input:checked+.slider:before {
   justify-content: space-between;
 }
 
+.menu-detail-container {
+  display: flex;
+  gap: 20px; /* Space between columns */
+  align-items: flex-start;
+  position: relative;
+}
+
 .menu-container {
-  width: 30%;
-  margin-left: 20px;
-  margin-right: 20px;
-  min-width: 280px;
+  flex: 1; /* Items take up 40% of space */
+  max-width: 300px; /* Prevents items from being too wide */
 }
 
 .menu-tabs {
@@ -184,27 +189,76 @@ input:checked+.slider:before {
 }
 
 .menus {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  /* Two equal columns */
-  column-gap: 40px;
-  /* Space between items in the same row */
-  row-gap: 10px;
-  /* Small gap between rows */
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  row-gap: 10px; /* Space between rows */
   width: 95%;
   box-sizing: border-box;
 }
 
 .menu-item {
-  width: 100%;
-  /* Match column width */
+  position: relative;
+  display: flex;
+  flex-direction: column; /* Keeps name and price stacked */
+  justify-content: space-between;
+  align-items: flex-start;
   padding: 15px;
-  text-align: center;
   background-color: white;
   border-radius: 10px;
   font-size: 16px;
   cursor: pointer;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.item-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.item-price {
+  font-weight: bold;
+  color: #333;
+}
+.info-container {
+  flex: 1;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  min-height: 150px;
+  width: 100%;
+  max-width: 300px;
+  text-align: left;
+  position: absolute;
+  right: -320px; /* Initially hidden off-screen */
+  opacity: 0;
+  transition: right 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+/* Show when visible */
+.info-container.visible {
+  display: block;
+  opacity: 1;
+}
+.info-icon {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  font-size: 14px;
+  background-color: #ddd;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+  pointer-events: auto;
+}
+
+.info-icon:hover {
+  background-color: #bbb;
 }
 
 .menu-item:hover {
