@@ -11,7 +11,6 @@ class App {
     this.storageController = new StorageController(this);
     this.languageSwitcher = new LanguageSwitcher();
     this.constructor = new Constructor();
-    this.currentView = null;
 
     this.init();
 
@@ -29,19 +28,14 @@ class App {
   // Also used when reloading.
   // Don't forget to empty the content before loading new content
   loadContent() {
-    $(document).ready(() => {
-      $("#menuBtn").text(this.trans("Menu"));
-      $("#storageBtn").text(this.trans("Storage"));
-
       // Populate language switcher options
       const languageList = this.languageSwitcher.getLanguageList();
       const currentLanguage = this.languageSwitcher.getCurrentLanguage();
       const languageSwitcher = $("#languageSwitcher");
       languageSwitcher.empty();
       languageList.forEach((lang) => {
-        languageSwitcher.append(this.constructor.createSelectOption(lang, this.trans(lang), lang === currentLanguage));
+        languageSwitcher.append(this.constructor.createSelectOption(lang, lang, lang === currentLanguage, 'lan-' + lang, "translatable"));
       });
-    });
   }
 
   setupEventListeners() {
@@ -51,34 +45,34 @@ class App {
       $("#languageSwitcher").on("change", (event) => {
         const selectedLanguage = event.target.value;
         this.languageSwitcher.setLanguage(selectedLanguage);
-
-        this.loadContent();
-        this.loadView(this.currentView);
+        this.languageSwitcher.translateHTML();
       })
     });
   }
 
   // Load the specified view
   loadView(view) {
-    this.currentView = view;
     console.log("Switching to view:", view);
+    let renderPromise;
     switch (view) {
       case "login":
-        this.loginController.render();
+        renderPromise = this.loginController.render();
         break;
       case "menu":
-        this.menuController.render();
+        renderPromise = this.menuController.render();
         break;
       case "storage":
-        this.storageController.render();
+        renderPromise = this.storageController.render();
         break;
       default:
         console.error("View not found:", view);
+        return;
     }
-  }
 
-  trans(key) {
-    return this.languageSwitcher.translate(key);
+    // Translate the HTML content after rendering
+    renderPromise.then(() => {
+      this.languageSwitcher.translateHTML();
+    });
   }
 }
 

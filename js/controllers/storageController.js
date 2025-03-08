@@ -34,7 +34,7 @@ class StorageController {
     }
   }
 
-  render() {
+  async render() {
     const storageItems = [
       ...this.model.beverages.map(beverage => ({
         name: beverage.name,
@@ -47,7 +47,7 @@ class StorageController {
         reorderThreshold: 5 // can be changed later
       }))
     ];
-    this.view.render(storageItems);
+    await this.view.render(storageItems);
   }
 }
 

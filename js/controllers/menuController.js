@@ -13,10 +13,10 @@ class MenuController {
     await this.model.loadMenuData();
   }
 
-  render() {
+  async render() {
     const beverages = this.model.getAllBeverages();
     const foods = this.model.getAllFoods();
-    this.view.render(beverages, foods);
+    await this.view.render(beverages, foods);
   }
 }
 
