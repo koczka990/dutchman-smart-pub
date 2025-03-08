@@ -3,9 +3,11 @@ import StorageController from "./controllers/storageController.js";
 import LoginController from "./controllers/loginController.js";
 import LanguageSwitcher from "./utils/languageSwitcher.js";
 import Constructor from "./views/constructor.js";
+import Database from "./models/database.js";
 
 class App {
   constructor() {
+    this.database = new Database();
     this.loginController = new LoginController(this);
     this.menuController = new MenuController(this);
     this.storageController = new StorageController(this);
