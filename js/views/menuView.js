@@ -242,6 +242,8 @@ class MenuView {
       items.push({ name: itemName, quantity, price: itemPrice });
     });
 
+    console.log("Items in the order:", items);
+
     this.controller.handleConfirmOrder(items);
   }
 
