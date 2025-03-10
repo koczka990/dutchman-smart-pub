@@ -2,6 +2,7 @@ import MenuModel from "../models/menuModel.js";
 import MenuView from "../views/menuView.js";
 import OrderModel from "../models/orderModel.js";
 import UserModel from "../models/userModel.js";
+import StorageModel from "../models/storageModel.js";
 
 class MenuController {
   constructor(app) {
@@ -10,11 +11,13 @@ class MenuController {
     this.userModel = new UserModel();
     this.view = new MenuView(this);
     this.orderModel = new OrderModel(app.database);
+    this.storageModel = new StorageModel();
     this.init();
   }
 
   async init() {
     await this.model.loadMenuData();
+    await this.storageModel.loadStorageData();
   }
 
   async render() {
@@ -51,6 +54,22 @@ class MenuController {
     const totalAmount = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
     try {
+      // Check stock availability for all items
+      for (const item of items) {
+        const product = this.storageModel.beverages.find(b => b.name === item.name) || 
+                       this.storageModel.foods.find(f => f.name === item.name);
+        
+        if (!product) {
+          alert(`Error: Product "${item.name}" not found in inventory.`);
+          return;
+        }
+        
+        if (product.stock < item.quantity) {
+          alert(`Sorry, we only have ${product.stock} units of "${item.name}" in stock.`);
+          return;
+        }
+      }
+
       if (userInfo.isVIP) {
         // Handle VIP order
         if (parseFloat(userInfo.balance) < totalAmount) {
@@ -89,6 +108,15 @@ class MenuController {
         });
 
         alert("Order confirmed! Your order will be delivered to your table shortly.");
+      }
+
+      // Update stock for all items
+      for (const item of items) {
+        const product = this.storageModel.beverages.find(b => b.name === item.name) || 
+                       this.storageModel.foods.find(f => f.name === item.name);
+        if (product) {
+          this.storageModel.updateStock(product.nr, -item.quantity);
+        }
       }
 
       // Clear the order list
