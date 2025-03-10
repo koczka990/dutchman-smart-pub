@@ -37,14 +37,19 @@ class LoginController {
     if (isVIP) {
       // Authenticate VIP user
       const user = this.model.authenticate(username, password);
+      console.log("VIP Login attempt:", { username, user });
       if (user) {
         console.log("VIP Login Successful:", user);
-        // Store user session data
-        this.model.storeUserSession({
+        // Store user session data with all necessary VIP information
+        const userSessionData = {
           username: user.username,
           tableNumber: tableNumber,
-          balance: user.balance
-        });
+          balance: user.balance,
+          role: user.role,
+          isVIP: true
+        };
+        console.log("Storing VIP session data:", userSessionData);
+        this.model.storeUserSession(userSessionData);
         this.redirectToMenu();
       } else {
         alert("Invalid username or password.");
@@ -53,9 +58,12 @@ class LoginController {
       // Handle regular customer login
       console.log("Customer Login:", { tableNumber });
       // Store user session data
-      this.model.storeUserSession({
-        tableNumber: tableNumber
-      });
+      const userSessionData = {
+        tableNumber: tableNumber,
+        isVIP: false
+      };
+      console.log("Storing customer session data:", userSessionData);
+      this.model.storeUserSession(userSessionData);
       this.redirectToMenu();
     }
   }

@@ -3,7 +3,13 @@ import Database from "./database.js";
 class UserModel {
   constructor() {
     this.users = [];
-    this.sessionId = this.generateSessionId();
+    // Get existing session ID or create a new one
+    this.sessionId = sessionStorage.getItem('current_session_id') || this.generateSessionId();
+    // Store the session ID if it's new
+    if (!sessionStorage.getItem('current_session_id')) {
+      sessionStorage.setItem('current_session_id', this.sessionId);
+    }
+    console.log("Using session ID:", this.sessionId);
   }
 
   generateSessionId() {
@@ -29,15 +35,18 @@ class UserModel {
   // Store user session data
   storeUserSession(userData) {
     const sessionKey = `${this.sessionId}_user`;
-    localStorage.setItem(sessionKey, JSON.stringify(userData));
+    console.log("Storing user session data:", { sessionKey, userData });
+    sessionStorage.setItem(sessionKey, JSON.stringify(userData));
   }
 
   // Get current user information
   getCurrentUserInfo() {
     const sessionKey = `${this.sessionId}_user`;
-    const userData = localStorage.getItem(sessionKey);
+    const userData = sessionStorage.getItem(sessionKey);
+    console.log("Retrieved user session data:", { sessionKey, userData });
     
     if (!userData) {
+      console.log("No user data found in sessionStorage");
       return {
         username: null,
         tableNumber: "-",
@@ -47,18 +56,20 @@ class UserModel {
     }
 
     const parsedData = JSON.parse(userData);
+    console.log("Parsed user data:", parsedData);
     return {
       username: parsedData.username || null,
       tableNumber: parsedData.tableNumber || "-",
       balance: parsedData.balance || null,
-      isVIP: !!(parsedData.username && parsedData.balance)
+      isVIP: parsedData.isVIP || false
     };
   }
 
   // Clear user session
   clearUserSession() {
     const sessionKey = `${this.sessionId}_user`;
-    localStorage.removeItem(sessionKey);
+    sessionStorage.removeItem(sessionKey);
+    sessionStorage.removeItem('current_session_id');
   }
 
   // Update user balance (for VIP users)

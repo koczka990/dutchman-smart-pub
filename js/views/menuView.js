@@ -24,17 +24,32 @@ class MenuView {
 
   displayCustomerInfo(userInfo) {
     const vipInfoDiv = document.getElementById("vip-info");
+    console.log("Displaying user info:", userInfo);
+    console.log("VIP info div:", vipInfoDiv);
 
     // Show/hide VIP information based on login type
     if (userInfo.isVIP) {
+      console.log("User is VIP, showing VIP information");
       vipInfoDiv.classList.remove("hidden");
-      document.getElementById("display-customer-name").textContent = userInfo.username;
-      document.getElementById("display-balance").textContent = `$${userInfo.balance}`;
-    } else {
-      vipInfoDiv.classList.add("hidden");
-    }
+      const nameElement = document.getElementById("display-customer-name");
+      const balanceElement = document.getElementById("display-balance");
+      const tableElement = document.getElementById("display-table-number");
+      
+      console.log("Elements found:", {
+        nameElement: !!nameElement,
+        balanceElement: !!balanceElement,
+        tableElement: !!tableElement
+      });
 
-    document.getElementById("display-table-number").textContent = userInfo.tableNumber;
+      if (nameElement) nameElement.textContent = userInfo.username;
+      if (balanceElement) balanceElement.textContent = `$${parseFloat(userInfo.balance).toFixed(2)}`;
+      if (tableElement) tableElement.textContent = userInfo.tableNumber;
+    } else {
+      console.log("User is not VIP, hiding VIP information");
+      vipInfoDiv.classList.add("hidden");
+      const tableElement = document.getElementById("display-table-number");
+      if (tableElement) tableElement.textContent = userInfo.tableNumber;
+    }
   }
 
   populateMenuItems(items) {
