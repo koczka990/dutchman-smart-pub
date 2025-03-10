@@ -34,6 +34,9 @@ class LoginController {
     const username = $("#username").val();
     const password = $("#password").val();
 
+    localStorage.removeItem("orderDetails");
+    localStorage.removeItem("selectedTable");
+
     if (isVIP) {
       // Authenticate VIP user
       const user = this.model.authenticate(username, password);
@@ -80,7 +83,8 @@ class LoginController {
   }
 
   // Redirect to the menu view
-  redirectToMenu() {
+  redirectToMenu() {1357
+
     this.app.loadView("menu");
   }
 }

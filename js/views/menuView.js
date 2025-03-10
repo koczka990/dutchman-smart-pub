@@ -45,14 +45,24 @@ class MenuView {
     if (!menuItems) return;
 
     menuItems.innerHTML = items
-      .map(
-        (name) =>
-          `<div class="menu-item" draggable="true" data-name="${name}">${name}</div>`
-      )
+        .map(({ name, priceinclvat }) => {
+          // Ensure price is a valid number, otherwise default to 0
+          const price = parseFloat(priceinclvat) || 0;
+          const formattedPrice = `$${price.toFixed(2)}`;
+
+          return `
+            <div class="menu-item" draggable="true" data-name="${name}" data-priceinclvat="${price}">
+              <span class="item-name">${name}</span>
+              <span class="item-price">${formattedPrice}</span>
+              <span class="info-icon" data-name="${name}">ℹ</span>
+            </div>
+          `;
+        })
       .join("");
 
     this.setupMenuItemDragEvents();
     this.setupMenuItemClickEvents(); // Setup click event listeners
+    this.setupInfoClickEvents(items);
   }
 
   setupEventListeners() {
@@ -85,7 +95,8 @@ class MenuView {
   setupMenuItemDragEvents() {
     document.querySelectorAll(".menu-item").forEach((item) => {
       item.addEventListener("dragstart", (event) => {
-        event.dataTransfer.setData("text/plain", item.dataset.name);
+        event.dataTransfer.setData("name", item.dataset.name);
+        event.dataTransfer.setData("price", item.dataset.priceinclvat);
       });
     });
   }
@@ -93,12 +104,17 @@ class MenuView {
   setupMenuItemClickEvents() {
     document.querySelectorAll(".menu-item").forEach((item) => {
       item.addEventListener("click", () => {
-        this.addItemToOrder(item.dataset.name);
+        const selectedItem = {
+          name: item.dataset.name,
+          priceinclvat: parseFloat(item.dataset.priceinclvat) || 0
+        };
+
+        this.addItemToOrder(selectedItem);
       });
     });
   }
 
-  setupOrderListDropZone() {
+  setupOrderListDropZone(items) {
     const orderList = document.getElementById("order-list");
 
     orderList.addEventListener("dragover", (event) => {
@@ -107,17 +123,27 @@ class MenuView {
 
     orderList.addEventListener("drop", (event) => {
       event.preventDefault();
-      const itemName = event.dataTransfer.getData("text/plain");
-      if (itemName) {
-        this.addItemToOrder(itemName);
+      const itemName = event.dataTransfer.getData("name");
+      const itemPrice = event.dataTransfer.getData("price");
+      if (itemName && itemPrice) {
+        const selectedItem = {
+          name: itemName,
+          priceinclvat: parseFloat(itemPrice)
+        };
+        this.addItemToOrder(selectedItem);
+      } else {
+        console.error("Dragged item data is missing.");
       }
     });
   }
 
-  addItemToOrder(itemName) {
+  addItemToOrder(selectedItem) {
     const orderList = document.getElementById("order-list");
+
+    if (!selectedItem) return;
+
     let existingItem = [...orderList.children].find(
-      (li) => li.dataset.name === itemName
+      (li) => li.dataset.name === selectedItem.name
     );
 
     if (existingItem) {
@@ -126,9 +152,10 @@ class MenuView {
     } else {
       const listItem = document.createElement("li");
       listItem.setAttribute("draggable", "true");
-      listItem.setAttribute("data-name", itemName);
+      listItem.setAttribute("data-name", selectedItem.name);
+      listItem.setAttribute("data-price", selectedItem.priceinclvat);
       listItem.innerHTML = `
-        <span>${itemName}</span>
+        <span>${selectedItem.name} - $${parseFloat(selectedItem.priceinclvat).toFixed(2)}</span>
         <span class="order-btn">
           <button class="decrease-btn" type="button">-</button>
           <span>1</span>
@@ -139,6 +166,11 @@ class MenuView {
       orderList.appendChild(listItem);
       this.setupQuantityButtons(listItem);
     }
+    if (document.getElementById("subtotal") && document.getElementById("total")) {
+      this.updateOrderSummary();
+    } else {
+      console.error("Order summary elements are missing.");
+    }
   }
 
   setupQuantityButtons(listItem) {
@@ -148,6 +180,7 @@ class MenuView {
 
     increaseBtn.addEventListener("click", () => {
       quantitySpan.textContent = parseInt(quantitySpan.textContent) + 1;
+      this.updateOrderSummary();
     });
 
     decreaseBtn.addEventListener("click", () => {
@@ -157,7 +190,26 @@ class MenuView {
       } else {
         listItem.remove();
       }
+      this.updateOrderSummary();
     });
+  }
+
+  updateOrderSummary() {
+    const orderList = document.getElementById("order-list");
+    let subtotal = 0;
+
+    // Loop through each order item in the UI
+    [...orderList.children].forEach(listItem => {
+      const itemPrice = parseFloat(listItem.dataset.price); // Read price from dataset
+      const quantity = parseInt(listItem.querySelector(".order-btn span").textContent); // Read quantity from UI
+      subtotal += itemPrice * quantity;
+    });
+
+    let total = subtotal; // No extra tax needed (price includes VAT)
+
+    // Update order summary in UI
+    document.getElementById("subtotal").textContent = `$${subtotal.toFixed(2)}`;
+    document.getElementById("total").textContent = `$${total.toFixed(2)}`;
   }
 
   confirmOrder() {
@@ -180,7 +232,8 @@ class MenuView {
       const quantity = parseInt(
         item.querySelector(".order-btn span").textContent
       );
-      items.push({ name: itemName, quantity });
+      const itemPrice = parseFloat(item.dataset.price || "0");
+      items.push({ name: itemName, quantity, price: itemPrice});
     });
 
     this.controller.handleConfirmOrder(tableNumber, items);
@@ -188,6 +241,61 @@ class MenuView {
 
   clearOrderList() {
     document.getElementById("order-list").innerHTML = "";
+  }
+
+  setupInfoClickEvents(items) {
+    document.querySelectorAll(".info-icon").forEach((icon) => {
+      icon.addEventListener("click", (event) => {
+        event.stopPropagation();
+
+        const itemName = event.target.dataset.name;
+        const selectedItem = items.find(i => i.name === itemName);
+
+        const infoSection = document.getElementById("info-section");
+        if (!infoSection) {
+          console.error("Info section not found in the document.");
+          return;
+        }
+
+        if (selectedItem) {
+          let detailsHTML = `
+            <h3>${selectedItem.name}</h3>
+          `;
+
+          // If the item is food, display food-related details
+          if (selectedItem.articletype === "200") {
+            detailsHTML += `
+                        <p><strong>Category:</strong> ${selectedItem.category || "N/A"}</p>
+                        <p><strong>Producer:</strong> ${selectedItem.producer || "N/A"}</p>
+                        <p><strong>Packaging:</strong> ${selectedItem.packaging || "N/A"}</p>
+                    `;
+          } else {
+            detailsHTML += `
+                        <p><strong>Producer:</strong> ${selectedItem.producer || "N/A"}</p>
+                        <p><strong>Country:</strong> ${selectedItem.countryoforigin || "N/A"} ml</p>
+                        <p><strong>Strength:</strong> ${selectedItem.alcoholstrength || "N/A"}%</p>
+                        <p><strong>Serving size:</strong> ${selectedItem.packaging || "N/A"}</p>
+                    `;
+          }
+
+          infoSection.innerHTML = detailsHTML;
+
+          // Get the position of the clicked info button
+          const iconRect = event.target.getBoundingClientRect();
+
+          // Position the info box next to the clicked item
+          infoSection.style.top = `${window.scrollY + iconRect.top}px`;
+          infoSection.style.left = `${window.scrollX + iconRect.right + 10}px`;
+
+          infoSection.classList.add("visible");        }
+      });
+    });
+    document.addEventListener("click", (event) => {
+      const infoSection = document.getElementById("info-section");
+      if (infoSection && !event.target.closest(".info-container") && !event.target.classList.contains("info-icon")) {
+        infoSection.classList.remove("visible");
+      }
+    });
   }
 }
 

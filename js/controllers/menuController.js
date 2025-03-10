@@ -23,10 +23,25 @@ class MenuController {
 
   handleConfirmOrder(tableNumber, items) {
     try {
+      if (!tableNumber) {
+        alert("Please select a table number before confirming the order.");
+        return;
+      }
+
+      if (items.length === 0) {
+        alert("No items in the order. Please add some items before confirming.");
+        return;
+      }
+
       const order = this.orderModel.createOrder(tableNumber, items);
-      alert(`Order confirmed!\nOrder ID: ${order.id}`);
+      console.log(`Order confirmed! Order ID: ${order.id}`);
+
+      localStorage.setItem("selectedTable", tableNumber);
+      localStorage.setItem("orderDetails", JSON.stringify(items));
+
+      this.app.loadView("payment");
     } catch (error) {
-      alert(error.message);
+      alert(`Order error: ${error.message}`);
     }
   }
 }
