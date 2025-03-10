@@ -34,18 +34,17 @@ class LoginController {
     const username = $("#username").val();
     const password = $("#password").val();
 
-    localStorage.removeItem("orderDetails");
-    localStorage.removeItem("selectedTable");
-
     if (isVIP) {
       // Authenticate VIP user
       const user = this.model.authenticate(username, password);
       if (user) {
         console.log("VIP Login Successful:", user);
-        // Save user info to localStorage
-        localStorage.setItem("tableNumber", tableNumber);
-        localStorage.setItem("username", user.username);
-        localStorage.setItem("balance", user.balance);
+        // Store user session data
+        this.model.storeUserSession({
+          username: user.username,
+          tableNumber: tableNumber,
+          balance: user.balance
+        });
         this.redirectToMenu();
       } else {
         alert("Invalid username or password.");
@@ -53,10 +52,10 @@ class LoginController {
     } else {
       // Handle regular customer login
       console.log("Customer Login:", { tableNumber });
-      // Save table number to localStorage
-      localStorage.setItem("tableNumber", tableNumber);
-      localStorage.removeItem("username"); // Clear VIP info
-      localStorage.removeItem("balance");
+      // Store user session data
+      this.model.storeUserSession({
+        tableNumber: tableNumber
+      });
       this.redirectToMenu();
     }
   }
@@ -73,9 +72,11 @@ class LoginController {
     const user = this.model.authenticate(username, password);
     if (user) {
       console.log("Employee Login Successful:", user);
-      localStorage.setItem("username", user.username);
-      localStorage.removeItem("tableNumber"); // Clear customer info
-      localStorage.removeItem("balance");
+      // Store user session data
+      this.model.storeUserSession({
+        username: user.username,
+        role: user.role
+      });
       this.redirectToMenu();
     } else {
       alert("Invalid username or password.");
@@ -83,8 +84,7 @@ class LoginController {
   }
 
   // Redirect to the menu view
-  redirectToMenu() {1357
-
+  redirectToMenu() {
     this.app.loadView("menu");
   }
 }

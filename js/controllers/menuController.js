@@ -1,6 +1,7 @@
 import MenuModel from "../models/menuModel.js";
 import MenuView from "../views/menuView.js";
 import OrderModel from "../models/orderModel.js";
+import UserModel from "../models/userModel.js";
 
 class MenuController {
   constructor(app) {
@@ -8,6 +9,7 @@ class MenuController {
     this.menuView = new MenuView(this);
     this.menuModel = new MenuModel();
     this.orderModel = new OrderModel(app.database);
+    this.userModel = new UserModel();
     this.init();
   }
 
@@ -18,13 +20,16 @@ class MenuController {
   async render() {
     const beverages = this.menuModel.getAllBeverages();
     const foods = this.menuModel.getAllFoods();
-    await this.menuView.render(beverages, foods);
+    const userInfo = this.userModel.getCurrentUserInfo();
+    await this.menuView.render(beverages, foods, userInfo);
   }
 
-  handleConfirmOrder(tableNumber, items) {
+  handleConfirmOrder(items) {
     try {
-      if (!tableNumber) {
-        alert("Please select a table number before confirming the order.");
+      const userInfo = this.userModel.getCurrentUserInfo();
+      
+      if (!userInfo.tableNumber || userInfo.tableNumber === "-") {
+        alert("No table number found. Please log in again.");
         return;
       }
 
@@ -33,11 +38,14 @@ class MenuController {
         return;
       }
 
-      const order = this.orderModel.createOrder(tableNumber, items);
+      const order = this.orderModel.createOrder(userInfo.tableNumber, items);
       console.log(`Order confirmed! Order ID: ${order.id}`);
 
-      localStorage.setItem("selectedTable", tableNumber);
-      localStorage.setItem("orderDetails", JSON.stringify(items));
+      // Store order details in session storage
+      this.userModel.storeUserSession({
+        ...userInfo,
+        orderDetails: items
+      });
 
       this.app.loadView("payment");
     } catch (error) {

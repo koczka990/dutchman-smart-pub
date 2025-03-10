@@ -4,7 +4,7 @@ class MenuView {
     this.appContent = document.getElementById("app-content");
   }
 
-  async render(beverages, foods) {
+  async render(beverages, foods, userInfo) {
     this.beverages = beverages;
     this.foods = foods;
 
@@ -13,7 +13,7 @@ class MenuView {
       const html = await response.text();
       this.appContent.innerHTML = html;
 
-      this.displayCustomerInfo();
+      this.displayCustomerInfo(userInfo);
       this.populateMenuItems(foods);
       this.setupEventListeners();
       this.setupOrderListDropZone(); // Ensures order list only gets drop events once
@@ -22,22 +22,19 @@ class MenuView {
     }
   }
 
-  displayCustomerInfo() {
-    const username = localStorage.getItem("username");
-    const tableNumber = localStorage.getItem("tableNumber") || "-";
-    const balance = localStorage.getItem("balance");
+  displayCustomerInfo(userInfo) {
     const vipInfoDiv = document.getElementById("vip-info");
 
     // Show/hide VIP information based on login type
-    if (username && balance) {
+    if (userInfo.isVIP) {
       vipInfoDiv.classList.remove("hidden");
-      document.getElementById("display-customer-name").textContent = username;
-      document.getElementById("display-balance").textContent = `$${balance}`;
+      document.getElementById("display-customer-name").textContent = userInfo.username;
+      document.getElementById("display-balance").textContent = `$${userInfo.balance}`;
     } else {
       vipInfoDiv.classList.add("hidden");
     }
 
-    document.getElementById("display-table-number").textContent = tableNumber;
+    document.getElementById("display-table-number").textContent = userInfo.tableNumber;
   }
 
   populateMenuItems(items) {
@@ -214,12 +211,6 @@ class MenuView {
 
   confirmOrder() {
     const orderList = document.getElementById("order-list").children;
-    const tableNumber = localStorage.getItem("tableNumber");
-
-    if (!tableNumber) {
-      alert("No table number found. Please log in again.");
-      return;
-    }
 
     if (orderList.length === 0) {
       alert("No items in the order. Please add some items before confirming.");
@@ -233,10 +224,10 @@ class MenuView {
         item.querySelector(".order-btn span").textContent
       );
       const itemPrice = parseFloat(item.dataset.price || "0");
-      items.push({ name: itemName, quantity, price: itemPrice});
+      items.push({ name: itemName, quantity, price: itemPrice });
     });
 
-    this.controller.handleConfirmOrder(tableNumber, items);
+    this.controller.handleConfirmOrder(items);
   }
 
   clearOrderList() {
