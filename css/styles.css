@@ -438,3 +438,113 @@ td {
 .reorder-btn:hover {
   background-color: #cc0000;
 }
+
+/* Payment Container - Main Layout */
+.payment-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Heading */
+.payment-container h2 {
+  text-align: center;
+  font-size: 22px;
+  color: #333;
+}
+
+/* Table Selector */
+.payment-container label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.payment-container select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Order List */
+.order-container {
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.order-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.order-container li {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  background: #fff;
+  margin: 5px 0;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  align-items: center;
+}
+
+/* Split Bill Checkbox */
+.payment-container .split-bill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.payment-container .split-bill input {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+/* Total Amount */
+#total-container {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: bold;
+  background: #f4f4f4;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+/* Confirm Payment Button */
+#confirm-payment {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#confirm-payment:hover {
+  background-color: #218838;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .payment-container {
+    max-width: 100%;
+    padding: 15px;
+  }
+}

@@ -3,6 +3,7 @@ import StorageController from "./controllers/storageController.js";
 import LoginController from "./controllers/loginController.js";
 import LanguageSwitcher from "./utils/languageSwitcher.js";
 import Database from "./models/database.js";
+import PaymentController from "./controllers/paymentController.js";
 
 class App {
   constructor() {
@@ -10,8 +11,8 @@ class App {
     this.loginController = new LoginController(this);
     this.menuController = new MenuController(this);
     this.storageController = new StorageController(this);
+    this.paymentController = new PaymentController(this);
     this.languageSwitcher = new LanguageSwitcher();
-
     this.languageSwitcher.setLanguage("en");
 
     // Initialize the index page
@@ -51,6 +52,9 @@ class App {
         break;
       case "storage":
         this.storageController.render();
+        break;
+      case "payment":
+        this.paymentController.render();
         break;
       default:
         console.error("View not found:", view);

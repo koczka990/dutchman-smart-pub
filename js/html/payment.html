@@ -1,0 +1,21 @@
+<div class="payment-container">
+  <h2>💳 Payment method</h2>
+
+  <label for="table-select">Select Table:</label>
+  <select id="table-select">
+    <option value="">-- Select Table --</option>
+  </select>
+
+  <div>
+    <input type="checkbox" id="split-bill">
+    <label for="split-bill">Enable Split Bill</label>
+  </div>
+
+  <div id="order-list" class="order-container"></div>
+
+  <div id="total-container" class="hidden">
+    <h3>Total: <span id="total-amount">$0.00</span></h3>
+    <button id="confirm-payment">Confirm Payment</button>
+  </div>
+
+</div>

@@ -120,6 +120,7 @@ class MenuView {
 
   addItemToOrder(selectedItem) {
     const orderList = document.getElementById("order-list");
+
     if (!selectedItem) return;
 
     let existingItem = [...orderList.children].find(
@@ -197,23 +198,14 @@ class MenuView {
     const tableSelect = document.getElementById("table-select");
     const tableNumber = tableSelect.value;
 
-    if (!tableNumber) {
-      alert("Please select a table number before confirming the order.");
-      return;
-    }
-
-    if (orderList.length === 0) {
-      alert("No items in the order. Please add some items before confirming.");
-      return;
-    }
-
     let items = [];
     [...orderList].forEach((item) => {
       const itemName = item.dataset.name;
       const quantity = parseInt(
         item.querySelector(".order-btn span").textContent
       );
-      items.push({ name: itemName, quantity });
+      const itemPrice = parseFloat(item.dataset.price || "0");
+      items.push({ name: itemName, quantity, price: itemPrice});
     });
 
     this.controller.handleConfirmOrder(tableNumber, items);
