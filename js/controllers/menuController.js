@@ -15,10 +15,10 @@ class MenuController {
     await this.menuModel.loadMenuData();
   }
 
-  render() {
+  async render() {
     const beverages = this.menuModel.getAllBeverages();
     const foods = this.menuModel.getAllFoods();
-    this.menuView.render(beverages, foods);
+    await this.menuView.render(beverages, foods);
   }
 
   handleConfirmOrder(tableNumber, items) {

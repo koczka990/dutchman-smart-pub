@@ -2,6 +2,7 @@ import MenuController from "./controllers/menuController.js";
 import StorageController from "./controllers/storageController.js";
 import LoginController from "./controllers/loginController.js";
 import LanguageSwitcher from "./utils/languageSwitcher.js";
+import Constructor from "./views/constructor.js";
 import Database from "./models/database.js";
 
 class App {
@@ -11,54 +12,69 @@ class App {
     this.menuController = new MenuController(this);
     this.storageController = new StorageController(this);
     this.languageSwitcher = new LanguageSwitcher();
-
-    this.languageSwitcher.setLanguage("en");
-
-    // Initialize the index page
-    $(document).ready(() => {
-      $("#menuBtn").text(this.trans("Menu"));
-      $("#storageBtn").text(this.trans("Storage"));
-    });
+    this.constructor = new Constructor();
 
     this.init();
-  }
 
-  init() {
-    console.log("App initialized");
-    this.setupEventListeners();
+    // Load the default view
     this.loadView("login");
   }
 
+  // Initialize the index page
+  init() {
+    this.loadContent();
+    this.setupEventListeners();
+  }
+
+  // Load the dynamic content of the index page.
+  // Also used when reloading.
+  // Don't forget to empty the content before loading new content
+  loadContent() {
+      // Populate language switcher options
+      const languageList = this.languageSwitcher.getLanguageList();
+      const currentLanguage = this.languageSwitcher.getCurrentLanguage();
+      const languageSwitcher = $("#languageSwitcher");
+      languageSwitcher.empty();
+      languageList.forEach((lang) => {
+        languageSwitcher.append(this.constructor.createSelectOption(lang, lang, lang === currentLanguage, 'lan-' + lang, "translatable"));
+      });
+  }
+
   setupEventListeners() {
-    document.addEventListener("DOMContentLoaded", () => {
-      document
-        .getElementById("menuBtn")
-        .addEventListener("click", () => this.loadView("menu"));
-      document
-        .getElementById("storageBtn")
-        .addEventListener("click", () => this.loadView("storage"));
+    $(document).ready(() => {
+      $("#menuBtn").on("click", () => this.loadView("menu"));
+      $("#storageBtn").on("click", () => this.loadView("storage"));
+      $("#languageSwitcher").on("change", (event) => {
+        const selectedLanguage = event.target.value;
+        this.languageSwitcher.setLanguage(selectedLanguage);
+        this.languageSwitcher.translateHTML();
+      })
     });
   }
 
+  // Load the specified view
   loadView(view) {
     console.log("Switching to view:", view);
+    let renderPromise;
     switch (view) {
       case "login":
-        this.loginController.render();
+        renderPromise = this.loginController.render();
         break;
       case "menu":
-        this.menuController.render();
+        renderPromise = this.menuController.render();
         break;
       case "storage":
-        this.storageController.render();
+        renderPromise = this.storageController.render();
         break;
       default:
         console.error("View not found:", view);
+        return;
     }
-  }
 
-  trans(key) {
-    return this.languageSwitcher.translate(key);
+    // Translate the HTML content after rendering
+    renderPromise.then(() => {
+      this.languageSwitcher.translateHTML();
+    });
   }
 }
 

@@ -32,6 +32,10 @@ nav a:hover {
   color: black;
 }
 
+#languageSwitcher {
+  float: right;
+}
+
 /**********/
 
 /* Login Page */

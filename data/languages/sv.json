@@ -1,5 +1,5 @@
 {
-  "Welcome to the Dutchman": "Välkommen till Dutchman",
-  "Menu": "Meny",
-  "Storage": "Förvaring"
+  "login-text": "Välkommen till Dutchman",
+  "menuBtn": "Meny",
+  "storageBtn": "Förvaring"
 }

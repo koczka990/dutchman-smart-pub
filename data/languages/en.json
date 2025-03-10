@@ -1,5 +1,21 @@
 {
-  "Welcome to the Dutchman": "Welcome to the Dutchman",
-  "Menu": "Menu",
-  "Storage": "Storage"
+  "//": "Navigation bar",
+  "login-text": "Welcome to the Dutchman",
+  "menuBtn": "Menu",
+  "storageBtn": "Storage",
+
+  "//": "Login view",
+  "customer-login-btn": "Customer Login",
+  "employee-login-btn": "Employee Login",
+
+  "//": "Menu view",
+  "menu-title": "Products",
+
+  "//": "Storage view",
+  "storage-title": "Storage Management",
+
+  "//": "Language selectors. Only exists in the English dictionary",
+  "lan-en": "English",
+  "lan-sv": "Svenska",
+  "lan-zh": "中文"
 }

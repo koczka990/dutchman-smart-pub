@@ -1,5 +1,6 @@
 {
-  "Welcome to the Dutchman": "欢迎来到Dutchman",
-  "Menu": "菜单",
-  "Storage": "库存"
+  "login-text": "欢迎来到Dutchman",
+  "menuBtn": "菜单",
+  "storageBtn": "库存",
+  "menu-title": "产品"
 }
