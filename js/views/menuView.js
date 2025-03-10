@@ -242,9 +242,51 @@ class MenuView {
       items.push({ name: itemName, quantity, price: itemPrice });
     });
 
-    console.log("Items in the order:", items);
+    // Get user info from the controller
+    const userInfo = this.controller.getUserInfo();
+    console.log("Confirming order with user info:", userInfo);
 
-    this.controller.handleConfirmOrder(items);
+    // Calculate total amount
+    const totalAmount = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+    // Create and show confirmation popup
+    const popup = document.createElement('div');
+    popup.className = 'order-confirmation-popup';
+    popup.innerHTML = `
+      <div class="popup-content">
+        <h2>Confirm Order</h2>
+        <div class="order-summary">
+          <h3>Order Summary:</h3>
+          <ul>
+            ${items.map(item => `
+              <li>${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}</li>
+            `).join('')}
+          </ul>
+          <p class="total">Total: $${totalAmount.toFixed(2)}</p>
+          ${userInfo.isVIP ? `
+            <p class="balance-info">Current Balance: $${parseFloat(userInfo.balance).toFixed(2)}</p>
+            <p class="new-balance">New Balance: $${(parseFloat(userInfo.balance) - totalAmount).toFixed(2)}</p>
+          ` : ''}
+        </div>
+        <div class="popup-buttons">
+          <button class="cancel-btn">Cancel</button>
+          <button class="confirm-btn">Confirm Order</button>
+        </div>
+      </div>
+    `;
+
+    // Add popup to the page
+    document.body.appendChild(popup);
+
+    // Handle button clicks
+    popup.querySelector('.cancel-btn').addEventListener('click', () => {
+      document.body.removeChild(popup);
+    });
+
+    popup.querySelector('.confirm-btn').addEventListener('click', () => {
+      this.controller.handleConfirmOrder(items, userInfo);
+      document.body.removeChild(popup);
+    });
   }
 
   clearOrderList() {

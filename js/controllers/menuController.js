@@ -6,50 +6,95 @@ import UserModel from "../models/userModel.js";
 class MenuController {
   constructor(app) {
     this.app = app;
-    this.menuView = new MenuView(this);
-    this.menuModel = new MenuModel();
-    this.orderModel = new OrderModel(app.database);
+    this.model = new MenuModel();
     this.userModel = new UserModel();
+    this.view = new MenuView(this);
+    this.orderModel = new OrderModel(app.database);
     this.init();
   }
 
   async init() {
-    await this.menuModel.loadMenuData();
+    await this.model.loadMenuData();
   }
 
   async render() {
-    const beverages = this.menuModel.getAllBeverages();
-    const foods = this.menuModel.getAllFoods();
+    const beverages = this.model.getAllBeverages();
+    const foods = this.model.getAllFoods();
     const userInfo = this.userModel.getCurrentUserInfo();
-    await this.menuView.render(beverages, foods, userInfo);
+    await this.view.render(beverages, foods, userInfo);
   }
 
-  handleConfirmOrder(items) {
+  // Get current user information
+  getUserInfo() {
+    const userInfo = this.userModel.getCurrentUserInfo();
+    console.log("Retrieved user info for order:", userInfo);
+    return userInfo;
+  }
+
+  // Handle order confirmation
+  async handleConfirmOrder(items, userInfo) {
+    console.log("Handling order confirmation with user info:", userInfo);
+
+    if (!items || items.length === 0) {
+      alert("No items in the order. Please add some items before confirming.");
+      return;
+    }
+
+    if (!userInfo) {
+      console.error("No user information available");
+      alert("Session error. Please log in again.");
+      this.app.loadView("login");
+      return;
+    }
+
+    // Calculate total amount
+    const totalAmount = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
     try {
-      const userInfo = this.userModel.getCurrentUserInfo();
-      
-      if (!userInfo.tableNumber || userInfo.tableNumber === "-") {
-        alert("No table number found. Please log in again.");
-        return;
+      if (userInfo.isVIP) {
+        // Handle VIP order
+        if (parseFloat(userInfo.balance) < totalAmount) {
+          alert("Insufficient balance. Please add more funds to your account.");
+          return;
+        }
+
+        // Create order
+        const order = await this.orderModel.createOrder({
+          items: items,
+          tableNumber: userInfo.tableNumber,
+          isVIP: true,
+          username: userInfo.username,
+          totalAmount: totalAmount
+        });
+
+        // Update VIP user's balance
+        await this.userModel.updateBalance(userInfo.username, -totalAmount);
+
+        // Update session with new balance
+        const updatedUserInfo = {
+          ...userInfo,
+          balance: parseFloat(userInfo.balance) - totalAmount
+        };
+        this.userModel.storeUserSession(updatedUserInfo);
+
+        alert(`Order confirmed! Your new balance is $${(parseFloat(userInfo.balance) - totalAmount).toFixed(2)}`);
+      } else {
+        // Handle regular customer order
+        const order = await this.orderModel.createOrder({
+          items: items,
+          tableNumber: userInfo.tableNumber,
+          isVIP: false,
+          totalAmount: totalAmount
+        });
+
+        alert("Order confirmed! Your order will be delivered to your table shortly.");
       }
 
-      if (items.length === 0) {
-        alert("No items in the order. Please add some items before confirming.");
-        return;
-      }
-
-      const order = this.orderModel.createOrder(userInfo.tableNumber, items);
-      console.log(`Order confirmed! Order ID: ${order.id}`);
-
-      // Store order details in session storage
-      this.userModel.storeUserSession({
-        ...userInfo,
-        orderDetails: items
-      });
-
-      this.app.loadView("payment");
+      // Clear the order list
+      this.view.clearOrderList();
     } catch (error) {
-      alert(`Order error: ${error.message}`);
+      console.error("Error processing order:", error);
+      alert("There was an error processing your order. Please try again.");
     }
   }
 }

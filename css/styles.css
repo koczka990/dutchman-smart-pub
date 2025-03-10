@@ -459,6 +459,8 @@ td {
 
 .customer-info strong {
   color: #007bff;
+}
+
 /* Payment Container - Main Layout */
 .payment-container {
   max-width: 600px;
@@ -567,4 +569,91 @@ td {
     max-width: 100%;
     padding: 15px;
   }
+}
+
+.order-confirmation-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.popup-content h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+.order-summary {
+  margin: 1.5rem 0;
+}
+
+.order-summary ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.order-summary li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.order-summary .total {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+}
+
+.balance-info, .new-balance {
+  color: #666;
+  margin: 0.5rem 0;
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.popup-buttons button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.cancel-btn {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.confirm-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.confirm-btn:hover {
+  background-color: #45a049;
 }
