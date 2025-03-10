@@ -286,6 +286,8 @@ class MenuView {
     popup.querySelector('.confirm-btn').addEventListener('click', () => {
       this.controller.handleConfirmOrder(items, userInfo);
       document.body.removeChild(popup);
+      // // Refresh the menu view
+      // this.render(this.beverages, this.foods, userInfo);
     });
   }
 

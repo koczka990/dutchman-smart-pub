@@ -58,6 +58,9 @@ class MenuController {
           return;
         }
 
+        // Update VIP user's balance first
+        await this.userModel.updateBalance(userInfo.username, -totalAmount);
+
         // Create order
         const order = await this.orderModel.createOrder({
           items: items,
@@ -67,9 +70,6 @@ class MenuController {
           totalAmount: totalAmount
         });
 
-        // Update VIP user's balance
-        await this.userModel.updateBalance(userInfo.username, -totalAmount);
-
         // Update session with new balance
         const updatedUserInfo = {
           ...userInfo,
@@ -78,6 +78,7 @@ class MenuController {
         this.userModel.storeUserSession(updatedUserInfo);
 
         alert(`Order confirmed! Your new balance is $${(parseFloat(userInfo.balance) - totalAmount).toFixed(2)}`);
+        this.render();
       } else {
         // Handle regular customer order
         const order = await this.orderModel.createOrder({

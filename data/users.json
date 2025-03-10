@@ -8,6 +8,13 @@
     },
     {
       "id": 2,
+      "username": "v",
+      "password": "v",
+      "role": "VIP",
+      "balance": 10000.0
+    },
+    {
+      "id": 2,
       "username": "bartender",
       "password": "bar123",
       "role": "Bartender"
