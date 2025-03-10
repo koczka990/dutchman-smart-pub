@@ -14,19 +14,13 @@
   <div class="order-container">
     <div class="customer-container">
       <h3>Customer Information</h3>
-      <label for="customer-name">Customer Name:</label>
-      <input type="text" id="customer-name" name="customer-name" />
-      <br /><br />
-      <label for="table-select">Table Number:</label>
-      <select name="table" id="table-select">
-        <option value="">--Choose a table--</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-      </select>
+      <div class="customer-info">
+        <div id="vip-info" class="hidden">
+          <p><strong>Customer Name: </strong><span id="display-customer-name">-</span></p>
+          <p><strong>Balance: </strong><span id="display-balance">-</span></p>
+        </div>
+        <p><strong>Table Number: </strong><span id="display-table-number">-</span></p>
+      </div>
     </div>
 
     <h3>Order Details</h3>

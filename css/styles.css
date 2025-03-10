@@ -388,3 +388,21 @@ td {
 .reorder-btn:hover {
   background-color: #cc0000;
 }
+
+/* Customer Information */
+.customer-info {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1.5rem;
+}
+
+.customer-info p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.customer-info strong {
+  color: #007bff;
+}

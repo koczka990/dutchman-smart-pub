@@ -13,12 +13,31 @@ class MenuView {
       const html = await response.text();
       this.appContent.innerHTML = html;
 
+      this.displayCustomerInfo();
       this.populateMenuItems(foods);
       this.setupEventListeners();
       this.setupOrderListDropZone(); // Ensures order list only gets drop events once
     } catch (error) {
       console.error("Error loading menu.html:", error);
     }
+  }
+
+  displayCustomerInfo() {
+    const username = localStorage.getItem("username");
+    const tableNumber = localStorage.getItem("tableNumber") || "-";
+    const balance = localStorage.getItem("balance");
+    const vipInfoDiv = document.getElementById("vip-info");
+
+    // Show/hide VIP information based on login type
+    if (username && balance) {
+      vipInfoDiv.classList.remove("hidden");
+      document.getElementById("display-customer-name").textContent = username;
+      document.getElementById("display-balance").textContent = `$${balance}`;
+    } else {
+      vipInfoDiv.classList.add("hidden");
+    }
+
+    document.getElementById("display-table-number").textContent = tableNumber;
   }
 
   populateMenuItems(items) {
@@ -143,11 +162,10 @@ class MenuView {
 
   confirmOrder() {
     const orderList = document.getElementById("order-list").children;
-    const tableSelect = document.getElementById("table-select");
-    const tableNumber = tableSelect.value;
+    const tableNumber = localStorage.getItem("tableNumber");
 
     if (!tableNumber) {
-      alert("Please select a table number before confirming the order.");
+      alert("No table number found. Please log in again.");
       return;
     }
 
