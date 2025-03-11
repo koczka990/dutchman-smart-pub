@@ -13,19 +13,23 @@ class OrderModel {
   }
 
   // Create a new order
-  createOrder(identifier, items, isVIP = false) {
-    if (items.length > 10) {
-      throw new Error("An order can have up to 10 products.");
+  createOrder(orderData) {
+    if (!orderData.items || orderData.items.length === 0) {
+      throw new Error("No items in the order");
     }
+
     const orders = this.loadOrders();
     const newOrder = {
       id: orders.length + 1,
-      identifier, // can be a user ID or table number
-      items,
-      isVIP,
-      total: this.calculateTotal(items),
+      tableNumber: orderData.tableNumber,
+      items: orderData.items,
+      isVIP: orderData.isVIP,
+      username: orderData.username,
+      totalAmount: orderData.totalAmount,
       status: "pending",
+      timestamp: new Date().toISOString()
     };
+    
     orders.push(newOrder);
     this.saveOrders(orders);
     return newOrder;
