@@ -2,7 +2,7 @@
     1. Create a new instance of LanguageSwitcher
     2. Use the setLanguage method to set the current language
     3. Use the translateHTML method to translate all HTML elements
-    4. To make an HTML element translatable, add the class "translatable" and set the id to the key in the dictionary
+    4. To make an HTML element translatable, add a data-translate-key attribute with the key to translate
  */
 
 // This class will be used to switch between languages
@@ -66,17 +66,17 @@ class LanguageSwitcher {
     }
   }
 
-  // Translate all HTML elements with the class "translatable" according to their id
+  // Translate all HTML elements with the data-translate-key attribute
   translateHTML() {
-    let translates = $(".translatable");
-    for (let i = 0; i < translates.length; i++) {
-      let id = translates[i].attributes['id'].nodeValue;
-      $(`#${id}`).html(this.translate(id));
-    }
+    let translates = $("[data-translate-key]");
+    translates.each((index, element) => {
+      let key = $(element).data("translate-key");
+      $(element).html(this.translate(key));
+    });
   }
 
   getAllTranslatables() {
-    return $(".translatable");
+    return $("[data-translate-key]");
   }
 
   getLanguageList() {

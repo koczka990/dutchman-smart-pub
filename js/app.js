@@ -36,7 +36,7 @@ class App {
       const languageSwitcher = $("#languageSwitcher");
       languageSwitcher.empty();
       languageList.forEach((lang) => {
-        languageSwitcher.append(this.constructor.createSelectOption(lang, lang, lang === currentLanguage, 'lan-' + lang, "translatable"));
+        languageSwitcher.append(this.constructor.createSelectOption(lang, lang, lang === currentLanguage, "", "", "lan-" + lang));
       });
   }
 
