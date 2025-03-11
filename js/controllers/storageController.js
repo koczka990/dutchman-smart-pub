@@ -35,6 +35,10 @@ class StorageController {
   }
 
   async render() {
+    // Always load fresh data from the database
+    await this.model.loadStorageData();
+    this.ensureStockValues();
+
     const storageItems = [
       ...this.model.beverages.map(beverage => ({
         name: beverage.name,

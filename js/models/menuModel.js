@@ -21,12 +21,28 @@ class MenuModel {
 
   getAllBeverages() {
     if (!this.beverages) return [];
-    return this.beverages.map((beverage) => beverage.name);
+    return this.beverages.map((beverage) => ({
+      name: beverage.name,
+      producer: beverage.producer,
+      countryoforigin: beverage.countryoforigin,
+      catgegory: beverage.catgegory,
+      alcoholstrength: beverage.alcoholstrength,
+      packaging: beverage.packaging,
+      priceinclvat: beverage.priceinclvat,
+      articletype: beverage.articletype
+    }));
   }
 
   getAllFoods() {
     if (!this.foods) return [];
-    return this.foods.map((food) => food.name);
+    return this.foods.map((food) => ({
+      name: food.name,
+      priceinclvat: food.priceinclvat,
+      category: food.category,
+      producer: food.producer,
+      articletype: food.articletype,
+      packaging: food.packaging
+    }));
   }
 
   // // Load menu items from the database
