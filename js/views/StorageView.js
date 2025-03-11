@@ -36,8 +36,8 @@ class StorageView {
             <td>
                 ${
                   item.stock <= item.reorderThreshold
-                    ? `<button class="reorder-btn" data-item="${item.name}">Reorder</button>`
-                    : "✔ In Stock"
+                    ? `<button class="reorder-btn" data-item="${item.name}" data-translate-key="reorder-btn">Reorder</button>`
+                    : '<span data-translate-key="✔ In Stock">✔ In Stock</span>'
                 }
             </td>
         </tr>
@@ -60,7 +60,7 @@ class StorageView {
   reorderItem(itemName) {
     const orderLog = document.getElementById("order-log");
     orderLog.innerHTML =
-      `<li>✅ Reordered ${itemName} - ${new Date().toLocaleTimeString()}</li>` +
+      `<li data-translate-key="Item">✅ Reordered ${itemName} - ${new Date().toLocaleTimeString()}</li>` +
       orderLog.innerHTML;
     alert(`Reordered ${itemName}!`);
   }

@@ -11,11 +11,13 @@ class LanguageSwitcher {
   static language;
   languageList;
   dictionaries;
+  dictionaryDir;
 
   constructor() {
     this.languageList = ["en", "sv", "zh"];
     this.defaultLanguage = "en";
     this.dictionaries = {};
+    this.dictionaryDir = "data/languages/";
     this.setLanguage(this.defaultLanguage);
     this.loadDictionaries();
   }
@@ -25,7 +27,7 @@ class LanguageSwitcher {
     for (const lang of this.languageList) {
       try {
         const xhr = new XMLHttpRequest();
-        xhr.open("GET", `data/languages/${lang}.json`, false); // false makes the request synchronous
+        xhr.open("GET", `${this.dictionaryDir}${lang}.json`, false); // false makes the request synchronous
         xhr.send(null);
 
         if (xhr.status === 200) {
@@ -62,7 +64,6 @@ class LanguageSwitcher {
       return this.dictionaries[defaultLang][key];
     } else {
       console.error("Translation key not found:", key);
-      return key;
     }
   }
 
@@ -71,7 +72,13 @@ class LanguageSwitcher {
     let translates = $("[data-translate-key]");
     translates.each((index, element) => {
       let key = $(element).data("translate-key");
-      $(element).html(this.translate(key));
+
+      // Translate different types of elements differently
+      if (element.tagName.toLowerCase() === "input" && $(element).attr("placeholder")) {
+        $(element).attr("placeholder", this.translate(key));
+      } else {
+        $(element).html(this.translate(key));
+      }
     });
   }
 

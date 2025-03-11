@@ -8,17 +8,18 @@
   <!-- Customer Login Form -->
   <form id="customer-login-form" class="hidden">
     <div class="form-group">
-      <label for="table-number">Table Number</label>
+      <label for="table-number" data-translate-key="Table Number">Table Number</label>
       <input
         type="number"
         id="table-number"
         placeholder="Enter table number"
         required
+        data-translate-key="table-number-placeholder"
       />
     </div>
 
     <div class="form-group">
-      <label for="vip-toggle">VIP User</label>
+      <label for="vip-toggle" data-translate-key="vip-toggle">VIP User</label>
       <label class="toggle-switch">
         <input type="checkbox" id="vip-toggle" />
         <span class="slider"></span>
@@ -27,16 +28,16 @@
 
     <div id="vip-fields" class="hidden">
       <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" placeholder="Enter username" />
+        <label for="username" data-translate-key="Username">Username</label>
+        <input type="text" id="username" placeholder="Enter username" data-translate-key="username-placeholder"/>
       </div>
       <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter password" />
+        <label for="password" data-translate-key="Password">Password</label>
+        <input type="password" id="password" placeholder="Enter password" data-translate-key="password-placeholder"/>
       </div>
     </div>
 
-    <button type="submit" id="customer-login-submit" class="login-btn" disabled>
+    <button type="submit" id="customer-login-submit" class="login-btn" data-translate-key="Login" disabled>
       Login
     </button>
   </form>
@@ -44,25 +45,27 @@
   <!-- Employee Login Form -->
   <form id="employee-login-form" class="hidden">
     <div class="form-group">
-      <label for="employee-username">Username</label>
+      <label for="employee-username" data-translate-key="Username">Username</label>
       <input
         type="text"
         id="employee-username"
         placeholder="Enter username"
         required
+        data-translate-key="username-placeholder"
       />
     </div>
     <div class="form-group">
-      <label for="employee-password">Password</label>
+      <label for="employee-password" data-translate-key="Password">Password</label>
       <input
         type="password"
         id="employee-password"
         placeholder="Enter password"
+        data-translate-key="password-placeholder"
         required
       />
     </div>
 
-    <button type="submit" id="employee-login-submit" class="login-btn">
+    <button type="submit" id="employee-login-submit" class="login-btn" data-translate-key="Login">
       Login
     </button>
   </form>
