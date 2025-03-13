@@ -23,8 +23,10 @@ class MenuController {
   async render() {
     const beverages = this.model.getAllBeverages();
     const foods = this.model.getAllFoods();
+    const vip_drinks = this.model.getAllVipDrinks();
+    const vip_foods = this.model.getAllVipFoods();
     const userInfo = this.userModel.getCurrentUserInfo();
-    await this.view.render(beverages, foods, userInfo);
+    await this.view.render(beverages, foods, vip_drinks, vip_foods, userInfo);
   }
 
   // Get current user information
@@ -61,7 +63,9 @@ class MenuController {
       for (const item of items) {
         const product =
           this.storageModel.beverages.find((b) => b.name === item.name) ||
-          this.storageModel.foods.find((f) => f.name === item.name);
+          this.storageModel.foods.find((f) => f.name === item.name) ||
+          this.storageModel.vip_drinks.find((v) => v.name === item.name) ||
+          this.storageModel.vip_foods.find((v) => v.name === item.name);
 
         if (!product) {
           alert(`Error: Product "${item.name}" not found in inventory.`);
@@ -126,7 +130,9 @@ class MenuController {
       for (const item of items) {
         const product =
           this.storageModel.beverages.find((b) => b.name === item.name) ||
-          this.storageModel.foods.find((f) => f.name === item.name);
+          this.storageModel.foods.find((f) => f.name === item.name) ||
+          this.storageModel.vip_drinks.find((v) => v.name === item.name) ||
+          this.storageModel.vip_foods.find((v) => v.name === item.name);
         if (product) {
           this.storageModel.updateStock(product.nr, -item.quantity);
         }

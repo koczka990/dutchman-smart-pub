@@ -17,6 +17,12 @@ class StorageModel {
       const foodsResponse = await fetch("/data/foods.json");
       this.foods = await foodsResponse.json();
 
+      const vipDrinksResponse = await fetch("/data/vip_drinks.json");
+      this.vip_drinks = await vipDrinksResponse.json();
+
+      const vipFoodsResponse = await fetch("/data/vip_foods.json");
+      this.vip_foods = await vipFoodsResponse.json();
+
       // Load stock data from localStorage
       const stockData = this.loadStockData();
 
@@ -52,6 +58,12 @@ class StorageModel {
     this.foods.forEach((food) => {
       food.stock = Math.floor(Math.random() * 11); // Random number between 0 and 10
     });
+    this.vip_drinks.forEach((vip_drink) => {
+      vip_drink.stock = Math.floor(Math.random() * 11);
+    });
+    this.vip_foods.forEach((vip_food) => {
+      vip_food.stock = Math.floor(Math.random() * 11);
+    });
     this.saveStockData();
   }
 
@@ -63,6 +75,12 @@ class StorageModel {
     this.foods.forEach((food) => {
       food.stock = stockData[food.nr] || 0;
     });
+    this.vip_drinks.forEach((vip_drink) => {
+      vip_drink.stock = stockData[vip_drink.nr] || 0;
+    });
+    this.vip_foods.forEach((vip_food) => {
+      vip_food.stock = stockData[vip_food.nr] || 0;
+    });
   }
 
   saveStockData() {
@@ -73,14 +91,22 @@ class StorageModel {
     this.foods.forEach((food) => {
       stockData[food.nr] = food.stock;
     });
+    this.vip_drinks.forEach((vip_drink) => {
+      stockData[vip_drink.nr] = vip_drink.stock;
+    });
+    this.vip_foods.forEach((vip_food) => {
+      stockData[vip_food.nr] = vip_food.stock;
+    });
     console.log("Saving stock data to Local Storage:", stockData);
     this.database.save(this.stockKey, stockData);
   }
 
   updateStock(productNr, amount) {
     const product =
-      this.beverages.find((beverage) => beverage.nr === productNr) ||
-      this.foods.find((food) => food.nr === productNr);
+        this.beverages.find((beverage) => beverage.nr === productNr) ||
+        this.foods.find((food) => food.nr === productNr) ||
+        this.vip_drinks.find((vip_drink) => vip_drink.nr === productNr) ||
+        this.vip_foods.find((vip_food) => vip_food.nr === productNr);
     if (product) {
       product.stock = (product.stock || 0) + amount;
       this.saveStockData();

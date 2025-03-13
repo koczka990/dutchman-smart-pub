@@ -30,6 +30,18 @@ class StorageController {
         stockUpdated = true;
       }
     });
+    this.model.vip_drinks.forEach((vip_drink) => {
+      if (vip_drink.stock === undefined) {
+        vip_drink.stock = 10;
+        stockUpdated = true;
+      }
+    });
+    this.model.vip_foods.forEach((vip_food) => {
+      if (vip_food.stock === undefined) {
+        vip_food.stock = 10;
+        stockUpdated = true;
+      }
+    });
 
     // Save changes to the database
     if (stockUpdated) {
@@ -40,7 +52,9 @@ class StorageController {
   handleReorder(itemName) {
     const product =
       this.model.beverages.find((b) => b.name === itemName) ||
-      this.model.foods.find((f) => f.name === itemName);
+      this.model.foods.find((f) => f.name === itemName) ||
+      this.model.vip_drinks.find((c) => c.name === itemName) ||
+      this.model.vip_foods.find((z) => z.name === itemName);
 
     if (product) {
       product.stock = 10; // Reset stock to 10
@@ -65,6 +79,16 @@ class StorageController {
       ...this.model.foods.map((food) => ({
         name: food.name,
         stock: food.stock,
+        reorderThreshold: 5, // can be changed later
+      })),
+      ...this.model.vip_drinks.map((vip_drink) => ({
+        name: vip_drink.name,
+        stock: vip_drink.stock,
+        reorderThreshold: 5, // can be changed later
+      })),
+      ...this.model.vip_foods.map((vip_food) => ({
+        name: vip_food.name,
+        stock: vip_food.stock,
         reorderThreshold: 5, // can be changed later
       })),
     ];

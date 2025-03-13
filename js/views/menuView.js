@@ -4,9 +4,11 @@ class MenuView {
     this.appContent = document.getElementById("app-content");
   }
 
-  async render(beverages, foods, userInfo) {
+  async render(beverages, foods, vip_drinks, vip_foods, userInfo) {
     this.beverages = beverages;
     this.foods = foods;
+    this.vip_drinks = vip_drinks;
+    this.vip_foods = vip_foods;
 
     try {
       const response = await fetch("js/html/menu.html");
@@ -24,6 +26,8 @@ class MenuView {
 
   displayCustomerInfo(userInfo) {
     const vipInfoDiv = document.getElementById("vip-info");
+    const vipFoodTab = document.getElementById("vip-food-tab");
+    const vipDrinksTab = document.getElementById("vip-drinks-tab");
     console.log("Displaying user info:", userInfo);
     console.log("VIP info div:", vipInfoDiv);
 
@@ -31,6 +35,9 @@ class MenuView {
     if (userInfo.isVIP) {
       console.log("User is VIP, showing VIP information");
       vipInfoDiv.classList.remove("hidden");
+      vipFoodTab.classList.remove("hidden");
+      vipDrinksTab.classList.remove("hidden");
+
       const nameElement = document.getElementById("display-customer-name");
       const balanceElement = document.getElementById("display-balance");
       const tableElement = document.getElementById("display-table-number");
@@ -80,19 +87,44 @@ class MenuView {
   setupEventListeners() {
     const foodTab = document.getElementById("food-tab");
     const drinksTab = document.getElementById("drinks-tab");
+    const vipFoodTab = document.getElementById("vip-food-tab");
+    const vipDrinksTab = document.getElementById("vip-drinks-tab");
     const confirmButton = document.getElementById("confirm-btn");
+    const subcategories = document.querySelectorAll('.subcategory');
     const clearButton = document.getElementById("clear-btn");
 
+
+    const tabs = [foodTab, drinksTab, vipFoodTab, vipDrinksTab];
+
     foodTab.addEventListener("click", () => {
+      tabs.forEach(tab => tab.classList.remove("active"));
       foodTab.classList.add("active");
-      drinksTab.classList.remove("active");
       this.populateMenuItems(this.foods);
     });
 
+    subcategories.forEach(button => {
+      button.addEventListener('click', () => {
+        const subcategory = button.getAttribute('id');
+        this.populateMenuItems(this.beverages.filter(item => item.category === subcategory));
+      });
+    });
+
     drinksTab.addEventListener("click", () => {
+      tabs.forEach(tab => tab.classList.remove("active"));
       drinksTab.classList.add("active");
-      foodTab.classList.remove("active");
       this.populateMenuItems(this.beverages);
+    });
+
+    vipFoodTab.addEventListener("click", () => {
+      tabs.forEach(tab => tab.classList.remove("active"));
+      vipFoodTab.classList.add("active");
+      this.populateMenuItems(this.vip_foods);
+    });
+
+    vipDrinksTab.addEventListener("click", () => {
+      tabs.forEach(tab => tab.classList.remove("active"));
+      vipDrinksTab.classList.add("active");
+      this.populateMenuItems(this.vip_drinks);
     });
 
     confirmButton.addEventListener("click", () => {
