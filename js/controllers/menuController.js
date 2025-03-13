@@ -11,13 +11,13 @@ class MenuController {
     this.userModel = new UserModel();
     this.view = new MenuView(this);
     this.orderModel = new OrderModel(app.database);
-    this.storageModel = new StorageModel();
+    this.storageModel = new StorageModel(app.database);
     this.init();
   }
 
   async init() {
     await this.model.loadMenuData();
-    await this.storageModel.loadStorageData();
+    await this.storageModel.loadStorageAndOrderHistoryData();
   }
 
   async render() {
@@ -51,21 +51,27 @@ class MenuController {
     }
 
     // Calculate total amount
-    const totalAmount = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const totalAmount = items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
 
     try {
       // Check stock availability for all items
       for (const item of items) {
-        const product = this.storageModel.beverages.find(b => b.name === item.name) || 
-                       this.storageModel.foods.find(f => f.name === item.name);
-        
+        const product =
+          this.storageModel.beverages.find((b) => b.name === item.name) ||
+          this.storageModel.foods.find((f) => f.name === item.name);
+
         if (!product) {
           alert(`Error: Product "${item.name}" not found in inventory.`);
           return;
         }
-        
+
         if (product.stock < item.quantity) {
-          alert(`Sorry, we only have ${product.stock} units of "${item.name}" in stock.`);
+          alert(
+            `Sorry, we only have ${product.stock} units of "${item.name}" in stock.`
+          );
           return;
         }
       }
@@ -86,17 +92,21 @@ class MenuController {
           tableNumber: userInfo.tableNumber,
           isVIP: true,
           username: userInfo.username,
-          totalAmount: totalAmount
+          totalAmount: totalAmount,
         });
 
         // Update session with new balance
         const updatedUserInfo = {
           ...userInfo,
-          balance: parseFloat(userInfo.balance) - totalAmount
+          balance: parseFloat(userInfo.balance) - totalAmount,
         };
         this.userModel.storeUserSession(updatedUserInfo);
 
-        alert(`Order confirmed! Your new balance is $${(parseFloat(userInfo.balance) - totalAmount).toFixed(2)}`);
+        alert(
+          `Order confirmed! Your new balance is $${(
+            parseFloat(userInfo.balance) - totalAmount
+          ).toFixed(2)}`
+        );
         this.render();
       } else {
         // Handle regular customer order
@@ -104,16 +114,19 @@ class MenuController {
           items: items,
           tableNumber: userInfo.tableNumber,
           isVIP: false,
-          totalAmount: totalAmount
+          totalAmount: totalAmount,
         });
 
-        alert("Order confirmed! Your order will be delivered to your table shortly.");
+        alert(
+          "Order confirmed! Your order will be delivered to your table shortly."
+        );
       }
 
       // Update stock for all items
       for (const item of items) {
-        const product = this.storageModel.beverages.find(b => b.name === item.name) || 
-                       this.storageModel.foods.find(f => f.name === item.name);
+        const product =
+          this.storageModel.beverages.find((b) => b.name === item.name) ||
+          this.storageModel.foods.find((f) => f.name === item.name);
         if (product) {
           this.storageModel.updateStock(product.nr, -item.quantity);
         }

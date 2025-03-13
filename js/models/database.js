@@ -2,11 +2,11 @@
 class Database {
   constructor() {
     // Initialize data in localStorage if it doesn't exist
-    if (!localStorage.getItem('users')) {
-      localStorage.setItem('users', JSON.stringify([]));
+    if (!localStorage.getItem("users")) {
+      localStorage.setItem("users", JSON.stringify([]));
     }
-    if (!localStorage.getItem('orders')) {
-      localStorage.setItem('orders', JSON.stringify([]));
+    if (!localStorage.getItem("orders")) {
+      localStorage.setItem("orders", JSON.stringify([]));
     }
   }
 
