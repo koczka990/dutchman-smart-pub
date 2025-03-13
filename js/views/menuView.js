@@ -292,7 +292,7 @@ class MenuView {
     document.getElementById("order-list").innerHTML = "";
     let totalPriceElement = document.getElementById("total");
     if (totalPriceElement) {
-      totalPriceElement.textContent = "0";  // Assuming the price is displayed as text
+      totalPriceElement.textContent = "0";
     }
   }
 
