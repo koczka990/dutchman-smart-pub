@@ -29,7 +29,8 @@ class MenuModel {
       alcoholstrength: beverage.alcoholstrength,
       packaging: beverage.packaging,
       priceinclvat: beverage.priceinclvat,
-      articletype: beverage.articletype
+      articletype: beverage.articletype,
+      articleNumber: beverage.nr,
     }));
   }
 
@@ -41,7 +42,8 @@ class MenuModel {
       category: food.category,
       producer: food.producer,
       articletype: food.articletype,
-      packaging: food.packaging
+      packaging: food.packaging,
+      articleNumber: food.nr,
     }));
   }
 

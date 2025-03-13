@@ -239,9 +239,8 @@ input:checked+.slider:before {
 .menu-item {
   position: relative;
   display: flex;
-  flex-direction: column; /* Keeps name and price stacked */
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
   padding: 15px;
   background-color: white;
   border-radius: 10px;
@@ -249,6 +248,17 @@ input:checked+.slider:before {
   cursor: pointer;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
   width: 100%;
+}
+
+.item-img {
+  height: 100px;
+  width: auto; /* Maintain aspect ratio */
+  margin-right: 15px; /* Add spacing between image and text */
+}
+
+.item-info {
+  display: flex;
+  flex-direction: column; /* Stack name and price */
 }
 
 .item-name {
