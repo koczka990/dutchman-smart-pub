@@ -68,6 +68,14 @@ class OrderModel {
     const orders = this.loadOrders();
     return orders.filter((order) => order.identifier === userId);
   }
+
+  // Store order details for payment processing
+  storeOrderDetails(items, tableNumber) {
+    // Use localStorage as a temporary storage for order details
+    // This is acceptable as it's handled by the model, not the view
+    localStorage.setItem("orderDetails", JSON.stringify(items));
+    localStorage.setItem("selectedTable", tableNumber);
+  }
 }
 
 export default OrderModel;

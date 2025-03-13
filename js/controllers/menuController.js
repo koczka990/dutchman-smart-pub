@@ -126,6 +126,41 @@ class MenuController {
       alert("There was an error processing your order. Please try again.");
     }
   }
+
+  // Handle regular customer orders and redirect to payment page
+  async handleRegularCustomerOrder(items, userInfo) {
+    if (!items || items.length === 0) {
+      alert("No items in the order. Please add some items before confirming.");
+      return;
+    }
+
+    try {
+      // Check stock availability for all items
+      for (const item of items) {
+        const product = this.storageModel.beverages.find(b => b.name === item.name) || 
+                       this.storageModel.foods.find(f => f.name === item.name);
+        
+        if (!product) {
+          alert(`Error: Product "${item.name}" not found in inventory.`);
+          return;
+        }
+        
+        if (product.stock < item.quantity) {
+          alert(`Sorry, we only have ${product.stock} units of "${item.name}" in stock.`);
+          return;
+        }
+      }
+
+      // Store order details using the order model
+      this.orderModel.storeOrderDetails(items, userInfo.tableNumber);
+      
+      // Redirect to payment page
+      this.app.loadView("payment");
+    } catch (error) {
+      console.error("Error processing order:", error);
+      alert("There was an error processing your order. Please try again.");
+    }
+  }
 }
 
 export default MenuController;
