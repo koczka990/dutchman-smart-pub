@@ -24,7 +24,7 @@ class MenuModel {
     return this.beverages.map((beverage) => ({
       name: beverage.name,
       producer: beverage.producer,
-      countryoforigin: beverage.countryoforigin,
+      countryoforiginlandname: beverage.countryoforiginlandname,
       catgegory: beverage.catgegory,
       alcoholstrength: beverage.alcoholstrength,
       packaging: beverage.packaging,

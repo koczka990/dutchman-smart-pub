@@ -187,10 +187,7 @@ class MenuView {
       orderList.appendChild(listItem);
       this.setupQuantityButtons(listItem);
     }
-    if (
-      document.getElementById("subtotal") &&
-      document.getElementById("total")
-    ) {
+    if (document.getElementById("total")) {
       this.updateOrderSummary();
     } else {
       console.error("Order summary elements are missing.");
@@ -220,7 +217,7 @@ class MenuView {
 
   updateOrderSummary() {
     const orderList = document.getElementById("order-list");
-    let subtotal = 0;
+    let total = 0;
 
     // Loop through each order item in the UI
     [...orderList.children].forEach((listItem) => {
@@ -231,10 +228,7 @@ class MenuView {
       subtotal += itemPrice * quantity;
     });
 
-    let total = subtotal; // No extra tax needed (price includes VAT)
-
     // Update order summary in UI
-    document.getElementById("subtotal").textContent = `$${subtotal.toFixed(2)}`;
     document.getElementById("total").textContent = `$${total.toFixed(2)}`;
   }
 
@@ -324,6 +318,10 @@ class MenuView {
 
   clearOrderList() {
     document.getElementById("order-list").innerHTML = "";
+    let totalPriceElement = document.getElementById("total");
+    if (totalPriceElement) {
+      totalPriceElement.textContent = "0";
+    }
   }
 
   setupInfoClickEvents(items) {
