@@ -1,4 +1,4 @@
-<div class="payment-container">
+<div class="payment-container wide-container">
   <h2>💳 Payment</h2>
 
   <div class="payment-header">
@@ -11,7 +11,7 @@
     </div>
   </div>
 
-  <div id="order-list" class="order-container"></div>
+  <div id="order-list" class="payment-order-list"></div>
 
   <div id="payment-controls">
     <div class="discount-container">
@@ -34,14 +34,16 @@
       </div>
     </div>
     
-    <button id="confirm-payment" class="primary-btn">Process Payment</button>
+    <div class="payment-buttons">
+      <button id="confirm-payment" class="payment-btn confirm-btn">Process Payment</button>
+    </div>
   </div>
 
   <div id="payment-complete" class="hidden">
     <div class="success-message">
       <h3>All items have been paid for!</h3>
       <p>Your order will be delivered to your table shortly.</p>
-      <button id="return-to-menu" class="primary-btn">Return to Menu</button>
+      <button id="return-to-menu" class="payment-btn return-btn">Return to Menu</button>
     </div>
   </div>
 </div>

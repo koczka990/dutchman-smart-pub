@@ -36,19 +36,62 @@ class PaymentView {
         }
 
         if (orders.length === 0) {
-            orderList.innerHTML = "<p>No items to pay for.</p>";
+            orderList.innerHTML = "<p class='no-items-message'>No items to pay for.</p>";
             this.showPaymentComplete();
             return;
         }
 
-        orderList.innerHTML = orders.map((order, index) => `
-            <div class="order-item" data-index="${index}" data-price="${order.price}" data-quantity="${order.quantity}">
-                <input type="checkbox" class="order-checkbox" data-index="${index}" checked>
-                <span class="item-details">${order.name} x${order.quantity} - $${(order.price * order.quantity).toFixed(2)}</span>
+        // Create an expanded array where each item with quantity > 1 is expanded into individual items
+        const expandedItems = [];
+        orders.forEach(order => {
+            // For each item, create 'quantity' number of individual items
+            for (let i = 0; i < order.quantity; i++) {
+                expandedItems.push({
+                    name: order.name,
+                    price: order.price,
+                    originalIndex: expandedItems.length // Keep track of the index in the expanded array
+                });
+            }
+        });
+
+        // Render each individual item
+        orderList.innerHTML = expandedItems.map((item, index) => `
+            <div class="payment-item" data-index="${index}" data-price="${item.price}">
+                <div class="payment-item-checkbox" data-index="${index}">
+                    <div class="checkbox-indicator selected"></div>
+                </div>
+                <div class="payment-item-details">
+                    <span class="item-name">${item.name}</span>
+                    <span class="item-price">$${parseFloat(item.price).toFixed(2)}</span>
+                </div>
             </div>
         `).join("");
 
+        // Store the expanded items for later use
+        this.expandedItems = expandedItems;
+
         this.updateTotals();
+        this.setupItemClickEvents();
+    }
+
+    setupItemClickEvents() {
+        // Make the entire payment item clickable
+        document.querySelectorAll(".payment-item").forEach(item => {
+            item.addEventListener("click", () => {
+                const index = item.dataset.index;
+                const checkbox = item.querySelector(`.payment-item-checkbox[data-index="${index}"]`);
+                const indicator = checkbox.querySelector(".checkbox-indicator");
+                
+                // Toggle selected state
+                if (indicator.classList.contains("selected")) {
+                    indicator.classList.remove("selected");
+                } else {
+                    indicator.classList.add("selected");
+                }
+                
+                this.updateTotals();
+            });
+        });
     }
 
     setupEventListeners() {
@@ -58,8 +101,8 @@ class PaymentView {
         
         if (checkAllBtn) {
             checkAllBtn.addEventListener("click", () => {
-                document.querySelectorAll(".order-checkbox").forEach(checkbox => {
-                    checkbox.checked = true;
+                document.querySelectorAll(".checkbox-indicator").forEach(indicator => {
+                    indicator.classList.add("selected");
                 });
                 this.updateTotals();
             });
@@ -67,8 +110,8 @@ class PaymentView {
         
         if (uncheckAllBtn) {
             uncheckAllBtn.addEventListener("click", () => {
-                document.querySelectorAll(".order-checkbox").forEach(checkbox => {
-                    checkbox.checked = false;
+                document.querySelectorAll(".checkbox-indicator").forEach(indicator => {
+                    indicator.classList.remove("selected");
                 });
                 this.updateTotals();
             });
@@ -81,13 +124,6 @@ class PaymentView {
                 this.updateTotals();
             });
         }
-        
-        // Individual checkboxes
-        document.querySelectorAll(".order-checkbox").forEach(checkbox => {
-            checkbox.addEventListener("change", () => {
-                this.updateTotals();
-            });
-        });
     }
 
     updateTotals() {
@@ -96,12 +132,14 @@ class PaymentView {
         
         // Calculate subtotal of checked items
         let subtotal = 0;
-        document.querySelectorAll(".order-item").forEach(item => {
-            const checkbox = item.querySelector(".order-checkbox");
-            if (checkbox && checkbox.checked) {
+        document.querySelectorAll(".payment-item").forEach(item => {
+            const index = item.dataset.index;
+            const checkbox = item.querySelector(`.payment-item-checkbox[data-index="${index}"]`);
+            const indicator = checkbox.querySelector(".checkbox-indicator");
+            
+            if (indicator.classList.contains("selected")) {
                 const price = parseFloat(item.dataset.price);
-                const quantity = parseInt(item.dataset.quantity);
-                subtotal += price * quantity;
+                subtotal += price; // Each item now represents a single unit
             }
         });
         
@@ -123,9 +161,13 @@ class PaymentView {
     
     getSelectedItems() {
         const selectedIndices = [];
-        document.querySelectorAll(".order-checkbox").forEach(checkbox => {
-            if (checkbox.checked) {
-                selectedIndices.push(parseInt(checkbox.dataset.index));
+        document.querySelectorAll(".payment-item").forEach(item => {
+            const index = parseInt(item.dataset.index);
+            const checkbox = item.querySelector(`.payment-item-checkbox[data-index="${index}"]`);
+            const indicator = checkbox.querySelector(".checkbox-indicator");
+            
+            if (indicator.classList.contains("selected")) {
+                selectedIndices.push(index);
             }
         });
         return selectedIndices;

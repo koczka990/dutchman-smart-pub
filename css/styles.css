@@ -474,93 +474,233 @@ td {
   gap: 15px;
 }
 
+/* Wide container for payment page */
+.wide-container {
+  max-width: 800px;
+  width: 80%;
+}
+
 /* Heading */
 .payment-container h2 {
   text-align: center;
-  font-size: 22px;
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Payment Header */
+.payment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.table-info h3 {
+  margin: 0;
+  font-size: 18px;
   color: #333;
 }
 
-/* Table Selector */
-.payment-container label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 5px;
-}
-
-.payment-container select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-/* Order List */
-.order-container {
-  background: #f9f9f9;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.order-container ul {
-  list-style: none;
-  padding: 0;
-}
-
-.order-container li {
+.selection-controls {
   display: flex;
-  justify-content: space-between;
-  padding: 8px;
-  background: #fff;
-  margin: 5px 0;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  align-items: center;
-}
-
-/* Split Bill Checkbox */
-.payment-container .split-bill {
-  display: flex;
-  align-items: center;
   gap: 10px;
 }
 
-.payment-container .split-bill input {
-  transform: scale(1.2);
-  cursor: pointer;
-}
-
-/* Total Amount */
-#total-container {
-  display: flex;
-  justify-content: space-between;
-  font-size: 18px;
-  font-weight: bold;
-  background: #f4f4f4;
-  padding: 10px;
-  border-radius: 5px;
-  margin-top: 10px;
-}
-
-/* Confirm Payment Button */
-#confirm-payment {
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  background-color: #28a745;
-  color: white;
+.control-btn {
+  padding: 8px 15px;
+  background-color: #f0f0f0;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
+  transition: background-color 0.2s;
 }
 
-#confirm-payment:hover {
-  background-color: #218838;
+.control-btn:hover {
+  background-color: #e0e0e0;
+}
+
+/* Payment Order List */
+.payment-order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.payment-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  margin-bottom: 5px;
+}
+
+.payment-item:hover {
+  background-color: #e8e8e8;
+  transform: translateY(-2px);
+}
+
+.payment-item-checkbox {
+  margin-right: 15px;
+}
+
+.checkbox-indicator {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  border: 2px solid #ccc;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.checkbox-indicator.selected {
+  background-color: #4CAF50;
+  border-color: #4CAF50;
+}
+
+.checkbox-indicator.selected:after {
+  content: "✓";
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+}
+
+.payment-item-details {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-name {
+  font-weight: bold;
+  font-size: 16px;
+  flex: 1;
+}
+
+.item-quantity {
+  margin: 0 15px;
+  color: #666;
+}
+
+.item-price {
+  font-weight: bold;
+  color: #333;
+}
+
+/* Payment Controls */
+#payment-controls {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.discount-container {
+  margin-bottom: 15px;
+}
+
+.discount-container label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.discount-container input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.totals {
+  margin: 20px 0;
+}
+
+.totals > div {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.final-total {
+  font-weight: bold;
+  font-size: 18px !important;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+}
+
+/* Payment Buttons */
+.payment-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.payment-btn {
+  padding: 12px 25px;
+  font-size: 16px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+  width: 60%;
+}
+
+.confirm-btn {
+  background-color: #237e08;
+  color: white;
+}
+
+.confirm-btn:hover {
+  background-color: #1c6606;
+}
+
+.return-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.return-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Payment Complete */
+#payment-complete {
+  text-align: center;
+  padding: 20px;
+}
+
+.success-message h3 {
+  color: #237e08;
+  margin-bottom: 15px;
+}
+
+.success-message p {
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.no-items-message {
+  text-align: center;
+  padding: 20px;
+  font-size: 16px;
+  color: #666;
 }
 
 /* Responsive */
@@ -643,15 +783,6 @@ td {
 .cancel-btn {
   background-color: #f0f0f0;
   color: #333;
-}
-
-.confirm-btn {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.cancel-btn:hover {
-  background-color: #e0e0e0;
 }
 
 .confirm-btn:hover {

@@ -63,25 +63,49 @@ class PaymentController {
             return;
         }
         
+        // Get the expanded items from the view
+        const expandedItems = this.paymentView.expandedItems;
+        
         // Calculate total with discount
         let subtotal = 0;
-        const selectedItems = selectedIndices.map(index => this.selectedItems[index]);
+        const selectedExpandedItems = selectedIndices.map(index => expandedItems[index]);
         
-        selectedItems.forEach(item => {
-            subtotal += item.price * item.quantity;
+        selectedExpandedItems.forEach(item => {
+            subtotal += parseFloat(item.price);
         });
         
         const discountAmount = subtotal * (discountPercent / 100);
         const total = subtotal - discountAmount;
         
         // Confirm payment
-        const confirmMessage = `Process payment of $${total.toFixed(2)} for ${selectedItems.length} item(s)?`;
+        const confirmMessage = `Process payment of $${total.toFixed(2)} for ${selectedExpandedItems.length} item(s)?`;
         if (confirm(confirmMessage)) {
-            // Remove paid items from the list
-            this.selectedItems = this.selectedItems.filter((_, index) => !selectedIndices.includes(index));
+            // Create a copy of the original items
+            const remainingItems = [...this.selectedItems];
+            
+            // For each selected expanded item, decrement the quantity of the corresponding original item
+            selectedExpandedItems.forEach(expandedItem => {
+                // Find the matching original item
+                const originalItem = remainingItems.find(item => item.name === expandedItem.name);
+                if (originalItem) {
+                    // Decrement the quantity
+                    originalItem.quantity -= 1;
+                    
+                    // If quantity reaches 0, remove the item
+                    if (originalItem.quantity <= 0) {
+                        const index = remainingItems.indexOf(originalItem);
+                        if (index > -1) {
+                            remainingItems.splice(index, 1);
+                        }
+                    }
+                }
+            });
             
             // Update the order in the model
-            this.paymentModel.updateOrder(this.selectedTable, this.selectedItems);
+            this.paymentModel.updateOrder(this.selectedTable, remainingItems);
+            
+            // Update the controller's items
+            this.selectedItems = remainingItems;
             
             // If all items are paid for, complete the order
             if (this.selectedItems.length === 0) {
