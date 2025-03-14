@@ -2,6 +2,8 @@ class MenuView {
   constructor(controller) {
     this.controller = controller;
     this.appContent = document.getElementById("app-content");
+    this.undoStack = []; // Stores previous states
+    this.redoStack = []; // Stores undone states
   }
 
   async render(beverages, foods, vip_drinks, vip_foods, userInfo) {
@@ -97,39 +99,43 @@ class MenuView {
     const vipFoodTab = document.getElementById("vip-food-tab");
     const vipDrinksTab = document.getElementById("vip-drinks-tab");
     const confirmButton = document.getElementById("confirm-btn");
-    const subcategories = document.querySelectorAll('.subcategory');
+    const subcategories = document.querySelectorAll(".subcategory");
     const clearButton = document.getElementById("clear-btn");
-
 
     const tabs = [foodTab, drinksTab, vipFoodTab, vipDrinksTab];
 
+    const undoButton = document.getElementById("undo-btn");
+    const redoButton = document.getElementById("redo-btn");
+
     foodTab.addEventListener("click", () => {
-      tabs.forEach(tab => tab.classList.remove("active"));
+      tabs.forEach((tab) => tab.classList.remove("active"));
       foodTab.classList.add("active");
       this.populateMenuItems(this.foods);
     });
 
-    subcategories.forEach(button => {
-      button.addEventListener('click', () => {
-        const subcategory = button.getAttribute('id');
-        this.populateMenuItems(this.beverages.filter(item => item.category === subcategory));
+    subcategories.forEach((button) => {
+      button.addEventListener("click", () => {
+        const subcategory = button.getAttribute("id");
+        this.populateMenuItems(
+          this.beverages.filter((item) => item.category === subcategory)
+        );
       });
     });
 
     drinksTab.addEventListener("click", () => {
-      tabs.forEach(tab => tab.classList.remove("active"));
+      tabs.forEach((tab) => tab.classList.remove("active"));
       drinksTab.classList.add("active");
       this.populateMenuItems(this.beverages);
     });
 
     vipFoodTab.addEventListener("click", () => {
-      tabs.forEach(tab => tab.classList.remove("active"));
+      tabs.forEach((tab) => tab.classList.remove("active"));
       vipFoodTab.classList.add("active");
       this.populateMenuItems(this.vip_foods);
     });
 
     vipDrinksTab.addEventListener("click", () => {
-      tabs.forEach(tab => tab.classList.remove("active"));
+      tabs.forEach((tab) => tab.classList.remove("active"));
       vipDrinksTab.classList.add("active");
       this.populateMenuItems(this.vip_drinks);
     });
@@ -141,6 +147,13 @@ class MenuView {
     clearButton.addEventListener("click", () => {
       this.clearOrderList();
     });
+
+    if (undoButton) {
+      undoButton.addEventListener("click", () => this.undo());
+    }
+    if (redoButton) {
+      redoButton.addEventListener("click", () => this.redo());
+    }
   }
 
   setupMenuItemDragEvents() {
@@ -193,6 +206,9 @@ class MenuView {
 
     if (!selectedItem) return;
 
+    // Save the current state before modifying
+    this.saveState();
+
     let existingItem = [...orderList.children].find(
       (li) => li.dataset.name === selectedItem.name
     );
@@ -232,11 +248,13 @@ class MenuView {
     const quantitySpan = listItem.querySelector(".order-btn span");
 
     increaseBtn.addEventListener("click", () => {
+      this.saveState(); // Save state before changing
       quantitySpan.textContent = parseInt(quantitySpan.textContent) + 1;
       this.updateOrderSummary();
     });
 
     decreaseBtn.addEventListener("click", () => {
+      this.saveState(); // Save state before changing
       let quantity = parseInt(quantitySpan.textContent);
       if (quantity > 1) {
         quantitySpan.textContent = quantity - 1;
@@ -245,6 +263,75 @@ class MenuView {
       }
       this.updateOrderSummary();
     });
+  }
+
+  saveState() {
+    const orderList = document.getElementById("order-list");
+    const currentState = [...orderList.children].map((item) => ({
+      name: item.dataset.name,
+      price: parseFloat(item.dataset.price),
+      quantity: parseInt(item.querySelector(".order-btn span").textContent),
+    }));
+
+    this.undoStack.push(currentState);
+    this.redoStack = []; // Clear redo stack when new action is performed
+  }
+
+  restoreState(state) {
+    const orderList = document.getElementById("order-list");
+    orderList.innerHTML = "";
+
+    state.forEach((item) => {
+      const listItem = document.createElement("li");
+      listItem.setAttribute("draggable", "true");
+      listItem.setAttribute("data-name", item.name);
+      listItem.setAttribute("data-price", item.price);
+      listItem.innerHTML = `
+        <span>${item.name} - $${item.price.toFixed(2)}</span>
+        <span class="order-btn">
+          <button class="decrease-btn" type="button">-</button>
+          <span>${item.quantity}</span>
+          <button class="increase-btn" type="button">+</button>
+        </span>
+      `;
+
+      orderList.appendChild(listItem);
+      this.setupQuantityButtons(listItem);
+    });
+
+    this.updateOrderSummary();
+  }
+
+  undo() {
+    if (this.undoStack.length === 0) return;
+
+    const currentState = [
+      ...document.getElementById("order-list").children,
+    ].map((item) => ({
+      name: item.dataset.name,
+      price: parseFloat(item.dataset.price),
+      quantity: parseInt(item.querySelector(".order-btn span").textContent),
+    }));
+
+    this.redoStack.push(currentState); // Save current state before undoing
+    const previousState = this.undoStack.pop();
+    this.restoreState(previousState);
+  }
+
+  redo() {
+    if (this.redoStack.length === 0) return;
+
+    const currentState = [
+      ...document.getElementById("order-list").children,
+    ].map((item) => ({
+      name: item.dataset.name,
+      price: parseFloat(item.dataset.price),
+      quantity: parseInt(item.querySelector(".order-btn span").textContent),
+    }));
+
+    this.undoStack.push(currentState); // Save current state before redoing
+    const nextState = this.redoStack.pop();
+    this.restoreState(nextState);
   }
 
   updateOrderSummary() {

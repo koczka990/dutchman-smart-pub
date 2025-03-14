@@ -20,8 +20,7 @@
 
     <div class="menus" id="menu-items"></div>
 
-    <div id="info-section" class="info-container">
-    </div>
+    <div id="info-section" class="info-container"></div>
   </div>
 
   <div class="order-container">
@@ -29,14 +28,26 @@
       <h3>Customer Information</h3>
       <div class="customer-info">
         <div id="vip-info" class="hidden">
-          <p><strong>Customer Name: </strong><span id="display-customer-name">-</span></p>
+          <p>
+            <strong>Customer Name: </strong
+            ><span id="display-customer-name">-</span>
+          </p>
           <p><strong>Balance: </strong><span id="display-balance">-</span></p>
         </div>
-        <p><strong>Table Number: </strong><span id="display-table-number">-</span></p>
+        <p>
+          <strong>Table Number: </strong
+          ><span id="display-table-number">-</span>
+        </p>
       </div>
     </div>
 
-    <h3>Order Details</h3>
+    <div class="order-header">
+      <h3>Order Details</h3>
+      <div class="order-buttons">
+        <button id="undo-btn">Undo</button>
+        <button id="redo-btn">Redo</button>
+      </div>
+    </div>
     <ul class="order-list" id="order-list">
       <!-- <li draggable="true">
         <span>Pizza</span>
