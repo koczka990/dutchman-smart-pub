@@ -1,112 +1,231 @@
 class StorageModel {
   constructor(database) {
     this.database = database;
-    this.beverages = [];
-    this.foods = [];
+
+    // Keys for localStorage
     this.stockKey = "productStock";
     this.storageOrderHistoryKey = "storageOrderHistory";
-    this.orderHistory = this.loadOrderHistory();
+
+    // Initialize storage data
+    this.drinks = [];
+    this.foods = [];
+    this.vip_drinks = [];
+    this.vip_foods = [];
+
+    this.orderHistory = [];
+
+    // Undo/Redo Stacks
+    this.undoStack = [];
+    this.redoStack = [];
   }
 
-  // Load beverage and food data from JSON files and stock data from localStorage
-  async loadStorageAndOrderHistoryData() {
+  // Undo/Redo functionality
+
+  // Save the current state before any stock update
+  saveStateForUndo() {
+    const currentState = {
+      drinks: JSON.parse(JSON.stringify(this.drinks)),
+      foods: JSON.parse(JSON.stringify(this.foods)),
+      vip_drinks: JSON.parse(JSON.stringify(this.vip_drinks)),
+      vip_foods: JSON.parse(JSON.stringify(this.vip_foods)),
+      orderHistory: JSON.parse(JSON.stringify(this.orderHistory)),
+    };
+
+    this.undoStack.push(currentState); // Save current state to undo stack
+    this.redoStack = []; // Clear redo stack whenever a new action happens
+  }
+
+  // Undo the last stock update
+  undo() {
+    if (this.undoStack.length === 0) return; // No more actions to undo
+
+    const lastState = this.undoStack.pop();
+    this.redoStack.push({
+      drinks: JSON.parse(JSON.stringify(this.drinks)),
+      foods: JSON.parse(JSON.stringify(this.foods)),
+      vip_drinks: JSON.parse(JSON.stringify(this.vip_drinks)),
+      vip_foods: JSON.parse(JSON.stringify(this.vip_foods)),
+      orderHistory: JSON.parse(JSON.stringify(this.orderHistory)),
+    });
+
+    // Restore the last state
+    this.drinks = lastState.drinks;
+    this.foods = lastState.foods;
+    this.vip_drinks = lastState.vip_drinks;
+    this.vip_foods = lastState.vip_foods;
+    this.orderHistory = lastState.orderHistory;
+
+    // Persist changes to localStorage
+    this.saveStockData();
+    this.saveOrderHistory();
+  }
+
+  // Redo the last undone stock update
+  redo() {
+    if (this.redoStack.length === 0) return; // No more actions to redo
+
+    const lastUndoneState = this.redoStack.pop();
+    this.undoStack.push({
+      beverages: JSON.parse(JSON.stringify(this.drinks)),
+      foods: JSON.parse(JSON.stringify(this.foods)),
+      vip_drinks: JSON.parse(JSON.stringify(this.vip_drinks)),
+      vip_foods: JSON.parse(JSON.stringify(this.vip_foods)),
+      orderHistory: JSON.parse(JSON.stringify(this.orderHistory)),
+    });
+
+    // Restore the last undone state
+    this.drinks = lastUndoneState.beverages;
+    this.foods = lastUndoneState.foods;
+    this.vip_drinks = lastUndoneState.vip_drinks;
+    this.vip_foods = lastUndoneState.vip_foods;
+    this.orderHistory = lastUndoneState.orderHistory;
+
+    // Persist changes to localStorage
+    this.saveStockData();
+    this.saveOrderHistory();
+  }
+
+  //////////////////////////
+
+  // Storage data getters
+
+  // Load storage data from JSON files
+  async loadJSONStorage() {
     try {
-      const beveragesResponse = await fetch("/data/beverages.json");
-      this.beverages = await beveragesResponse.json();
+      // Fetch all necessary data in parallel using Promise.all
+      const [
+        beveragesResponse,
+        foodsResponse,
+        vipDrinksResponse,
+        vipFoodsResponse,
+      ] = await Promise.all([
+        fetch("/data/beverages.json"),
+        fetch("/data/foods.json"),
+        fetch("/data/vip_drinks.json"),
+        fetch("/data/vip_foods.json"),
+      ]);
 
-      const foodsResponse = await fetch("/data/foods.json");
+      // Parse the responses into JSON
+      this.drinks = await beveragesResponse.json();
       this.foods = await foodsResponse.json();
-
-      const vipDrinksResponse = await fetch("/data/vip_drinks.json");
       this.vip_drinks = await vipDrinksResponse.json();
-
-      const vipFoodsResponse = await fetch("/data/vip_foods.json");
       this.vip_foods = await vipFoodsResponse.json();
-
-      // Load stock data from localStorage
-      const stockData = this.loadStockData();
-
-      // If no stock data is available, initialize with random values
-      if (Object.keys(stockData).length === 0) {
-        this.initializeStockData();
-      } else {
-        this.applyStockData(stockData);
-      }
-
-      // Load order history from localStorage
-      this.orderHistory = this.loadOrderHistory();
     } catch (error) {
       console.error("Error loading storage data:", error);
     }
   }
 
+  // Load stock data and order history from localStorage
+  loadLocalStorageData() {
+    // Load stock data from localStorage
+    const stockData = this.loadLocalStorageStockData();
+
+    // Load order history from localStorage
+    this.orderHistory = this.loadLocalStorageOrderHistory();
+
+    // If no stock data is available, initialize with random values
+    if (Object.keys(stockData).length === 0) {
+      this.initializeStockData();
+    } else {
+      this.applyStockData(stockData);
+    }
+  }
+
   // Load stock data from localStorage
-  loadStockData() {
+  loadLocalStorageStockData() {
     return this.database.load(this.stockKey) || {};
   }
 
   // Load order history from localStorage
-  loadOrderHistory() {
+  loadLocalStorageOrderHistory() {
     return this.database.load(this.storageOrderHistoryKey) || [];
   }
 
+  getOrderHistory() {
+    return this.orderHistory;
+  }
+
+  //////////////////////////
+
+  // Storage data setters
+
   // Initialize stock data with random values
   initializeStockData() {
-    this.beverages.forEach((beverage) => {
-      beverage.stock = Math.floor(Math.random() * 11); // Random number between 0 and 10
+    const allItems = [
+      ...this.drinks,
+      ...this.foods,
+      ...this.vip_drinks,
+      ...this.vip_foods,
+    ];
+
+    allItems.forEach((item) => {
+      item.stock = Math.floor(Math.random() * 11); // Random number between 0 and 10
     });
-    this.foods.forEach((food) => {
-      food.stock = Math.floor(Math.random() * 11); // Random number between 0 and 10
-    });
-    this.vip_drinks.forEach((vip_drink) => {
-      vip_drink.stock = Math.floor(Math.random() * 11);
-    });
-    this.vip_foods.forEach((vip_food) => {
-      vip_food.stock = Math.floor(Math.random() * 11);
-    });
+
     this.saveStockData();
   }
 
   // Apply stock data to products
   applyStockData(stockData) {
-    this.beverages.forEach((beverage) => {
-      beverage.stock = stockData[beverage.nr] || 0;
-    });
-    this.foods.forEach((food) => {
-      food.stock = stockData[food.nr] || 0;
-    });
-    this.vip_drinks.forEach((vip_drink) => {
-      vip_drink.stock = stockData[vip_drink.nr] || 0;
-    });
-    this.vip_foods.forEach((vip_food) => {
-      vip_food.stock = stockData[vip_food.nr] || 0;
+    const allItems = [
+      ...this.drinks,
+      ...this.foods,
+      ...this.vip_drinks,
+      ...this.vip_foods,
+    ];
+
+    allItems.forEach((item) => {
+      item.stock = stockData[item.nr] || 0;
     });
   }
 
+  // Ensure that all products have a stock value
+  ensureStockValues() {
+    let stockUpdated = false;
+    [
+      ...this.drinks,
+      ...this.foods,
+      ...this.vip_drinks,
+      ...this.vip_foods,
+    ].forEach((item) => {
+      if (item.stock === undefined) {
+        item.stock = 10; // Default value for stock
+        stockUpdated = true;
+      }
+    });
+
+    // Save changes if stock values were updated
+    if (stockUpdated) {
+      this.saveStockData();
+    }
+  }
+
+  //////////////////////////
+
+  // Storage data methods
+
+  // Save stock data to localStorage
   saveStockData() {
     const stockData = {};
-    this.beverages.forEach((beverage) => {
-      stockData[beverage.nr] = beverage.stock;
-    });
-    this.foods.forEach((food) => {
-      stockData[food.nr] = food.stock;
-    });
-    this.vip_drinks.forEach((vip_drink) => {
-      stockData[vip_drink.nr] = vip_drink.stock;
-    });
-    this.vip_foods.forEach((vip_food) => {
-      stockData[vip_food.nr] = vip_food.stock;
-    });
+    [this.drinks, this.foods, this.vip_drinks, this.vip_foods].forEach(
+      (items) => {
+        items.forEach((item) => {
+          stockData[item.nr] = item.stock;
+        });
+      }
+    );
     console.log("Saving stock data to Local Storage:", stockData);
     this.database.save(this.stockKey, stockData);
   }
 
   updateStock(productNr, amount) {
-    const product =
-        this.beverages.find((beverage) => beverage.nr === productNr) ||
-        this.foods.find((food) => food.nr === productNr) ||
-        this.vip_drinks.find((vip_drink) => vip_drink.nr === productNr) ||
-        this.vip_foods.find((vip_food) => vip_food.nr === productNr);
+    const product = [
+      ...this.drinks,
+      ...this.foods,
+      ...this.vip_drinks,
+      ...this.vip_foods,
+    ].find((item) => item.nr === productNr);
+
     if (product) {
       product.stock = (product.stock || 0) + amount;
       this.saveStockData();
@@ -119,18 +238,14 @@ class StorageModel {
     this.database.save(this.storageOrderHistoryKey, this.orderHistory);
   }
 
-  // Add an order to history
+  // Add stock reorder to history log
   addOrder(itemName) {
     const orderEntry = {
       name: itemName,
       time: new Date().toLocaleTimeString(),
     };
-    this.orderHistory.unshift(orderEntry); // Add new order to history
+    this.orderHistory.unshift(orderEntry); // Add new order to history array
     this.saveOrderHistory(); // Persist to localStorage
-  }
-
-  getOrderHistory() {
-    return this.orderHistory;
   }
 }
 

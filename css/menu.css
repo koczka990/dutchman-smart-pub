@@ -227,6 +227,49 @@ input {
   border-radius: 10px;
 }
 
+.order-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between; /* Pushes elements to opposite ends */
+  align-items: center; /* Aligns items vertically */
+  padding: 10px;
+  border-bottom: 2px solid #ddd; /* Optional: Adds a separator */
+}
+
+.undo-redo-buttons {
+  display: flex; /* Keeps buttons in a row */
+}
+
+.undo-redo-buttons button {
+  margin-left: 10px; /* Adds spacing between buttons */
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  background-color: #007bff; /* Primary blue color */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.undo-redo-buttons button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+  transform: scale(1.05);
+}
+
+.undo-redo-buttons button:active {
+  background-color: #004494; /* Even darker blue when clicked */
+  transform: scale(0.98);
+}
+
+.undo-redo-buttons button:disabled {
+  background-color: #ccc; /* Gray color */
+  color: #666; /* Darker gray text */
+  cursor: not-allowed;
+  transform: none;
+}
+
 .order-list {
   list-style: none;
   padding: 10px;
