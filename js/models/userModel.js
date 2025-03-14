@@ -19,6 +19,7 @@ class UserModel {
 
   async loadUsers() {
     try {
+      console.log("Loading users from localStorage");
       // Load users from localStorage using Database class
       this.users = this.database.load('users') || [];
       return this.users;
