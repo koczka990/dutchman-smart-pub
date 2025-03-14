@@ -1,6 +1,32 @@
 {
-  "login-text": "欢迎来到Dutchman",
+  "//": "Navigation bar",
+  "login-text": "欢迎来到 Dutchman",
   "menuBtn": "菜单",
   "storageBtn": "库存",
-  "menu-title": "产品"
+
+  "//": "Login view",
+  "customer-login-btn": "顾客登录",
+  "employee-login-btn": "员工登录",
+  "Table Number": "桌号",
+  "table-number-placeholder": "请输入桌号",
+  "vip-toggle": "会员",
+  "Username": "用户名",
+  "username-placeholder": "请输入用户名",
+  "Password": "密码",
+  "password-placeholder": "请输入密码",
+  "Login": "登录",
+
+  "//": "Menu view",
+  "menu-title": "产品",
+
+  "//": "Storage view",
+  "storage-title": "库存管理",
+  "Item": "商品",
+    "Quantity": "数量",
+  "Reorder": "库存状态",
+  "reorder-btn": "订购",
+  "✔ In Stock": "✔ 有货",
+  "Recent Orders": "最近订单",
+
+  "//": "end of file"
 }

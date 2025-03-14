@@ -4,7 +4,7 @@ class MenuView {
     this.appContent = document.getElementById("app-content");
   }
 
-  async render(beverages, foods) {
+  async render(beverages, foods, userInfo) {
     this.beverages = beverages;
     this.foods = foods;
 
@@ -13,6 +13,7 @@ class MenuView {
       const html = await response.text();
       this.appContent.innerHTML = html;
 
+      this.displayCustomerInfo(userInfo);
       this.populateMenuItems(foods);
       this.setupEventListeners();
       this.setupOrderListDropZone(); // Ensures order list only gets drop events once
@@ -21,19 +22,59 @@ class MenuView {
     }
   }
 
+  displayCustomerInfo(userInfo) {
+    const vipInfoDiv = document.getElementById("vip-info");
+    console.log("Displaying user info:", userInfo);
+    console.log("VIP info div:", vipInfoDiv);
+
+    // Show/hide VIP information based on login type
+    if (userInfo.isVIP) {
+      console.log("User is VIP, showing VIP information");
+      vipInfoDiv.classList.remove("hidden");
+      const nameElement = document.getElementById("display-customer-name");
+      const balanceElement = document.getElementById("display-balance");
+      const tableElement = document.getElementById("display-table-number");
+      
+      console.log("Elements found:", {
+        nameElement: !!nameElement,
+        balanceElement: !!balanceElement,
+        tableElement: !!tableElement
+      });
+
+      if (nameElement) nameElement.textContent = userInfo.username;
+      if (balanceElement) balanceElement.textContent = `$${parseFloat(userInfo.balance).toFixed(2)}`;
+      if (tableElement) tableElement.textContent = userInfo.tableNumber;
+    } else {
+      console.log("User is not VIP, hiding VIP information");
+      vipInfoDiv.classList.add("hidden");
+      const tableElement = document.getElementById("display-table-number");
+      if (tableElement) tableElement.textContent = userInfo.tableNumber;
+    }
+  }
+
   populateMenuItems(items) {
     const menuItems = document.getElementById("menu-items");
     if (!menuItems) return;
 
     menuItems.innerHTML = items
-      .map(
-        (name) =>
-          `<div class="menu-item" draggable="true" data-name="${name}">${name}</div>`
-      )
+        .map(({ name, priceinclvat }) => {
+          // Ensure price is a valid number, otherwise default to 0
+          const price = parseFloat(priceinclvat) || 0;
+          const formattedPrice = `$${price.toFixed(2)}`;
+
+          return `
+            <div class="menu-item" draggable="true" data-name="${name}" data-priceinclvat="${price}">
+              <span class="item-name">${name}</span>
+              <span class="item-price">${formattedPrice}</span>
+              <span class="info-icon" data-name="${name}">ℹ</span>
+            </div>
+          `;
+        })
       .join("");
 
     this.setupMenuItemDragEvents();
     this.setupMenuItemClickEvents(); // Setup click event listeners
+    this.setupInfoClickEvents(items);
   }
 
   setupEventListeners() {
@@ -66,7 +107,8 @@ class MenuView {
   setupMenuItemDragEvents() {
     document.querySelectorAll(".menu-item").forEach((item) => {
       item.addEventListener("dragstart", (event) => {
-        event.dataTransfer.setData("text/plain", item.dataset.name);
+        event.dataTransfer.setData("name", item.dataset.name);
+        event.dataTransfer.setData("price", item.dataset.priceinclvat);
       });
     });
   }
@@ -74,12 +116,17 @@ class MenuView {
   setupMenuItemClickEvents() {
     document.querySelectorAll(".menu-item").forEach((item) => {
       item.addEventListener("click", () => {
-        this.addItemToOrder(item.dataset.name);
+        const selectedItem = {
+          name: item.dataset.name,
+          priceinclvat: parseFloat(item.dataset.priceinclvat) || 0
+        };
+
+        this.addItemToOrder(selectedItem);
       });
     });
   }
 
-  setupOrderListDropZone() {
+  setupOrderListDropZone(items) {
     const orderList = document.getElementById("order-list");
 
     orderList.addEventListener("dragover", (event) => {
@@ -88,17 +135,27 @@ class MenuView {
 
     orderList.addEventListener("drop", (event) => {
       event.preventDefault();
-      const itemName = event.dataTransfer.getData("text/plain");
-      if (itemName) {
-        this.addItemToOrder(itemName);
+      const itemName = event.dataTransfer.getData("name");
+      const itemPrice = event.dataTransfer.getData("price");
+      if (itemName && itemPrice) {
+        const selectedItem = {
+          name: itemName,
+          priceinclvat: parseFloat(itemPrice)
+        };
+        this.addItemToOrder(selectedItem);
+      } else {
+        console.error("Dragged item data is missing.");
       }
     });
   }
 
-  addItemToOrder(itemName) {
+  addItemToOrder(selectedItem) {
     const orderList = document.getElementById("order-list");
+
+    if (!selectedItem) return;
+
     let existingItem = [...orderList.children].find(
-      (li) => li.dataset.name === itemName
+      (li) => li.dataset.name === selectedItem.name
     );
 
     if (existingItem) {
@@ -107,9 +164,10 @@ class MenuView {
     } else {
       const listItem = document.createElement("li");
       listItem.setAttribute("draggable", "true");
-      listItem.setAttribute("data-name", itemName);
+      listItem.setAttribute("data-name", selectedItem.name);
+      listItem.setAttribute("data-price", selectedItem.priceinclvat);
       listItem.innerHTML = `
-        <span>${itemName}</span>
+        <span>${selectedItem.name} - $${parseFloat(selectedItem.priceinclvat).toFixed(2)}</span>
         <span class="order-btn">
           <button class="decrease-btn" type="button">-</button>
           <span>1</span>
@@ -120,6 +178,11 @@ class MenuView {
       orderList.appendChild(listItem);
       this.setupQuantityButtons(listItem);
     }
+    if (document.getElementById("total")) {
+      this.updateOrderSummary();
+    } else {
+      console.error("Order summary elements are missing.");
+    }
   }
 
   setupQuantityButtons(listItem) {
@@ -129,6 +192,7 @@ class MenuView {
 
     increaseBtn.addEventListener("click", () => {
       quantitySpan.textContent = parseInt(quantitySpan.textContent) + 1;
+      this.updateOrderSummary();
     });
 
     decreaseBtn.addEventListener("click", () => {
@@ -138,18 +202,27 @@ class MenuView {
       } else {
         listItem.remove();
       }
+      this.updateOrderSummary();
     });
+  }
+
+  updateOrderSummary() {
+    const orderList = document.getElementById("order-list");
+    let total = 0;
+
+    // Loop through each order item in the UI
+    [...orderList.children].forEach(listItem => {
+      const itemPrice = parseFloat(listItem.dataset.price); // Read price from dataset
+      const quantity = parseInt(listItem.querySelector(".order-btn span").textContent); // Read quantity from UI
+      total += itemPrice * quantity;
+    });
+
+    // Update order summary in UI
+    document.getElementById("total").textContent = `$${total.toFixed(2)}`;
   }
 
   confirmOrder() {
     const orderList = document.getElementById("order-list").children;
-    const tableSelect = document.getElementById("table-select");
-    const tableNumber = tableSelect.value;
-
-    if (!tableNumber) {
-      alert("Please select a table number before confirming the order.");
-      return;
-    }
 
     if (orderList.length === 0) {
       alert("No items in the order. Please add some items before confirming.");
@@ -162,14 +235,120 @@ class MenuView {
       const quantity = parseInt(
         item.querySelector(".order-btn span").textContent
       );
-      items.push({ name: itemName, quantity });
+      const itemPrice = parseFloat(item.dataset.price || "0");
+      items.push({ name: itemName, quantity, price: itemPrice });
     });
 
-    this.controller.handleConfirmOrder(tableNumber, items);
+    // Get user info from the controller
+    const userInfo = this.controller.getUserInfo();
+    console.log("Confirming order with user info:", userInfo);
+
+    // Calculate total amount
+    const totalAmount = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+    // Create and show confirmation popup
+    const popup = document.createElement('div');
+    popup.className = 'order-confirmation-popup';
+    popup.innerHTML = `
+      <div class="popup-content">
+        <h2>Confirm Order</h2>
+        <div class="order-summary">
+          <h3>Order Summary:</h3>
+          <ul>
+            ${items.map(item => `
+              <li>${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}</li>
+            `).join('')}
+          </ul>
+          <p class="total">Total: $${totalAmount.toFixed(2)}</p>
+          ${userInfo.isVIP ? `
+            <p class="balance-info">Current Balance: $${parseFloat(userInfo.balance).toFixed(2)}</p>
+            <p class="new-balance">New Balance: $${(parseFloat(userInfo.balance) - totalAmount).toFixed(2)}</p>
+          ` : ''}
+        </div>
+        <div class="popup-buttons">
+          <button class="cancel-btn">Cancel</button>
+          <button class="confirm-btn">Confirm Order</button>
+        </div>
+      </div>
+    `;
+
+    // Add popup to the page
+    document.body.appendChild(popup);
+
+    // Handle button clicks
+    popup.querySelector('.cancel-btn').addEventListener('click', () => {
+      document.body.removeChild(popup);
+    });
+
+    popup.querySelector('.confirm-btn').addEventListener('click', () => {
+      this.controller.handleConfirmOrder(items, userInfo);
+      document.body.removeChild(popup);
+      // // Refresh the menu view
+      // this.render(this.beverages, this.foods, userInfo);
+    });
   }
 
   clearOrderList() {
     document.getElementById("order-list").innerHTML = "";
+    let totalPriceElement = document.getElementById("total");
+    if (totalPriceElement) {
+      totalPriceElement.textContent = "0";
+    }
+  }
+
+  setupInfoClickEvents(items) {
+    document.querySelectorAll(".info-icon").forEach((icon) => {
+      icon.addEventListener("click", (event) => {
+        event.stopPropagation();
+
+        const itemName = event.target.dataset.name;
+        const selectedItem = items.find(i => i.name === itemName);
+
+        const infoSection = document.getElementById("info-section");
+        if (!infoSection) {
+          console.error("Info section not found in the document.");
+          return;
+        }
+
+        if (selectedItem) {
+          let detailsHTML = `
+            <h3>${selectedItem.name}</h3>
+          `;
+
+          // If the item is food, display food-related details
+          if (selectedItem.articletype === "200") {
+            detailsHTML += `
+                        <p><strong>Category:</strong> ${selectedItem.category || "N/A"}</p>
+                        <p><strong>Producer:</strong> ${selectedItem.producer || "N/A"}</p>
+                        <p><strong>Packaging:</strong> ${selectedItem.packaging || "N/A"}</p>
+                    `;
+          } else {
+            detailsHTML += `
+                        <p><strong>Producer:</strong> ${selectedItem.producer || "N/A"}</p>
+                        <p><strong>Country:</strong> ${selectedItem.countryoforiginlandname || "N/A"}</p>
+                        <p><strong>Strength:</strong> ${selectedItem.alcoholstrength || "N/A"}</p>
+                        <p><strong>Packaging:</strong> ${selectedItem.packaging || "N/A"}</p>
+                    `;
+          }
+
+          infoSection.innerHTML = detailsHTML;
+
+          // Get the position of the clicked info button
+          const iconRect = event.target.getBoundingClientRect();
+
+          // Position the info box next to the clicked item
+          infoSection.style.top = `${window.scrollY + iconRect.top}px`;
+          infoSection.style.left = `${window.scrollX + iconRect.right + 10}px`;
+
+          infoSection.classList.add("visible");        }
+      });
+    });
+    document.addEventListener("click", (event) => {
+      const infoSection = document.getElementById("info-section");
+      if (infoSection && !event.target.closest(".info-container") && !event.target.classList.contains("info-icon")) {
+        infoSection.classList.remove("visible");
+      }
+    });
   }
 }
 

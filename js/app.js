@@ -4,6 +4,7 @@ import LoginController from "./controllers/loginController.js";
 import LanguageSwitcher from "./utils/languageSwitcher.js";
 import Constructor from "./views/constructor.js";
 import Database from "./models/database.js";
+import PaymentController from "./controllers/paymentController.js";
 
 class App {
   constructor() {
@@ -11,6 +12,7 @@ class App {
     this.loginController = new LoginController(this);
     this.menuController = new MenuController(this);
     this.storageController = new StorageController(this);
+    this.paymentController = new PaymentController(this);
     this.languageSwitcher = new LanguageSwitcher();
     this.constructor = new Constructor();
 
@@ -36,7 +38,7 @@ class App {
       const languageSwitcher = $("#languageSwitcher");
       languageSwitcher.empty();
       languageList.forEach((lang) => {
-        languageSwitcher.append(this.constructor.createSelectOption(lang, lang, lang === currentLanguage, 'lan-' + lang, "translatable"));
+        languageSwitcher.append(this.constructor.createSelectOption(lang, lang, lang === currentLanguage, "", "", "lan-" + lang));
       });
   }
 
@@ -65,6 +67,9 @@ class App {
         break;
       case "storage":
         renderPromise = this.storageController.render();
+        break;
+      case "payment":
+        this.paymentController.render();
         break;
       default:
         console.error("View not found:", view);
