@@ -1,5 +1,3 @@
-import Database from "./database.js";
-
 class MenuModel {
   constructor() {
     this.beverages = [];
@@ -84,46 +82,6 @@ class MenuModel {
       articleNumber: vipFood.nr,
     }));
   }
-
-  // // Load menu items from the database
-  // loadMenuItems() {
-  //   return Database.load("menuItems") || [];
-  // }
-
-  // // Save menu items to the database
-  // saveMenuItems(menuItems) {
-  //   Database.save("menuItems", menuItems);
-  // }
-
-  // // Get a menu item by ID
-  // getMenuItem(id) {
-  //   const menuItems = this.loadMenuItems();
-  //   return menuItems.find((item) => item.id === id);
-  // }
-
-  // // Update stock level for a menu item
-  // updateStock(id, quantity) {
-  //   const menuItems = this.loadMenuItems();
-  //   const item = menuItems.find((item) => item.id === id);
-  //   if (item) {
-  //     item.stock -= quantity;
-  //     this.saveMenuItems(menuItems);
-  //   }
-  // }
-
-  // // Add a new menu item
-  // addMenuItem(item) {
-  //   const menuItems = this.loadMenuItems();
-  //   menuItems.push(item);
-  //   this.saveMenuItems(menuItems);
-  // }
-
-  // // Remove a menu item
-  // removeMenuItem(id) {
-  //   let menuItems = this.loadMenuItems();
-  //   menuItems = menuItems.filter((item) => item.id !== id);
-  //   this.saveMenuItems(menuItems);
-  // }
 }
 
 export default MenuModel;
