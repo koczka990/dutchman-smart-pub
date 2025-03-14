@@ -6,7 +6,12 @@ class StorageController {
     this.app = app;
     this.model = new StorageModel(app.database);
     this.view = new StorageView();
+
+    // Bind methods
     this.view.onReorder = this.handleReorder.bind(this);
+    this.view.onUndo = this.handleUndo.bind(this);
+    this.view.onRedo = this.handleRedo.bind(this);
+
     this.init();
   }
 
@@ -50,6 +55,7 @@ class StorageController {
   }
 
   handleReorder(itemName) {
+    this.model.saveStateForUndo(); // Save the current state before reorderingj
     const product =
       this.model.beverages.find((b) => b.name === itemName) ||
       this.model.foods.find((f) => f.name === itemName) ||
@@ -60,9 +66,20 @@ class StorageController {
       product.stock = 10; // Reset stock to 10
       this.model.saveStockData(); // Persist changes
       this.model.addOrder(itemName); // Save order in history
+      this.model.saveOrderHistory();
 
       this.render(); // Re-render UI with updated order log
     }
+  }
+
+  handleUndo() {
+    this.model.undo(); // Call the undo method from model
+    this.render(); // Re-render UI with the updated state
+  }
+
+  handleRedo() {
+    this.model.redo(); // Call the redo method from model
+    this.render(); // Re-render UI with the updated state
   }
 
   async render() {

@@ -2,6 +2,8 @@ class StorageView {
   constructor() {
     this.appContent = document.getElementById("app-content");
     this.onReorder = () => {}; // Callback function
+    this.onUndo = () => {}; // Callback function for Undo
+    this.onRedo = () => {}; // Callback function for Redo
   }
 
   // storageItems: Array of objects with name, stock, and reorderThreshold properties
@@ -33,6 +35,16 @@ class StorageView {
         // Call the reorderItem method with the item name
         this.reorderItem(itemName);
       });
+    });
+
+    // Undo button event listener
+    document.getElementById("undo-btn")?.addEventListener("click", () => {
+      this.onUndo();
+    });
+
+    // Redo button event listener
+    document.getElementById("redo-btn")?.addEventListener("click", () => {
+      this.onRedo();
     });
   }
 

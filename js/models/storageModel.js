@@ -6,6 +6,66 @@ class StorageModel {
     this.stockKey = "productStock";
     this.storageOrderHistoryKey = "storageOrderHistory";
     this.orderHistory = this.loadOrderHistory();
+    this.undoStack = []; // Keeps track of previous states for undo
+    this.redoStack = []; // Keeps track of undone states for redo
+  }
+
+  // Save the current state before any stock update
+  saveStateForUndo() {
+    const currentState = {
+      beverages: JSON.parse(JSON.stringify(this.beverages)),
+      foods: JSON.parse(JSON.stringify(this.foods)),
+      vip_drinks: JSON.parse(JSON.stringify(this.vip_drinks)),
+      vip_foods: JSON.parse(JSON.stringify(this.vip_foods)),
+      orderHistory: JSON.parse(JSON.stringify(this.orderHistory)),
+    };
+
+    this.undoStack.push(currentState); // Save current state to undo stack
+    this.redoStack = []; // Clear redo stack whenever a new action happens
+  }
+
+  // Undo the last stock update
+  undo() {
+    if (this.undoStack.length === 0) return;
+    const lastState = this.undoStack.pop();
+    this.redoStack.push({
+      beverages: JSON.parse(JSON.stringify(this.beverages)),
+      foods: JSON.parse(JSON.stringify(this.foods)),
+      vip_drinks: JSON.parse(JSON.stringify(this.vip_drinks)),
+      vip_foods: JSON.parse(JSON.stringify(this.vip_foods)),
+      orderHistory: JSON.parse(JSON.stringify(this.orderHistory)),
+    });
+
+    this.beverages = lastState.beverages;
+    this.foods = lastState.foods;
+    this.vip_drinks = lastState.vip_drinks;
+    this.vip_foods = lastState.vip_foods;
+    this.orderHistory = lastState.orderHistory;
+
+    this.saveStockData(); // Persist changes to localStorage
+    this.saveOrderHistory(); // Persist order history data
+  }
+
+  // Redo the last undone stock update
+  redo() {
+    if (this.redoStack.length === 0) return;
+    const lastUndoneState = this.redoStack.pop();
+    this.undoStack.push({
+      beverages: JSON.parse(JSON.stringify(this.beverages)),
+      foods: JSON.parse(JSON.stringify(this.foods)),
+      vip_drinks: JSON.parse(JSON.stringify(this.vip_drinks)),
+      vip_foods: JSON.parse(JSON.stringify(this.vip_foods)),
+      orderHistory: JSON.parse(JSON.stringify(this.orderHistory)),
+    });
+
+    this.beverages = lastUndoneState.beverages;
+    this.foods = lastUndoneState.foods;
+    this.vip_drinks = lastUndoneState.vip_drinks;
+    this.vip_foods = lastUndoneState.vip_foods;
+    this.orderHistory = lastUndoneState.orderHistory;
+
+    this.saveStockData(); // Persist changes to localStorage
+    this.saveOrderHistory(); // Persist order history data
   }
 
   // Load beverage and food data from JSON files and stock data from localStorage
@@ -103,10 +163,10 @@ class StorageModel {
 
   updateStock(productNr, amount) {
     const product =
-        this.beverages.find((beverage) => beverage.nr === productNr) ||
-        this.foods.find((food) => food.nr === productNr) ||
-        this.vip_drinks.find((vip_drink) => vip_drink.nr === productNr) ||
-        this.vip_foods.find((vip_food) => vip_food.nr === productNr);
+      this.beverages.find((beverage) => beverage.nr === productNr) ||
+      this.foods.find((food) => food.nr === productNr) ||
+      this.vip_drinks.find((vip_drink) => vip_drink.nr === productNr) ||
+      this.vip_foods.find((vip_food) => vip_food.nr === productNr);
     if (product) {
       product.stock = (product.stock || 0) + amount;
       this.saveStockData();

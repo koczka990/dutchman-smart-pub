@@ -8,6 +8,15 @@
   align-items: flex-start;
 }
 
+.storage-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between; /* Pushes elements to opposite ends */
+  align-items: center; /* Aligns items vertically */
+  padding: 10px;
+  border-bottom: 2px solid #ddd; /* Optional: Adds a separator */
+}
+
 .storage-title {
   width: 100%;
   margin-bottom: 10px;
