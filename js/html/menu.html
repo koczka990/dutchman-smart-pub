@@ -5,7 +5,17 @@
     <!-- Tabs for Food & Drinks -->
     <div class="menu-tabs">
       <button id="food-tab" class="active">🍔 Food</button>
-      <button id="drinks-tab">🍹 Drinks</button>
+      <div class="dropdown">
+        <button id="drinks-tab" class="dropbtn">🍹 Drinks</button>
+        <div id="drinks-subcategories" class="dropdown-content">
+          <button class="subcategory" id="Spirits">🥃 Spirits</button>
+          <button class="subcategory" id="Beer">🍺 Beer</button>
+          <button class="subcategory" id="Whisky">🥃 Whisky</button>
+          <button class="subcategory" id="Grappa">🍇 Grappa</button>
+        </div>
+      </div>
+      <button id="vip-food-tab" class="hidden">👑 VIP Food</button>
+      <button id="vip-drinks-tab" class="hidden">👑 VIP Drinks</button>
     </div>
 
     <div class="menus" id="menu-items"></div>
