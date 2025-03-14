@@ -41,6 +41,67 @@
   color: white;
 }
 
+/* ==============================
+   Dropdown Container
+   ============================== */
+
+/* Dropdown wrapper that controls the position and layout */
+.dropdown {
+  position: relative;
+  display: inline-block;  /* Inline-block ensures it aligns with other elements */
+  flex: 1;                /* Take up remaining space in the flex container */
+}
+
+/* Dropdown button styling */
+.dropbtn {
+  width: 100%;             /* Full width of the dropdown container */
+  height: 100%;            /* Match the height of other buttons in the menu */
+}
+
+/* ==============================
+   Dropdown Content (Menu)
+   ============================== */
+
+/* Initially hidden dropdown menu */
+.dropdown-content {
+  display: none;            /* Hide by default */
+  position: absolute;       /* Position it relative to the dropdown button */
+  min-width: 130px;         /* Set the minimum width */
+  border: 1px solid #929292; /* Add a border */
+  z-index: 1;               /* Ensure it appears above other elements */
+  border-radius: 0px;       /* No border radius for the dropdown content */
+  background-color: white;  /* Set background color */
+}
+
+/* Button inside the dropdown content */
+.dropdown-content button {
+  color: black;             /* Text color */
+  text-align: left;         /* Align text to the left */
+  width: 100%;              /* Make button fill the entire dropdown width */
+  background-color: white;  /* Set background */
+  border-radius: 0px;       /* No border radius for the dropdown items */
+  padding: 10px;            /* Add some padding to the buttons */
+}
+
+/* Hover and active states for dropdown buttons */
+.dropdown-content button:hover {
+  background-color: #ddd;   /* Change background color on hover */
+}
+
+.dropdown-content button:active {
+  background-color: #ccc;   /* Change background color on active */
+  border: 1px solid #aaa;   /* Add border when button is pressed */
+}
+
+/* ==============================
+   Display Dropdown on Hover
+   ============================== */
+
+/* Show dropdown when hovering over the parent */
+.dropdown:hover .dropdown-content {
+  display: block;          /* Make dropdown content visible */
+}
+
 .menus {
   display: flex;
   flex-direction: column; /* Stack items vertically */

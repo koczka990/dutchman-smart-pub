@@ -67,7 +67,8 @@ class MenuModel {
       alcoholstrength: vipDrink.alcoholstrength,
       packaging: vipDrink.packaging,
       priceinclvat: vipDrink.priceinclvat,
-      articletype: vipDrink.articletype
+      articletype: vipDrink.articletype,
+      articleNumber: vipDrink.nr,
     }));
   }
 
@@ -79,7 +80,8 @@ class MenuModel {
       category: vipFood.category,
       producer: vipFood.producer,
       articletype: vipFood.articletype,
-      packaging: vipFood.packaging
+      packaging: vipFood.packaging,
+      articleNumber: vipFood.nr,
     }));
   }
 
