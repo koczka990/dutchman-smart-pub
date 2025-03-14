@@ -1,24 +1,26 @@
 class StorageView {
   constructor() {
-    this.appContent = document.getElementById("app-content");
-    this.onReorder = () => {}; // Callback function
-    this.onUndo = () => {}; // Callback function for Undo
-    this.onRedo = () => {}; // Callback function for Redo
+    // Callback functions
+    this.onReorder = () => {};
+    this.onUndo = () => {};
+    this.onRedo = () => {};
   }
 
   // storageItems: Array of objects with name, stock, and reorderThreshold properties
   // orderHistory: Array of objects with name and time properties
   async render(storageItems, orderHistory) {
+    this.appContent = document.getElementById("app-content");
+
     try {
       const response = await fetch("js/html/storage.html");
       const html = await response.text();
       this.appContent.innerHTML = html;
 
       // Fill in the table contents with storage items
-      this.populateStorageTable(storageItems);
+      this.renderStorageTableItems(storageItems);
 
       // Fill in the order log with order history
-      this.renderOrderLog(orderHistory);
+      this.renderOrderHistoryLog(orderHistory);
 
       // Attach event listeners
       this.setupEventListeners();
@@ -33,7 +35,7 @@ class StorageView {
       button.addEventListener("click", (event) => {
         const itemName = event.target.getAttribute("data-item");
         // Call the reorderItem method with the item name
-        this.reorderItem(itemName);
+        this.onReorder(itemName);
       });
     });
 
@@ -49,7 +51,7 @@ class StorageView {
   }
 
   // Fill in the table with storage items
-  populateStorageTable(storageItems) {
+  renderStorageTableItems(storageItems) {
     const storageList = document.getElementById("storage-list");
     if (!storageList) return;
 
@@ -73,7 +75,7 @@ class StorageView {
   }
 
   // Fill in the order log with order history
-  renderOrderLog(orderHistory) {
+  renderOrderHistoryLog(orderHistory) {
     const orderLog = document.getElementById("order-log");
     if (!orderLog) return;
 
@@ -83,10 +85,6 @@ class StorageView {
       orderLog.innerHTML = orderHistory
         .map((order) => `<li>✅ Reordered ${order.name} - ${order.time}</li>`)
         .join("");
-  }
-
-  reorderItem(itemName) {
-    this.onReorder(itemName);
   }
 }
 
