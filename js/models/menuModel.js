@@ -38,7 +38,8 @@ class MenuModel {
       alcoholstrength: beverage.alcoholstrength,
       packaging: beverage.packaging,
       priceinclvat: beverage.priceinclvat,
-      articletype: beverage.articletype
+      articletype: beverage.articletype,
+      articleNumber: beverage.nr,
     }));
   }
 
@@ -50,7 +51,8 @@ class MenuModel {
       category: food.category,
       producer: food.producer,
       articletype: food.articletype,
-      packaging: food.packaging
+      packaging: food.packaging,
+      articleNumber: food.nr,
     }));
   }
 
@@ -65,7 +67,8 @@ class MenuModel {
       alcoholstrength: vipDrink.alcoholstrength,
       packaging: vipDrink.packaging,
       priceinclvat: vipDrink.priceinclvat,
-      articletype: vipDrink.articletype
+      articletype: vipDrink.articletype,
+      articleNumber: vipDrink.nr,
     }));
   }
 
@@ -77,7 +80,8 @@ class MenuModel {
       category: vipFood.category,
       producer: vipFood.producer,
       articletype: vipFood.articletype,
-      packaging: vipFood.packaging
+      packaging: vipFood.packaging,
+      articleNumber: vipFood.nr,
     }));
   }
 

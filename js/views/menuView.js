@@ -41,15 +41,18 @@ class MenuView {
       const nameElement = document.getElementById("display-customer-name");
       const balanceElement = document.getElementById("display-balance");
       const tableElement = document.getElementById("display-table-number");
-      
+
       console.log("Elements found:", {
         nameElement: !!nameElement,
         balanceElement: !!balanceElement,
-        tableElement: !!tableElement
+        tableElement: !!tableElement,
       });
 
       if (nameElement) nameElement.textContent = userInfo.username;
-      if (balanceElement) balanceElement.textContent = `$${parseFloat(userInfo.balance).toFixed(2)}`;
+      if (balanceElement)
+        balanceElement.textContent = `$${parseFloat(userInfo.balance).toFixed(
+          2
+        )}`;
       if (tableElement) tableElement.textContent = userInfo.tableNumber;
     } else {
       console.log("User is not VIP, hiding VIP information");
@@ -64,19 +67,23 @@ class MenuView {
     if (!menuItems) return;
 
     menuItems.innerHTML = items
-        .map(({ name, priceinclvat }) => {
-          // Ensure price is a valid number, otherwise default to 0
-          const price = parseFloat(priceinclvat) || 0;
-          const formattedPrice = `$${price.toFixed(2)}`;
+      .map(({ name, priceinclvat, articleNumber }) => {
+        // Ensure price is a valid number, otherwise default to 0
+        const price = parseFloat(priceinclvat) || 0;
+        const formattedPrice = `$${price.toFixed(2)}`;
+        const itemImg = `../data/img/${articleNumber}.png`;
 
-          return `
+        return `
             <div class="menu-item" draggable="true" data-name="${name}" data-priceinclvat="${price}">
-              <span class="item-name">${name}</span>
-              <span class="item-price">${formattedPrice}</span>
-              <span class="info-icon" data-name="${name}">ℹ</span>
+              <img  class="item-img" src="${itemImg}" alt="${name}" />
+              <div class="item-info">
+                <div class="item-name">${name}</div>
+                <div class="item-price">${formattedPrice}</div>
+                <div class="info-icon" data-name="${name}">ℹ</div>
+              </div>
             </div>
           `;
-        })
+      })
       .join("");
 
     this.setupMenuItemDragEvents();
@@ -150,7 +157,7 @@ class MenuView {
       item.addEventListener("click", () => {
         const selectedItem = {
           name: item.dataset.name,
-          priceinclvat: parseFloat(item.dataset.priceinclvat) || 0
+          priceinclvat: parseFloat(item.dataset.priceinclvat) || 0,
         };
 
         this.addItemToOrder(selectedItem);
@@ -172,7 +179,7 @@ class MenuView {
       if (itemName && itemPrice) {
         const selectedItem = {
           name: itemName,
-          priceinclvat: parseFloat(itemPrice)
+          priceinclvat: parseFloat(itemPrice),
         };
         this.addItemToOrder(selectedItem);
       } else {
@@ -199,7 +206,9 @@ class MenuView {
       listItem.setAttribute("data-name", selectedItem.name);
       listItem.setAttribute("data-price", selectedItem.priceinclvat);
       listItem.innerHTML = `
-        <span>${selectedItem.name} - $${parseFloat(selectedItem.priceinclvat).toFixed(2)}</span>
+        <span>${selectedItem.name} - $${parseFloat(
+        selectedItem.priceinclvat
+      ).toFixed(2)}</span>
         <span class="order-btn">
           <button class="decrease-btn" type="button">-</button>
           <span>1</span>
@@ -243,10 +252,12 @@ class MenuView {
     let total = 0;
 
     // Loop through each order item in the UI
-    [...orderList.children].forEach(listItem => {
+    [...orderList.children].forEach((listItem) => {
       const itemPrice = parseFloat(listItem.dataset.price); // Read price from dataset
-      const quantity = parseInt(listItem.querySelector(".order-btn span").textContent); // Read quantity from UI
-      total += itemPrice * quantity;
+      const quantity = parseInt(
+        listItem.querySelector(".order-btn span").textContent
+      ); // Read quantity from UI
+      subtotal += itemPrice * quantity;
     });
 
     // Update order summary in UI
@@ -276,26 +287,43 @@ class MenuView {
     console.log("Confirming order with user info:", userInfo);
 
     // Calculate total amount
-    const totalAmount = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const totalAmount = items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
 
     // Create and show confirmation popup
-    const popup = document.createElement('div');
-    popup.className = 'order-confirmation-popup';
+    const popup = document.createElement("div");
+    popup.className = "order-confirmation-popup";
     popup.innerHTML = `
       <div class="popup-content">
         <h2>Confirm Order</h2>
         <div class="order-summary">
           <h3>Order Summary:</h3>
           <ul>
-            ${items.map(item => `
-              <li>${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}</li>
-            `).join('')}
+            ${items
+              .map(
+                (item) => `
+              <li>${item.name} x${item.quantity} - $${(
+                  item.price * item.quantity
+                ).toFixed(2)}</li>
+            `
+              )
+              .join("")}
           </ul>
           <p class="total">Total: $${totalAmount.toFixed(2)}</p>
-          ${userInfo.isVIP ? `
-            <p class="balance-info">Current Balance: $${parseFloat(userInfo.balance).toFixed(2)}</p>
-            <p class="new-balance">New Balance: $${(parseFloat(userInfo.balance) - totalAmount).toFixed(2)}</p>
-          ` : ''}
+          ${
+            userInfo.isVIP
+              ? `
+            <p class="balance-info">Current Balance: $${parseFloat(
+              userInfo.balance
+            ).toFixed(2)}</p>
+            <p class="new-balance">New Balance: $${(
+              parseFloat(userInfo.balance) - totalAmount
+            ).toFixed(2)}</p>
+          `
+              : ""
+          }
         </div>
         <div class="popup-buttons">
           <button class="cancel-btn">Cancel</button>
@@ -308,11 +336,11 @@ class MenuView {
     document.body.appendChild(popup);
 
     // Handle button clicks
-    popup.querySelector('.cancel-btn').addEventListener('click', () => {
+    popup.querySelector(".cancel-btn").addEventListener("click", () => {
       document.body.removeChild(popup);
     });
 
-    popup.querySelector('.confirm-btn').addEventListener('click', () => {
+    popup.querySelector(".confirm-btn").addEventListener("click", () => {
       this.controller.handleConfirmOrder(items, userInfo);
       document.body.removeChild(popup);
       // // Refresh the menu view
@@ -334,7 +362,7 @@ class MenuView {
         event.stopPropagation();
 
         const itemName = event.target.dataset.name;
-        const selectedItem = items.find(i => i.name === itemName);
+        const selectedItem = items.find((i) => i.name === itemName);
 
         const infoSection = document.getElementById("info-section");
         if (!infoSection) {
@@ -350,16 +378,30 @@ class MenuView {
           // If the item is food, display food-related details
           if (selectedItem.articletype === "200") {
             detailsHTML += `
-                        <p><strong>Category:</strong> ${selectedItem.category || "N/A"}</p>
-                        <p><strong>Producer:</strong> ${selectedItem.producer || "N/A"}</p>
-                        <p><strong>Packaging:</strong> ${selectedItem.packaging || "N/A"}</p>
+                        <p><strong>Category:</strong> ${
+                          selectedItem.category || "N/A"
+                        }</p>
+                        <p><strong>Producer:</strong> ${
+                          selectedItem.producer || "N/A"
+                        }</p>
+                        <p><strong>Packaging:</strong> ${
+                          selectedItem.packaging || "N/A"
+                        }</p>
                     `;
           } else {
             detailsHTML += `
-                        <p><strong>Producer:</strong> ${selectedItem.producer || "N/A"}</p>
-                        <p><strong>Country:</strong> ${selectedItem.countryoforiginlandname || "N/A"}</p>
-                        <p><strong>Strength:</strong> ${selectedItem.alcoholstrength || "N/A"}</p>
-                        <p><strong>Packaging:</strong> ${selectedItem.packaging || "N/A"}</p>
+                        <p><strong>Producer:</strong> ${
+                          selectedItem.producer || "N/A"
+                        }</p>
+                        <p><strong>Country:</strong> ${
+                          selectedItem.countryoforigin || "N/A"
+                        } ml</p>
+                        <p><strong>Strength:</strong> ${
+                          selectedItem.alcoholstrength || "N/A"
+                        }%</p>
+                        <p><strong>Serving size:</strong> ${
+                          selectedItem.packaging || "N/A"
+                        }</p>
                     `;
           }
 
@@ -372,12 +414,17 @@ class MenuView {
           infoSection.style.top = `${window.scrollY + iconRect.top}px`;
           infoSection.style.left = `${window.scrollX + iconRect.right + 10}px`;
 
-          infoSection.classList.add("visible");        }
+          infoSection.classList.add("visible");
+        }
       });
     });
     document.addEventListener("click", (event) => {
       const infoSection = document.getElementById("info-section");
-      if (infoSection && !event.target.closest(".info-container") && !event.target.classList.contains("info-icon")) {
+      if (
+        infoSection &&
+        !event.target.closest(".info-container") &&
+        !event.target.classList.contains("info-icon")
+      ) {
         infoSection.classList.remove("visible");
       }
     });

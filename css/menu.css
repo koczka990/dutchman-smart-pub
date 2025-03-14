@@ -1,0 +1,295 @@
+.dashboard-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.menu-detail-container {
+  display: flex;
+  gap: 20px; /* Space between columns */
+  align-items: flex-start;
+  position: relative;
+}
+
+.menu-container {
+  flex: 1; /* Items take up 40% of space */
+  max-width: 300px; /* Prevents items from being too wide */
+}
+
+.menu-tabs {
+  display: flex;
+  column-gap: 15px;
+  margin-bottom: 15px;
+  width: 100%;
+  /* Full width of menu */
+}
+
+.menu-tabs button {
+  flex: 1;
+  font-size: 18px;
+  text-align: center;
+  border-radius: 8px 8px 0 0;
+  border: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.menu-tabs button.active {
+  background-color: #4CAF50;
+  /* Green for active */
+  color: white;
+}
+
+/* ==============================
+   Dropdown Container
+   ============================== */
+
+/* Dropdown wrapper that controls the position and layout */
+.dropdown {
+  position: relative;
+  display: inline-block;  /* Inline-block ensures it aligns with other elements */
+  flex: 1;                /* Take up remaining space in the flex container */
+}
+
+/* Dropdown button styling */
+.dropbtn {
+  width: 100%;             /* Full width of the dropdown container */
+  height: 100%;            /* Match the height of other buttons in the menu */
+}
+
+/* ==============================
+   Dropdown Content (Menu)
+   ============================== */
+
+/* Initially hidden dropdown menu */
+.dropdown-content {
+  display: none;            /* Hide by default */
+  position: absolute;       /* Position it relative to the dropdown button */
+  min-width: 130px;         /* Set the minimum width */
+  border: 1px solid #929292; /* Add a border */
+  z-index: 1;               /* Ensure it appears above other elements */
+  border-radius: 0px;       /* No border radius for the dropdown content */
+  background-color: white;  /* Set background color */
+}
+
+/* Button inside the dropdown content */
+.dropdown-content button {
+  color: black;             /* Text color */
+  text-align: left;         /* Align text to the left */
+  width: 100%;              /* Make button fill the entire dropdown width */
+  background-color: white;  /* Set background */
+  border-radius: 0px;       /* No border radius for the dropdown items */
+  padding: 10px;            /* Add some padding to the buttons */
+}
+
+/* Hover and active states for dropdown buttons */
+.dropdown-content button:hover {
+  background-color: #ddd;   /* Change background color on hover */
+}
+
+.dropdown-content button:active {
+  background-color: #ccc;   /* Change background color on active */
+  border: 1px solid #aaa;   /* Add border when button is pressed */
+}
+
+/* ==============================
+   Display Dropdown on Hover
+   ============================== */
+
+/* Show dropdown when hovering over the parent */
+.dropdown:hover .dropdown-content {
+  display: block;          /* Make dropdown content visible */
+}
+
+.menus {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  row-gap: 10px; /* Space between rows */
+  width: 95%;
+  box-sizing: border-box;
+}
+
+.menu-item {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 15px;
+  background-color: white;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.item-img {
+  height: 100px;
+  width: auto; /* Maintain aspect ratio */
+  margin-right: 15px; /* Add spacing between image and text */
+}
+
+.item-info {
+  display: flex;
+  flex-direction: column; /* Stack name and price */
+}
+
+.item-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.item-price {
+  font-weight: bold;
+  color: #333;
+}
+
+.info-container {
+  flex: 1;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  min-height: 150px;
+  width: 100%;
+  max-width: 300px;
+  text-align: left;
+  position: absolute;
+  right: -320px; /* Initially hidden off-screen */
+  opacity: 0;
+  transition: right 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* Show when visible */
+.info-container.visible {
+  display: block;
+  opacity: 1;
+}
+
+.info-icon {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  font-size: 14px;
+  background-color: #ddd;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+  pointer-events: auto;
+}
+
+.info-icon:hover {
+  background-color: #bbb;
+}
+
+.menu-item:hover {
+  background-color: #e0e0e0;
+}
+
+.category-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.category-buttons button {
+  flex: 1;
+  padding: 15px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.category-buttons .active {
+  border: 2px solid blue;
+}
+
+.order-container {
+  padding: 40px;
+  margin-right: 20px;
+  width: 40%;
+  min-height: 100%;
+}
+
+/*Customer Information*/
+input {
+  width: 50%;
+  padding: 7px 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.order-list {
+  list-style: none;
+  padding: 10px;
+  min-height: 100px;
+  border: dashed 1px #333;
+  border-radius: 10px;
+}
+
+.order-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.order-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.order-list li button {
+  color: white;
+  text-align: center;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.decrease-btn {
+  background-color: #cc0000;
+}
+
+.increase-btn {
+  background-color: #237e08;
+}
+
+.order-summary h4 {
+  display: flex;
+  justify-content: space-between;
+}
+
+#confirm-btn {
+  width: 40%;
+  margin-top: 20px;
+  padding: 10px;
+  background: #237e08;
+  color: white;
+  text-align: center;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+#clear-btn {
+  width: 40%;
+  margin-top: 20px;
+  padding: 10px;
+  background: #cc0000;
+  color: white;
+  text-align: center;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+}
