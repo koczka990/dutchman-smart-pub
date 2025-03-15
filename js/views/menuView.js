@@ -6,8 +6,8 @@ class MenuView {
     this.redoStack = []; // Stores undone states
   }
 
-  async render(beverages, foods, vip_drinks, vip_foods, userInfo) {
-    this.beverages = beverages;
+  async render(drinks, foods, vip_drinks, vip_foods, userInfo) {
+    this.drinks = drinks;
     this.foods = foods;
     this.vip_drinks = vip_drinks;
     this.vip_foods = vip_foods;
@@ -117,7 +117,7 @@ class MenuView {
       button.addEventListener("click", () => {
         const subcategory = button.getAttribute("id");
         this.populateMenuItems(
-          this.beverages.filter((item) => item.category === subcategory)
+          this.drinks.filter((item) => item.category === subcategory)
         );
       });
     });
@@ -125,7 +125,7 @@ class MenuView {
     drinksTab.addEventListener("click", () => {
       tabs.forEach((tab) => tab.classList.remove("active"));
       drinksTab.classList.add("active");
-      this.populateMenuItems(this.beverages);
+      this.populateMenuItems(this.drinks);
     });
 
     vipFoodTab.addEventListener("click", () => {
@@ -431,7 +431,7 @@ class MenuView {
       this.controller.handleConfirmOrder(items, userInfo);
       document.body.removeChild(popup);
       // // Refresh the menu view
-      // this.render(this.beverages, this.foods, userInfo);
+      // this.render(this.drinks, this.foods, userInfo);
     });
   }
 

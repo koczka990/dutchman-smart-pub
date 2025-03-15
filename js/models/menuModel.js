@@ -1,7 +1,7 @@
 class MenuModel {
   constructor() {
     // Initialize menu data
-    this.beverages = [];
+    this.drinks = [];
     this.foods = [];
     this.vip_drinks = [];
     this.vip_foods = [];
@@ -12,19 +12,19 @@ class MenuModel {
     try {
       // Fetch all necessary data in parallel using Promise.all
       const [
-        beveragesResponse,
+        drinksResponse,
         foodsResponse,
         vipDrinksResponse,
         vipFoodsResponse,
       ] = await Promise.all([
-        fetch("/data/beverages.json"),
+        fetch("/data/drinks.json"),
         fetch("/data/foods.json"),
         fetch("/data/vip_drinks.json"),
         fetch("/data/vip_foods.json"),
       ]);
 
       // Parse the responses into JSON
-      this.drinks = await beveragesResponse.json();
+      this.drinks = await drinksResponse.json();
       this.foods = await foodsResponse.json();
       this.vip_drinks = await vipDrinksResponse.json();
       this.vip_foods = await vipFoodsResponse.json();
@@ -35,18 +35,18 @@ class MenuModel {
 
   // Getters for menu items
 
-  getAllBeverages() {
-    if (!this.beverages) return [];
-    return this.beverages.map((beverage) => ({
-      name: beverage.name,
-      producer: beverage.producer,
-      countryoforigin: beverage.countryoforigin,
-      category: beverage.category,
-      alcoholstrength: beverage.alcoholstrength,
-      packaging: beverage.packaging,
-      priceinclvat: beverage.priceinclvat,
-      articletype: beverage.articletype,
-      articleNumber: beverage.nr,
+  getAllDrinks() {
+    if (!this.drinks) return [];
+    return this.drinks.map((drink) => ({
+      name: drink.name,
+      producer: drink.producer,
+      countryoforigin: drink.countryoforigin,
+      category: drink.category,
+      alcoholstrength: drink.alcoholstrength,
+      packaging: drink.packaging,
+      priceinclvat: drink.priceinclvat,
+      articletype: drink.articletype,
+      articleNumber: drink.nr,
     }));
   }
 

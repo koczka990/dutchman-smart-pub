@@ -21,19 +21,13 @@ class MenuController {
   }
 
   async render() {
-    const beverages = this.menuModel.getAllBeverages();
+    const drinks = this.menuModel.getAllDrinks();
     const foods = this.menuModel.getAllFoods();
     const vip_drinks = this.menuModel.getAllVipDrinks();
     const vip_foods = this.menuModel.getAllVipFoods();
     const userInfo = this.userModel.getCurrentUserInfo();
 
-    await this.menuView.render(
-      beverages,
-      foods,
-      vip_drinks,
-      vip_foods,
-      userInfo
-    );
+    await this.menuView.render(drinks, foods, vip_drinks, vip_foods, userInfo);
   }
 
   // Get current user information
