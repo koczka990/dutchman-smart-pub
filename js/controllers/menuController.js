@@ -7,26 +7,27 @@ import StorageModel from "../models/storageModel.js";
 class MenuController {
   constructor(app) {
     this.app = app;
-    this.model = new MenuModel();
+    this.menuModel = new MenuModel();
     this.userModel = new UserModel();
-    this.view = new MenuView(this);
     this.orderModel = new OrderModel(app.database);
     this.storageModel = new StorageModel(app.database);
+    this.menuView = new MenuView(this);
     this.init();
   }
 
   async init() {
-    await this.model.loadMenuData();
-    await this.storageModel.loadStorageAndOrderHistoryData();
+    await this.menuModel.loadMenuData();
+    await this.storageModel.loadJSONStorage();
   }
 
   async render() {
-    const beverages = this.model.getAllBeverages();
-    const foods = this.model.getAllFoods();
-    const vip_drinks = this.model.getAllVipDrinks();
-    const vip_foods = this.model.getAllVipFoods();
+    const drinks = this.menuModel.getAllDrinks();
+    const foods = this.menuModel.getAllFoods();
+    const vip_drinks = this.menuModel.getAllVipDrinks();
+    const vip_foods = this.menuModel.getAllVipFoods();
     const userInfo = this.userModel.getCurrentUserInfo();
-    await this.view.render(beverages, foods, vip_drinks, vip_foods, userInfo);
+
+    await this.menuView.render(drinks, foods, vip_drinks, vip_foods, userInfo);
   }
 
   // Get current user information
@@ -62,7 +63,7 @@ class MenuController {
       // Check stock availability for all items
       for (const item of items) {
         const product =
-          this.storageModel.beverages.find((b) => b.name === item.name) ||
+          this.storageModel.drinks.find((b) => b.name === item.name) ||
           this.storageModel.foods.find((f) => f.name === item.name) ||
           this.storageModel.vip_drinks.find((v) => v.name === item.name) ||
           this.storageModel.vip_foods.find((v) => v.name === item.name);
@@ -114,7 +115,7 @@ class MenuController {
         this.render();
       } else {
         // Handle regular customer order
-        const order = await this.orderModel.createOrder({
+        const order = this.orderModel.createOrder({
           items: items,
           tableNumber: userInfo.tableNumber,
           isVIP: false,
@@ -129,7 +130,7 @@ class MenuController {
       // Update stock for all items
       for (const item of items) {
         const product =
-          this.storageModel.beverages.find((b) => b.name === item.name) ||
+          this.storageModel.drinks.find((b) => b.name === item.name) ||
           this.storageModel.foods.find((f) => f.name === item.name) ||
           this.storageModel.vip_drinks.find((v) => v.name === item.name) ||
           this.storageModel.vip_foods.find((v) => v.name === item.name);
@@ -139,7 +140,7 @@ class MenuController {
       }
 
       // Clear the order list
-      this.view.clearOrderList();
+      this.menuView.clearOrderList();
     } catch (error) {
       console.error("Error processing order:", error);
       alert("There was an error processing your order. Please try again.");

@@ -6,7 +6,7 @@ import LoginView from "../views/loginView.js";
 class LoginController {
   constructor(app) {
     this.app = app; // Reference to the main application
-    this.model = new UserModel(); // Initialize the user model
+    this.model = new UserModel(app.database); // Initialize the user model
     this.view = new LoginView(); // Initialize the login view
     this.init(); // Call the init method to load users
   }
@@ -19,9 +19,6 @@ class LoginController {
   // Render the login view and set up event listeners
   async render() {
     await this.view.render(this);
-    this.view.setupEventListeners();
-    this.view.bindCustomerLogin(this.handleCustomerLogin.bind(this));
-    this.view.bindEmployeeLogin(this.handleEmployeeLogin.bind(this));
   }
 
   // Handle customer login
@@ -46,7 +43,7 @@ class LoginController {
           tableNumber: tableNumber,
           balance: user.balance,
           role: user.role,
-          isVIP: true
+          isVIP: true,
         };
         console.log("Storing VIP session data:", userSessionData);
         this.model.storeUserSession(userSessionData);
@@ -60,7 +57,7 @@ class LoginController {
       // Store user session data
       const userSessionData = {
         tableNumber: tableNumber,
-        isVIP: false
+        isVIP: false,
       };
       console.log("Storing customer session data:", userSessionData);
       this.model.storeUserSession(userSessionData);
@@ -83,7 +80,7 @@ class LoginController {
       // Store user session data
       this.model.storeUserSession({
         username: user.username,
-        role: user.role
+        role: user.role,
       });
       this.redirectToMenu();
     } else {
@@ -93,6 +90,7 @@ class LoginController {
 
   // Redirect to the menu view
   redirectToMenu() {
+    this.app.toggleMenuVisibility();
     this.app.loadView("menu");
   }
 }

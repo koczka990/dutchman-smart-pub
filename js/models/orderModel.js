@@ -1,10 +1,18 @@
 class OrderModel {
   constructor(database) {
     this.database = database;
+    this.orders = [];
   }
+
   // Load orders from the database
   loadOrders() {
-    return this.database.load("orders") || [];
+    this.orders = this.database.load("orders") || [];
+    return this.orders;
+    // return this.database.load("orders") || [];
+  }
+
+  getOrderData() {
+    return this.loadOrders();
   }
 
   // Save orders to the database
@@ -27,9 +35,9 @@ class OrderModel {
       username: orderData.username,
       totalAmount: orderData.totalAmount,
       status: "pending",
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
-    
+
     orders.push(newOrder);
     this.saveOrders(orders);
     return newOrder;

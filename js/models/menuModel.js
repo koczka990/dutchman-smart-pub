@@ -1,6 +1,7 @@
 class MenuModel {
   constructor() {
-    this.beverages = [];
+    // Initialize menu data
+    this.drinks = [];
     this.foods = [];
     this.vip_drinks = [];
     this.vip_foods = [];
@@ -9,35 +10,43 @@ class MenuModel {
   // Load menu items from the json files
   async loadMenuData() {
     try {
-      const beveragesResponse = await fetch("/data/beverages.json");
-      this.beverages = await beveragesResponse.json();
-      console.log(this.beverages);
-      const foodsResponse = await fetch("/data/foods.json");
+      // Fetch all necessary data in parallel using Promise.all
+      const [
+        drinksResponse,
+        foodsResponse,
+        vipDrinksResponse,
+        vipFoodsResponse,
+      ] = await Promise.all([
+        fetch("/data/drinks.json"),
+        fetch("/data/foods.json"),
+        fetch("/data/vip_drinks.json"),
+        fetch("/data/vip_foods.json"),
+      ]);
+
+      // Parse the responses into JSON
+      this.drinks = await drinksResponse.json();
       this.foods = await foodsResponse.json();
-      console.log(this.foods);
-      const vipDrinksResponse = await fetch("/data/vip_drinks.json");
       this.vip_drinks = await vipDrinksResponse.json();
-      console.log(this.vip_drinks);
-      const vipFoodsResponse = await fetch("/data/vip_foods.json");
       this.vip_foods = await vipFoodsResponse.json();
-      console.log(this.foods);
     } catch (error) {
       console.error("Error loading menu data:", error);
     }
   }
 
-  getAllBeverages() {
-    if (!this.beverages) return [];
-    return this.beverages.map((beverage) => ({
-      name: beverage.name,
-      producer: beverage.producer,
-      countryoforigin: beverage.countryoforigin,
-      category: beverage.category,
-      alcoholstrength: beverage.alcoholstrength,
-      packaging: beverage.packaging,
-      priceinclvat: beverage.priceinclvat,
-      articletype: beverage.articletype,
-      articleNumber: beverage.nr,
+  // Getters for menu items
+
+  getAllDrinks() {
+    if (!this.drinks) return [];
+    return this.drinks.map((drink) => ({
+      name: drink.name,
+      producer: drink.producer,
+      countryoforigin: drink.countryoforigin,
+      category: drink.category,
+      alcoholstrength: drink.alcoholstrength,
+      packaging: drink.packaging,
+      priceinclvat: drink.priceinclvat,
+      articletype: drink.articletype,
+      articleNumber: drink.nr,
     }));
   }
 
@@ -56,7 +65,7 @@ class MenuModel {
 
   getAllVipDrinks() {
     if (!this.vip_drinks) return [];
-    console.log(this.vip_drinks, "vip drinks!!!!!!");
+    // console.log(this.vip_drinks, "vip drinks!!!!!!");
     return this.vip_drinks.map((vipDrink) => ({
       name: vipDrink.name,
       producer: vipDrink.producer,

@@ -1,24 +1,25 @@
-import Database from "./database.js";
-
 class UserModel {
-  constructor() {
+  constructor(database) {
+    this.database = database;
+
     this.users = [];
-    this.database = new Database();
-    // Get existing session ID or create a new one
-    this.sessionId =
-      sessionStorage.getItem("current_session_id") || this.generateSessionId();
-    // Store the session ID if it's new
-    if (!sessionStorage.getItem("current_session_id")) {
-      sessionStorage.setItem("current_session_id", this.sessionId);
-    }
-    console.log("Using session ID:", this.sessionId);
+
+    this.sessionId = this.getSessionId();
   }
 
-  generateSessionId() {
-    return "session_" + Math.random().toString(36).substr(2, 9);
+  getSessionId() {
+    let sessionId = sessionStorage.getItem("current_session_id");
+    if (!sessionId) {
+      // Generate a new session ID if none exists
+      sessionId = "session_" + Math.random().toString(36).substr(2, 9);
+      sessionStorage.setItem("current_session_id", sessionId);
+    }
+    return sessionId;
   }
 
   async loadUsers() {
+    if (this.users.length > 0) return this.users; // Use cached users
+
     try {
       console.log("Loading users from localStorage");
       // Load users from localStorage using Database class
@@ -42,6 +43,12 @@ class UserModel {
     const sessionKey = `${this.sessionId}_user`;
     console.log("Storing user session data:", { sessionKey, userData });
     sessionStorage.setItem(sessionKey, JSON.stringify(userData));
+  }
+
+  getUserData() {
+    const sessionKey = `${this.sessionId}_user`;
+    const userData = sessionStorage.getItem(sessionKey);
+    return userData;
   }
 
   // Get current user information

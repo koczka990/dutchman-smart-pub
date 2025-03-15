@@ -3,6 +3,8 @@
   "login-text": "Welcome to the Dutchman",
   "menuBtn": "Menu",
   "storageBtn": "Storage",
+  "orderBtn": "Order",
+  "logoutBtn": "Log Out",
 
   "//": "Login view",
   "customer-login-btn": "Customer Login",

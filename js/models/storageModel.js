@@ -66,7 +66,7 @@ class StorageModel {
 
     const lastUndoneState = this.redoStack.pop();
     this.undoStack.push({
-      beverages: JSON.parse(JSON.stringify(this.drinks)),
+      drinks: JSON.parse(JSON.stringify(this.drinks)),
       foods: JSON.parse(JSON.stringify(this.foods)),
       vip_drinks: JSON.parse(JSON.stringify(this.vip_drinks)),
       vip_foods: JSON.parse(JSON.stringify(this.vip_foods)),
@@ -74,7 +74,7 @@ class StorageModel {
     });
 
     // Restore the last undone state
-    this.drinks = lastUndoneState.beverages;
+    this.drinks = lastUndoneState.drinks;
     this.foods = lastUndoneState.foods;
     this.vip_drinks = lastUndoneState.vip_drinks;
     this.vip_foods = lastUndoneState.vip_foods;
@@ -94,19 +94,19 @@ class StorageModel {
     try {
       // Fetch all necessary data in parallel using Promise.all
       const [
-        beveragesResponse,
+        drinksResponse,
         foodsResponse,
         vipDrinksResponse,
         vipFoodsResponse,
       ] = await Promise.all([
-        fetch("/data/beverages.json"),
+        fetch("/data/drinks.json"),
         fetch("/data/foods.json"),
         fetch("/data/vip_drinks.json"),
         fetch("/data/vip_foods.json"),
       ]);
 
       // Parse the responses into JSON
-      this.drinks = await beveragesResponse.json();
+      this.drinks = await drinksResponse.json();
       this.foods = await foodsResponse.json();
       this.vip_drinks = await vipDrinksResponse.json();
       this.vip_foods = await vipFoodsResponse.json();
