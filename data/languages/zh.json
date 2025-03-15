@@ -4,6 +4,7 @@
   "menuBtn": "菜单",
   "storageBtn": "库存",
   "orderBtn": "订单",
+  "logoutBtn": "登出",
 
   "//": "Login view",
   "customer-login-btn": "顾客登录",

@@ -64,6 +64,10 @@ class App {
       $("#menuBtn").on("click", () => this.loadView("menu"));
       $("#storageBtn").on("click", () => this.loadView("storage"));
       $("#orderBtn").on("click", () => this.loadView("order"));
+      $("#logoutBtn").on("click", () => {
+        this.loginController.model.clearUserSession("order");
+        this.loadView("login");
+      });
       $("#languageSwitcher").on("change", (event) => {
         const selectedLanguage = event.target.value;
         this.languageSwitcher.setLanguage(selectedLanguage);
@@ -100,6 +104,7 @@ class App {
     // Translate the HTML content after rendering
     renderPromise.then(() => {
       this.languageSwitcher.translateHTML();
+      this.toggleMenuVisibility();
     });
   }
 

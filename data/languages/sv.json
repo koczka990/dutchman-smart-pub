@@ -2,5 +2,6 @@
   "login-text": "Välkommen till Dutchman",
   "menuBtn": "Meny",
   "storageBtn": "Förvaring",
-  "orderBtn": "Beställning"
+  "orderBtn": "Beställning",
+  "logoutBtn": "Logga ut"
 }

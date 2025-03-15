@@ -18,6 +18,11 @@ nav a:hover {
   color: black;
 }
 
+.right {
+  display: flex;
+  float: right;
+}
+
 #languageSwitcher {
   padding: 5px 10px;
   border: 1px solid #ccc;
