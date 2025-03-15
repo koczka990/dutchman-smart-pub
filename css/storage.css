@@ -6,6 +6,9 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  overflow: auto;
+  background-color: #1A2B45E6;
+  padding: 10px;
 }
 
 .storage-header {
@@ -14,7 +17,8 @@
   justify-content: space-between; /* Pushes elements to opposite ends */
   align-items: center; /* Aligns items vertically */
   padding: 10px;
-  border-bottom: 2px solid #ddd; /* Optional: Adds a separator */
+  color: #D2B99B;
+  margin: 20px 0px;
 }
 
 .storage-title {
@@ -36,26 +40,40 @@
 table {
   width: 100%;
   border-collapse: collapse;
+  border-radius: 10px;
 }
 
 th,
 td {
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #F5C142;
   text-align: left;
 }
 
-.low-stock {
+th {
+  background-color: #5C3A21;
+  color: #D2B99B;
+}
+
+tr {
+  background-color: #D2B99B;
+}
+
+tr.low-stock {
   background-color: #f1d5d5;
   color: #7b1313;
 }
 
 .order-history {
-  margin-top: 20px;
+  margin: 20px 0px;
+  border-radius: 10px;
   padding: 10px;
   border: 1px solid #ccc;
   background-color: #f9f9f9;
   border-radius: 5px;
+  min-height: 300px;
+  background-color: #1A2B45E6;
+  color: #D2B99B;
 }
 
 .reorder-btn {
@@ -68,22 +86,4 @@ td {
 
 .reorder-btn:hover {
   background-color: #cc0000;
-}
-
-/* Customer Information */
-.customer-info {
-  background-color: #f8f9fa;
-  padding: 1rem;
-  border-radius: 5px;
-  margin-bottom: 1.5rem;
-}
-
-.customer-info p {
-  margin: 0.5rem 0;
-  font-size: 1rem;
-  color: #333;
-}
-
-.customer-info strong {
-  color: #007bff;
 }

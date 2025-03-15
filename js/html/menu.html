@@ -1,12 +1,14 @@
 <div class="dashboard-container">
   <div class="menu-container">
-    <h3 id="menu-title" data-translate-key="menu-title">Products</h3>
+    <h3 id="menu-title" class="header" data-translate-key="menu-title">
+      Products
+    </h3>
 
     <!-- Tabs for Food & Drinks -->
     <div class="menu-tabs">
-      <button id="food-tab" class="active">🍔 Food</button>
+      <button id="food-tab" class="active">🍖 Food</button>
       <div class="dropdown">
-        <button id="drinks-tab" class="dropbtn">🍹 Drinks</button>
+        <button id="drinks-tab" class="dropbtn">🍻 Drinks</button>
         <div id="drinks-subcategories" class="dropdown-content">
           <button class="subcategory" id="Spirits">🥃 Spirits</button>
           <button class="subcategory" id="Beer">🍺 Beer</button>
@@ -23,9 +25,11 @@
     <div id="info-section" class="info-container"></div>
   </div>
 
-  <div class="order-container">
+  <div class="menu-order-container">
     <div class="customer-container">
-      <h3>Customer Information</h3>
+      <div class="order-header header">
+        <h3>Customer Information</h3>
+      </div>
       <div class="customer-info">
         <div id="vip-info" class="hidden">
           <p>
@@ -41,35 +45,19 @@
       </div>
     </div>
 
-    <div class="order-header">
+    <div class="order-header header">
       <h3>Order Details</h3>
       <div class="undo-redo-buttons">
         <button id="undo-btn">Undo</button>
         <button id="redo-btn">Redo</button>
       </div>
     </div>
-    <ul class="order-list" id="order-list">
-      <!-- <li draggable="true">
-        <span>Pizza</span>
-        <span class="order-btn">
-          <button id="decrease-btn" type="button">-</button>
-          <span>1</span>
-          <button id="increase-btn" type="button">+</button>
-        </span>
-      </li>
-      <li draggable="true" ondragstart="drag(event)">
-        <span>Burger</span>
-        <span class="order-btn">
-          <button class="decrease-btn" type="button">-</button>
-          <span>1</span>
-          <button class="increase-btn" type="button">+</button>
-        </span>
-      </li> -->
-    </ul>
+    <ul class="order-list" id="order-list"></ul>
 
-    <hr />
-    <h3>Order Summary</h3>
     <div class="order-summary">
+      <div class="order-header header">
+        <h3>Order Summary</h3>
+      </div>
       <h4>
         <span>Total:</span>
         <span id="total">$0.00</span>

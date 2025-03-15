@@ -2,39 +2,54 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
-    max-width: 80vw; /* Limit the max width for better alignment */
+    max-width: 80vw;
+    /* Limit the max width for better alignment */
     width: 100%;
     padding: 20px;
 }
 
 .employee-table-card {
-    background: white;
+    background-color: #1A2B45;
     padding: 15px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-left: 5px solid #007bff;
 }
+
 .employee-table-card.vip {
     border-left: 5px solid gold;
 }
+
 .employee-table-card h3 {
     margin: 0 0 10px;
     font-size: 18px;
-    color: #333;
+    color: #F5C142;
 }
+
 .employee-order-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
+
 .employee-order-list li {
+    color: #D2B99B;
     padding: 5px 0;
-    border-bottom: 1px solid #ddd;
 }
+
 .employee-order-list li:last-child {
-    border-bottom: none;
+    border-bottom: 1px solid #ccc;
 }
+
 .status {
     font-weight: bold;
     text-transform: capitalize;
+}
+
+.order-total {
+    color: #B34C43;
+}
+
+.order-time {
+    color: #ffffff
 }

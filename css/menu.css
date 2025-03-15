@@ -3,18 +3,32 @@
   height: 100%;
   display: flex;
   justify-content: space-between;
+  overflow: hidden;
+}
+
+#menu-title {
+  padding: 10px;
+  border-radius: 10px;
+  width: auto;
 }
 
 .menu-detail-container {
   display: flex;
-  gap: 20px; /* Space between columns */
+  gap: 20px;
+  /* Space between columns */
   align-items: flex-start;
   position: relative;
 }
 
 .menu-container {
-  flex: 1; /* Items take up 40% of space */
-  max-width: 300px; /* Prevents items from being too wide */
+  flex: 1;
+  width: 70%;
+  /* Prevents items from being too wide */
+  background-color: #1A2B45E6;
+  padding: 20px;
+  margin: 10px;
+  border-radius: 10px;
+  overflow: auto;
 }
 
 .menu-tabs {
@@ -36,7 +50,7 @@
 }
 
 .menu-tabs button.active {
-  background-color: #4CAF50;
+  background-color: #3C9D9B;
   /* Green for active */
   color: white;
 }
@@ -48,14 +62,18 @@
 /* Dropdown wrapper that controls the position and layout */
 .dropdown {
   position: relative;
-  display: inline-block;  /* Inline-block ensures it aligns with other elements */
-  flex: 1;                /* Take up remaining space in the flex container */
+  display: inline-block;
+  /* Inline-block ensures it aligns with other elements */
+  flex: 1;
+  /* Take up remaining space in the flex container */
 }
 
 /* Dropdown button styling */
 .dropbtn {
-  width: 100%;             /* Full width of the dropdown container */
-  height: 100%;            /* Match the height of other buttons in the menu */
+  width: 100%;
+  /* Full width of the dropdown container */
+  height: 100%;
+  /* Match the height of other buttons in the menu */
 }
 
 /* ==============================
@@ -64,33 +82,49 @@
 
 /* Initially hidden dropdown menu */
 .dropdown-content {
-  display: none;            /* Hide by default */
-  position: absolute;       /* Position it relative to the dropdown button */
-  min-width: 130px;         /* Set the minimum width */
-  border: 1px solid #929292; /* Add a border */
-  z-index: 1;               /* Ensure it appears above other elements */
-  border-radius: 0px;       /* No border radius for the dropdown content */
-  background-color: white;  /* Set background color */
+  display: none;
+  /* Hide by default */
+  position: absolute;
+  /* Position it relative to the dropdown button */
+  min-width: 130px;
+  /* Set the minimum width */
+  border: 1px solid #929292;
+  /* Add a border */
+  z-index: 1;
+  /* Ensure it appears above other elements */
+  border-radius: 0px;
+  /* No border radius for the dropdown content */
+  background-color: white;
+  /* Set background color */
 }
 
 /* Button inside the dropdown content */
 .dropdown-content button {
-  color: black;             /* Text color */
-  text-align: left;         /* Align text to the left */
-  width: 100%;              /* Make button fill the entire dropdown width */
-  background-color: white;  /* Set background */
-  border-radius: 0px;       /* No border radius for the dropdown items */
-  padding: 10px;            /* Add some padding to the buttons */
+  color: black;
+  /* Text color */
+  text-align: left;
+  /* Align text to the left */
+  width: 100%;
+  /* Make button fill the entire dropdown width */
+  background-color: white;
+  /* Set background */
+  border-radius: 0px;
+  /* No border radius for the dropdown items */
+  padding: 10px;
+  /* Add some padding to the buttons */
 }
 
 /* Hover and active states for dropdown buttons */
 .dropdown-content button:hover {
-  background-color: #ddd;   /* Change background color on hover */
+  background-color: #3C9D9B;
+  /* Change background color on hover */
 }
 
 .dropdown-content button:active {
-  background-color: #ccc;   /* Change background color on active */
-  border: 1px solid #aaa;   /* Add border when button is pressed */
+  background-color: #3C9D9B;
+  /* Change background color on active */
+  border: 1px solid #aaa;
+  /* Add border when button is pressed */
 }
 
 /* ==============================
@@ -99,15 +133,18 @@
 
 /* Show dropdown when hovering over the parent */
 .dropdown:hover .dropdown-content {
-  display: block;          /* Make dropdown content visible */
+  display: block;
+  /* Make dropdown content visible */
 }
 
 .menus {
-  display: flex;
-  flex-direction: column; /* Stack items vertically */
-  row-gap: 10px; /* Space between rows */
-  width: 95%;
-  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  /* Responsive grid */
+  gap: 16px;
+  /* Spacing between cards */
+  padding: 20px;
+  width: 80%;
 }
 
 .menu-item {
@@ -116,23 +153,26 @@
   flex-direction: row;
   align-items: center;
   padding: 15px;
-  background-color: white;
+  background-color: #B34C43;
   border-radius: 10px;
   font-size: 16px;
   cursor: pointer;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-  width: 100%;
+  max-width: 250px;
 }
 
 .item-img {
-  height: 100px;
-  width: auto; /* Maintain aspect ratio */
-  margin-right: 15px; /* Add spacing between image and text */
+  height: 70px;
+  width: auto;
+  /* Maintain aspect ratio */
+  margin-right: 15px;
+  /* Add spacing between image and text */
 }
 
 .item-info {
   display: flex;
-  flex-direction: column; /* Stack name and price */
+  flex-direction: column;
+  /* Stack name and price */
 }
 
 .item-name {
@@ -156,7 +196,8 @@
   max-width: 300px;
   text-align: left;
   position: absolute;
-  right: -320px; /* Initially hidden off-screen */
+  right: -320px;
+  /* Initially hidden off-screen */
   opacity: 0;
   transition: right 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
@@ -212,41 +253,59 @@
   border: 2px solid blue;
 }
 
-.order-container {
-  padding: 40px;
+.menu-order-container {
+  background-color: #1A2B45E6;
+  margin: 10px;
+  padding: 20px;
   margin-right: 20px;
-  width: 40%;
+  width: 30%;
   min-height: 100%;
+  border-radius: 10px;
 }
 
 /*Customer Information*/
-input {
-  width: 50%;
-  padding: 7px 10px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
+.customer-info {
+  background-color: #1A2B45;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1.5rem;
+}
+
+.customer-info p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #D2B99B;
+}
+
+.customer-info strong {
+  color: #ffffff;
 }
 
 .order-header {
   width: 100%;
   display: flex;
-  justify-content: space-between; /* Pushes elements to opposite ends */
-  align-items: center; /* Aligns items vertically */
+  justify-content: space-between;
+  /* Pushes elements to opposite ends */
+  align-items: center;
+  /* Aligns items vertically */
   padding: 10px;
-  border-bottom: 2px solid #ddd; /* Optional: Adds a separator */
+  /* Optional: Adds a separator */
 }
 
 .undo-redo-buttons {
-  display: flex; /* Keeps buttons in a row */
+  display: flex;
+  /* Keeps buttons in a row */
 }
 
 .undo-redo-buttons button {
-  margin-left: 10px; /* Adds spacing between buttons */
+  margin: 10px;
+  /* Adds spacing between buttons */
   padding: 8px 16px;
   font-size: 14px;
   font-weight: bold;
-  color: white;
-  background-color: #007bff; /* Primary blue color */
+  color: #1A2B45;
+  background-color: #F5C142;
+  /* Primary blue color */
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -254,26 +313,34 @@ input {
 }
 
 .undo-redo-buttons button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #0056b3;
+  /* Darker blue on hover */
   transform: scale(1.05);
 }
 
 .undo-redo-buttons button:active {
-  background-color: #004494; /* Even darker blue when clicked */
+  background-color: #004494;
+  /* Even darker blue when clicked */
   transform: scale(0.98);
 }
 
 .undo-redo-buttons button:disabled {
-  background-color: #ccc; /* Gray color */
-  color: #666; /* Darker gray text */
+  background-color: #ccc;
+  /* Gray color */
+  color: #666;
+  /* Darker gray text */
   cursor: not-allowed;
   transform: none;
+}
+
+.customer-info {
+  margin: 10px;
 }
 
 #order-list {
   list-style: none;
   min-height: 100px;
-  border: dashed 1px #333;
+  border: dashed 1px #F5C142;
   border-radius: 10px;
   padding: 10px;
   margin-top: 10px;
@@ -319,23 +386,28 @@ input {
 }
 
 .decrease-btn {
-  background-color: #cc0000;
+  background-color: #B34C43;
 }
 
 .increase-btn {
-  background-color: #237e08;
+  background-color: #3C9D9B;
 }
 
 .order-summary h4 {
   display: flex;
   justify-content: space-between;
+  color: #F5C142;
+}
+
+#total {
+  color: #F5C142;
 }
 
 #confirm-btn {
   width: 40%;
   margin-top: 20px;
   padding: 10px;
-  background: #237e08;
+  background: #3C9D9B;
   color: white;
   text-align: center;
   border: none;
@@ -347,7 +419,7 @@ input {
   width: 40%;
   margin-top: 20px;
   padding: 10px;
-  background: #cc0000;
+  background: #B34C43;
   color: white;
   text-align: center;
   border: none;

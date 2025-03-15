@@ -30,8 +30,10 @@ class OrderView {
                 .map((item) => `<li>${item.name} - ${item.quantity}</li>`)
                 .join("")}
           </ul>
-          <p><strong>Total: $${order.totalAmount}</strong></p>
-          <small>Ordered at: ${new Date(
+          <p><strong class="order-total">Total: $${
+            order.totalAmount
+          }</strong></p>
+          <small class="order-time">Ordered at: ${new Date(
             order.timestamp
           ).toLocaleString()}</small>
       `;

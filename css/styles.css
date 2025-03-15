@@ -3,6 +3,18 @@ body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
   margin: 0;
+  overflow: hidden;
+
+  /* Cover the entire viewport */
+  background-image: url("/data/img/background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* Apply the blur effect */
+  backdrop-filter: blur(1px); /* Adjust the blur radius as needed */
+  /* Or for older browsers without backdrop-filter support*/
+  background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
 }
 
 main {
@@ -10,4 +22,20 @@ main {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  overflow: hidden;
+}
+
+.header {
+  color: #F5C142;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  margin: 10px;
+  background-color: #1A2B45E6;
+  overflow: auto;
 }
