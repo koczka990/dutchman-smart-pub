@@ -19,9 +19,6 @@ class LoginController {
   // Render the login view and set up event listeners
   async render() {
     await this.view.render(this);
-    this.view.setupEventListeners();
-    this.view.bindCustomerLogin(this.handleCustomerLogin.bind(this));
-    this.view.bindEmployeeLogin(this.handleEmployeeLogin.bind(this));
   }
 
   // Handle customer login
@@ -93,6 +90,7 @@ class LoginController {
 
   // Redirect to the menu view
   redirectToMenu() {
+    this.app.toggleMenuVisibility();
     this.app.loadView("menu");
   }
 }

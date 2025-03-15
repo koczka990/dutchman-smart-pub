@@ -33,6 +33,7 @@ class App {
   init() {
     this.loadContent();
     this.setupEventListeners();
+    this.toggleMenuVisibility();
   }
 
   // Load the dynamic content of the index page.
@@ -100,6 +101,23 @@ class App {
     renderPromise.then(() => {
       this.languageSwitcher.translateHTML();
     });
+  }
+
+  toggleMenuVisibility() {
+    const sessionData = this.loginController.model.getUserData();
+
+    console.log("Checking session data:", sessionData);
+    if (sessionData) {
+      // User is logged in, show menu
+      $("#menuBtn").show();
+      $("#storageBtn").show();
+      $("#orderBtn").show();
+    } else {
+      // No session, hide menu
+      $("#menuBtn").hide();
+      $("#storageBtn").hide();
+      $("#orderBtn").hide();
+    }
   }
 }
 
