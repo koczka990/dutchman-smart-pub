@@ -3,6 +3,7 @@ import MenuController from "./controllers/menuController.js";
 import StorageController from "./controllers/storageController.js";
 import LoginController from "./controllers/loginController.js";
 import PaymentController from "./controllers/paymentController.js";
+import OrderController from "./controllers/orderController.js";
 
 // Database
 import Database from "./models/database.js";
@@ -18,6 +19,7 @@ class App {
     this.menuController = new MenuController(this);
     this.storageController = new StorageController(this);
     this.paymentController = new PaymentController(this);
+    this.orderController = new OrderController(this);
     this.languageSwitcher = new LanguageSwitcher();
     this.constructor = new Constructor();
 
@@ -60,6 +62,7 @@ class App {
     $(document).ready(() => {
       $("#menuBtn").on("click", () => this.loadView("menu"));
       $("#storageBtn").on("click", () => this.loadView("storage"));
+      $("#orderBtn").on("click", () => this.loadView("order"));
       $("#languageSwitcher").on("change", (event) => {
         const selectedLanguage = event.target.value;
         this.languageSwitcher.setLanguage(selectedLanguage);
@@ -83,7 +86,10 @@ class App {
         renderPromise = this.storageController.render();
         break;
       case "payment":
-        this.paymentController.render();
+        renderPromise = this.paymentController.render();
+        break;
+      case "order":
+        renderPromise = this.orderController.render();
         break;
       default:
         console.error("View not found:", view);

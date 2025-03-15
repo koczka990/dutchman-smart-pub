@@ -1,20 +1,20 @@
-$(document).ready(function () {
-    const orderItemsContainer = $("#order-items");
-    const order = JSON.parse(localStorage.getItem("currentOrder")) || [];
-  
-    // Display order items
-    order.forEach((item) => {
-      const orderItem = `
-        <div class="order-item">
-          <span>${item.name} (x${item.quantity})</span>
-          <span>$${(item.price * item.quantity).toFixed(2)}</span>
-        </div>
-      `;
-      orderItemsContainer.append(orderItem);
-    });
-  
-    // Back to Menu button
-    $("#back-to-menu-btn").click(function () {
-      window.location.href = "menu.html";
-    });
-  });
+import OrderModel from "../models/orderModel.js";
+import OrderView from "../views/orderView.js";
+
+class OrderController {
+  constructor(app) {
+    this.app = app;
+    this.model = new OrderModel(app.database);
+    this.view = new OrderView();
+    this.init();
+  }
+
+  init() {}
+
+  async render() {
+    const orderData = this.model.getOrderData();
+    await this.view.render(orderData);
+  }
+}
+
+export default OrderController;

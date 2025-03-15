@@ -65,7 +65,7 @@ class MenuModel {
 
   getAllVipDrinks() {
     if (!this.vip_drinks) return [];
-    console.log(this.vip_drinks, "vip drinks!!!!!!");
+    // console.log(this.vip_drinks, "vip drinks!!!!!!");
     return this.vip_drinks.map((vipDrink) => ({
       name: vipDrink.name,
       producer: vipDrink.producer,

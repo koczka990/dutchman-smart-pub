@@ -1,11 +1,18 @@
 class OrderModel {
   constructor(database) {
     this.database = database;
+    this.orders = [];
   }
 
   // Load orders from the database
   loadOrders() {
-    return this.database.load("orders") || [];
+    this.orders = this.database.load("orders") || [];
+    return this.orders;
+    // return this.database.load("orders") || [];
+  }
+
+  getOrderData() {
+    return this.loadOrders();
   }
 
   // Save orders to the database

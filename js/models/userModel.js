@@ -1,9 +1,9 @@
-import Database from "./database.js";
-
 class UserModel {
-  constructor() {
+  constructor(database) {
+    this.database = database;
+
     this.users = [];
-    this.database = new Database();
+
     // Get existing session ID or create a new one
     this.sessionId =
       sessionStorage.getItem("current_session_id") || this.generateSessionId();
