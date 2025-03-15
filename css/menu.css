@@ -270,34 +270,52 @@ input {
   transform: none;
 }
 
-.order-list {
+#order-list {
   list-style: none;
-  padding: 10px;
   min-height: 100px;
   border: dashed 1px #333;
   border-radius: 10px;
+  padding: 10px;
+  margin-top: 10px;
 }
 
-.order-list li {
+#order-list li {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  background: #f8f9fa;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  border: 1px solid #ddd;
+  transition: background 0.3s;
+}
+
+#order-list li:hover {
+  background: #e9ecef;
 }
 
 .order-btn {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 8px;
 }
 
-.order-list li button {
+.order-btn button {
   color: white;
-  text-align: center;
-  padding: 5px 10px;
   border: none;
-  border-radius: 5px;
+  padding: 5px 10px;
+  border-radius: 4px;
   cursor: pointer;
+  transition: 0.3s;
+  font-size: 14px;
+}
+
+.order-btn span {
+  font-weight: bold;
+  font-size: 14px;
+  min-width: 20px;
+  text-align: center;
 }
 
 .decrease-btn {

@@ -2,6 +2,7 @@ class OrderModel {
   constructor(database) {
     this.database = database;
   }
+
   // Load orders from the database
   loadOrders() {
     return this.database.load("orders") || [];
@@ -27,9 +28,9 @@ class OrderModel {
       username: orderData.username,
       totalAmount: orderData.totalAmount,
       status: "pending",
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
-    
+
     orders.push(newOrder);
     this.saveOrders(orders);
     return newOrder;

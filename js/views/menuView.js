@@ -344,7 +344,7 @@ class MenuView {
       const quantity = parseInt(
         listItem.querySelector(".order-btn span").textContent
       ); // Read quantity from UI
-      subtotal += itemPrice * quantity;
+      total += itemPrice * quantity;
     });
 
     // Update order summary in UI

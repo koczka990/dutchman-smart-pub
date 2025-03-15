@@ -1,5 +1,6 @@
 class MenuModel {
   constructor() {
+    // Initialize menu data
     this.beverages = [];
     this.foods = [];
     this.vip_drinks = [];
@@ -9,22 +10,30 @@ class MenuModel {
   // Load menu items from the json files
   async loadMenuData() {
     try {
-      const beveragesResponse = await fetch("/data/beverages.json");
-      this.beverages = await beveragesResponse.json();
-      console.log(this.beverages);
-      const foodsResponse = await fetch("/data/foods.json");
+      // Fetch all necessary data in parallel using Promise.all
+      const [
+        beveragesResponse,
+        foodsResponse,
+        vipDrinksResponse,
+        vipFoodsResponse,
+      ] = await Promise.all([
+        fetch("/data/beverages.json"),
+        fetch("/data/foods.json"),
+        fetch("/data/vip_drinks.json"),
+        fetch("/data/vip_foods.json"),
+      ]);
+
+      // Parse the responses into JSON
+      this.drinks = await beveragesResponse.json();
       this.foods = await foodsResponse.json();
-      console.log(this.foods);
-      const vipDrinksResponse = await fetch("/data/vip_drinks.json");
       this.vip_drinks = await vipDrinksResponse.json();
-      console.log(this.vip_drinks);
-      const vipFoodsResponse = await fetch("/data/vip_foods.json");
       this.vip_foods = await vipFoodsResponse.json();
-      console.log(this.foods);
     } catch (error) {
       console.error("Error loading menu data:", error);
     }
   }
+
+  // Getters for menu items
 
   getAllBeverages() {
     if (!this.beverages) return [];
