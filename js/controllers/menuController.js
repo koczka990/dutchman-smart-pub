@@ -149,6 +149,7 @@ class MenuController {
 
   // Handle regular customer orders and redirect to payment page
   async handleRegularCustomerOrder(items, userInfo) {
+    console.log("Handling regular customer order with items:", items, "and userInfo:", userInfo);
     if (!items || items.length === 0) {
       alert("No items in the order. Please add some items before confirming.");
       return;
@@ -172,6 +173,7 @@ class MenuController {
       }
 
       // Store order details using the order model
+      console.log("Storing order details:", items, userInfo.tableNumber);
       this.orderModel.storeOrderDetails(items, userInfo.tableNumber);
       
       // Redirect to payment page
