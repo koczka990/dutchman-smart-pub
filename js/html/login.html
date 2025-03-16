@@ -1,12 +1,9 @@
 <div class="login-container">
   <h1 id="login-text" class="login-text" data-translate-key="login-text">Welcome to the Dutchman</h1>
-  <div class="login-options">
-    <button id="customer-login-btn" class="login-btn" data-translate-key="customer-login-btn">Customer Login</button>
-    <button id="employee-login-btn" class="login-btn" data-translate-key="employee-login-btn">Employee Login</button>
-  </div>
-
-  <!-- Customer Login Form -->
-  <form id="customer-login-form" class="hidden">
+  
+  <!-- VIP Customer Login Form (Default) -->
+  <form id="vip-login-form">
+    <h2 data-translate-key="vip-login-heading">VIP Customer Login</h2>
     <div class="form-group">
       <label for="table-number" data-translate-key="Table Number">Table Number</label>
       <input
@@ -19,31 +16,27 @@
     </div>
 
     <div class="form-group">
-      <label for="vip-toggle" data-translate-key="vip-toggle">VIP User</label>
-      <label class="toggle-switch">
-        <input type="checkbox" id="vip-toggle" />
-        <span class="slider"></span>
-      </label>
+      <label for="username" data-translate-key="Username">Username</label>
+      <input type="text" id="username" placeholder="Enter username" data-translate-key="username-placeholder" required/>
+    </div>
+    
+    <div class="form-group">
+      <label for="password" data-translate-key="Password">Password</label>
+      <input type="password" id="password" placeholder="Enter password" data-translate-key="password-placeholder" required/>
     </div>
 
-    <div id="vip-fields" class="hidden">
-      <div class="form-group">
-        <label for="username" data-translate-key="Username">Username</label>
-        <input type="text" id="username" placeholder="Enter username" data-translate-key="username-placeholder"/>
-      </div>
-      <div class="form-group">
-        <label for="password" data-translate-key="Password">Password</label>
-        <input type="password" id="password" placeholder="Enter password" data-translate-key="password-placeholder"/>
-      </div>
-    </div>
-
-    <button type="submit" id="customer-login-submit" class="login-btn" data-translate-key="Login" disabled>
+    <button type="submit" id="vip-login-submit" class="login-btn" data-translate-key="Login">
       Login
     </button>
+    
+    <div class="employee-link">
+      <a href="#" id="employee-link" data-translate-key="employee-link">Are you an employee?</a>
+    </div>
   </form>
 
   <!-- Employee Login Form -->
   <form id="employee-login-form" class="hidden">
+    <h2 data-translate-key="employee-login-heading">Employee Login</h2>
     <div class="form-group">
       <label for="employee-username" data-translate-key="Username">Username</label>
       <input
@@ -68,5 +61,32 @@
     <button type="submit" id="employee-login-submit" class="login-btn" data-translate-key="Login">
       Login
     </button>
+    
+    <div class="vip-link">
+      <a href="#" id="vip-link" data-translate-key="vip-link">Back to VIP Login</a>
+    </div>
+  </form>
+  
+  <!-- Regular Customer Login Form (Only accessible after employee login) -->
+  <form id="regular-customer-login-form" class="hidden">
+    <h2 data-translate-key="regular-customer-login-heading">Regular Customer Login</h2>
+    <div class="form-group">
+      <label for="regular-table-number" data-translate-key="Table Number">Table Number</label>
+      <input
+        type="number"
+        id="regular-table-number"
+        placeholder="Enter table number"
+        required
+        data-translate-key="table-number-placeholder"
+      />
+    </div>
+
+    <button type="submit" id="regular-customer-login-submit" class="login-btn" data-translate-key="Login">
+      Login
+    </button>
+    
+    <div class="back-to-employee">
+      <a href="#" id="back-to-employee" data-translate-key="back-to-employee">Back to Employee Dashboard</a>
+    </div>
   </form>
 </div>

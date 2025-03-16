@@ -11,53 +11,53 @@ class LoginView {
       // Call function to enable tab switching
       this.setupEventListeners();
 
-      this.bindCustomerLogin(controller.handleCustomerLogin.bind(controller));
+      this.bindVIPLogin(controller.handleVIPLogin.bind(controller));
       this.bindEmployeeLogin(controller.handleEmployeeLogin.bind(controller));
+      this.bindRegularCustomerLogin(controller.handleRegularCustomerLogin.bind(controller));
     } catch (error) {
       console.error("Error loading login.html:", error);
     }
   }
 
   setupEventListeners() {
-    // Show Customer Login Form
-    $("#customer-login-btn").click(() => {
-      $("#customer-login-form").removeClass("hidden");
-      $("#employee-login-form").addClass("hidden");
-    });
-
     // Show Employee Login Form
-    $("#employee-login-btn").click(() => {
+    $("#employee-link").click((e) => {
+      e.preventDefault();
+      $("#vip-login-form").addClass("hidden");
       $("#employee-login-form").removeClass("hidden");
-      $("#customer-login-form").addClass("hidden");
     });
 
-    // Toggle VIP Fields
-    $("#vip-toggle").change((event) => {
-      console.log("VIP Toggle Changed");
-      console.log(event.target.checked);
-      if (event.target.checked) {
-        $("#vip-fields").removeClass("hidden");
-      } else {
-        $("#vip-fields").addClass("hidden");
-      }
-      validateCustomerLoginForm();
+    // Show VIP Login Form
+    $("#vip-link").click((e) => {
+      e.preventDefault();
+      $("#employee-login-form").addClass("hidden");
+      $("#regular-customer-login-form").addClass("hidden");
+      $("#vip-login-form").removeClass("hidden");
     });
 
-    // Validate Customer Login Form
+    // Show Regular Customer Login Form (only after employee login)
+    $("#back-to-employee").click((e) => {
+      e.preventDefault();
+      $("#regular-customer-login-form").addClass("hidden");
+      // Here we would typically show an employee dashboard
+      // For now, we'll just show the employee login form again
+      $("#employee-login-form").removeClass("hidden");
+    });
+
+    // Validate VIP Login Form
     $("#table-number, #username, #password").on("input", () => {
-      validateCustomerLoginForm();
+      validateVIPLoginForm();
     });
 
-    function validateCustomerLoginForm() {
+    function validateVIPLoginForm() {
       const tableNumber = $("#table-number").val();
-      const isVIP = $("#vip-toggle").is(":checked");
       const username = $("#username").val();
       const password = $("#password").val();
 
-      if (tableNumber && (!isVIP || (username && password))) {
-        $("#customer-login-submit").prop("disabled", false);
+      if (tableNumber && username && password) {
+        $("#vip-login-submit").prop("disabled", false);
       } else {
-        $("#customer-login-submit").prop("disabled", true);
+        $("#vip-login-submit").prop("disabled", true);
       }
     }
 
@@ -77,28 +77,43 @@ class LoginView {
       }
     }
 
+    // Validate Regular Customer Login Form
+    $("#regular-table-number").on("input", () => {
+      validateRegularCustomerLoginForm();
+    });
+
+    function validateRegularCustomerLoginForm() {
+      const tableNumber = $("#regular-table-number").val();
+
+      if (tableNumber) {
+        $("#regular-customer-login-submit").prop("disabled", false);
+      } else {
+        $("#regular-customer-login-submit").prop("disabled", true);
+      }
+    }
+
     // Initial validation check
+    validateVIPLoginForm();
     validateEmployeeLoginForm();
-
-    // // Handle Customer Login Submit
-    // $("#customer-login-submit").click((event) => {
-    //   event.preventDefault();
-    //   this.handleCustomerLogin(event);
-    // });
-
-    // // Handle Employee Login Submit
-    // $("#employee-login-submit").click((event) => {
-    //   event.preventDefault();
-    //   this.handleEmployeeLogin(event);
-    // });
+    validateRegularCustomerLoginForm();
   }
 
-  bindCustomerLogin(handler) {
-    $("#customer-login-form").on("submit", handler);
+  bindVIPLogin(handler) {
+    $("#vip-login-form").on("submit", handler);
   }
 
   bindEmployeeLogin(handler) {
     $("#employee-login-form").on("submit", handler);
+  }
+
+  bindRegularCustomerLogin(handler) {
+    $("#regular-customer-login-form").on("submit", handler);
+  }
+
+  // Method to show regular customer login form after employee login
+  showRegularCustomerLogin() {
+    $("#employee-login-form").addClass("hidden");
+    $("#regular-customer-login-form").removeClass("hidden");
   }
 }
 
