@@ -1,35 +1,52 @@
-import Database from "./database.js";
-
 class MenuModel {
   constructor() {
-    this.beverages = [];
+    // Initialize menu data
+    this.drinks = [];
     this.foods = [];
+    this.vip_drinks = [];
+    this.vip_foods = [];
   }
 
   // Load menu items from the json files
   async loadMenuData() {
     try {
-      const beveragesResponse = await fetch("/data/beverages.json");
-      this.beverages = await beveragesResponse.json();
+      // Fetch all necessary data in parallel using Promise.all
+      const [
+        drinksResponse,
+        foodsResponse,
+        vipDrinksResponse,
+        vipFoodsResponse,
+      ] = await Promise.all([
+        fetch("/data/drinks.json"),
+        fetch("/data/foods.json"),
+        fetch("/data/vip_drinks.json"),
+        fetch("/data/vip_foods.json"),
+      ]);
 
-      const foodsResponse = await fetch("/data/foods.json");
+      // Parse the responses into JSON
+      this.drinks = await drinksResponse.json();
       this.foods = await foodsResponse.json();
+      this.vip_drinks = await vipDrinksResponse.json();
+      this.vip_foods = await vipFoodsResponse.json();
     } catch (error) {
       console.error("Error loading menu data:", error);
     }
   }
 
-  getAllBeverages() {
-    if (!this.beverages) return [];
-    return this.beverages.map((beverage) => ({
-      name: beverage.name,
-      producer: beverage.producer,
-      countryoforigin: beverage.countryoforigin,
-      catgegory: beverage.catgegory,
-      alcoholstrength: beverage.alcoholstrength,
-      packaging: beverage.packaging,
-      priceinclvat: beverage.priceinclvat,
-      articletype: beverage.articletype
+  // Getters for menu items
+
+  getAllDrinks() {
+    if (!this.drinks) return [];
+    return this.drinks.map((drink) => ({
+      name: drink.name,
+      producer: drink.producer,
+      countryoforigin: drink.countryoforigin,
+      category: drink.category,
+      alcoholstrength: drink.alcoholstrength,
+      packaging: drink.packaging,
+      priceinclvat: drink.priceinclvat,
+      articletype: drink.articletype,
+      articleNumber: drink.nr,
     }));
   }
 
@@ -41,49 +58,39 @@ class MenuModel {
       category: food.category,
       producer: food.producer,
       articletype: food.articletype,
-      packaging: food.packaging
+      packaging: food.packaging,
+      articleNumber: food.nr,
     }));
   }
 
-  // // Load menu items from the database
-  // loadMenuItems() {
-  //   return Database.load("menuItems") || [];
-  // }
+  getAllVipDrinks() {
+    if (!this.vip_drinks) return [];
+    // console.log(this.vip_drinks, "vip drinks!!!!!!");
+    return this.vip_drinks.map((vipDrink) => ({
+      name: vipDrink.name,
+      producer: vipDrink.producer,
+      countryoforigin: vipDrink.countryoforigin,
+      category: vipDrink.category,
+      alcoholstrength: vipDrink.alcoholstrength,
+      packaging: vipDrink.packaging,
+      priceinclvat: vipDrink.priceinclvat,
+      articletype: vipDrink.articletype,
+      articleNumber: vipDrink.nr,
+    }));
+  }
 
-  // // Save menu items to the database
-  // saveMenuItems(menuItems) {
-  //   Database.save("menuItems", menuItems);
-  // }
-
-  // // Get a menu item by ID
-  // getMenuItem(id) {
-  //   const menuItems = this.loadMenuItems();
-  //   return menuItems.find((item) => item.id === id);
-  // }
-
-  // // Update stock level for a menu item
-  // updateStock(id, quantity) {
-  //   const menuItems = this.loadMenuItems();
-  //   const item = menuItems.find((item) => item.id === id);
-  //   if (item) {
-  //     item.stock -= quantity;
-  //     this.saveMenuItems(menuItems);
-  //   }
-  // }
-
-  // // Add a new menu item
-  // addMenuItem(item) {
-  //   const menuItems = this.loadMenuItems();
-  //   menuItems.push(item);
-  //   this.saveMenuItems(menuItems);
-  // }
-
-  // // Remove a menu item
-  // removeMenuItem(id) {
-  //   let menuItems = this.loadMenuItems();
-  //   menuItems = menuItems.filter((item) => item.id !== id);
-  //   this.saveMenuItems(menuItems);
-  // }
+  getAllVipFoods() {
+    if (!this.vip_foods) return [];
+    return this.vip_foods.map((vipFood) => ({
+      name: vipFood.name,
+      priceinclvat: vipFood.priceinclvat,
+      category: vipFood.category,
+      producer: vipFood.producer,
+      articletype: vipFood.articletype,
+      packaging: vipFood.packaging,
+      articleNumber: vipFood.nr,
+    }));
+  }
 }
 
 export default MenuModel;

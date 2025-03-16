@@ -1,0 +1,68 @@
+[
+    {
+        "nr": "20006",
+        "articleid": "35006",
+        "articletype": "200",
+        "name": "Lobster Roll",
+        "priceinclvat": "220.00",
+        "category": "Main Course",
+        "packaging": "Box",
+        "producer": "Seafood Bistro",
+        "countryoforiginlandname": "USA"
+    },
+    {
+        "nr": "20008",
+        "articleid": "35008",
+        "articletype": "200",
+        "name": "Grilled Wagyu Steak",
+        "priceinclvat": "350.00",
+        "category": "Main Course",
+        "packaging": "Plate",
+        "producer": "Prime Cuts",
+        "countryoforiginlandname": "Japan"
+    },
+    {
+        "nr": "20009",
+        "articleid": "35009",
+        "articletype": "200",
+        "name": "Truffle Risotto",
+        "priceinclvat": "150.00",
+        "category": "Main Course",
+        "packaging": "Bowl",
+        "producer": "Gourmet Kitchen",
+        "countryoforiginlandname": "Italy"
+    },
+    {
+        "nr": "20010",
+        "articleid": "35010",
+        "articletype": "200",
+        "name": "Foie Gras",
+        "priceinclvat": "500.00",
+        "category": "Starter",
+        "packaging": "Plate",
+        "producer": "Fine Dining",
+        "countryoforiginlandname": "France"
+    },
+    {
+        "nr": "20011",
+        "articleid": "35011",
+        "articletype": "200",
+        "name": "Tiramisu",
+        "priceinclvat": "80.00",
+        "category": "Dessert",
+        "packaging": "Cup",
+        "producer": "Italian Bakery",
+        "countryoforiginlandname": "Italy"
+    },
+    {
+        "nr": "20012",
+        "articleid": "35012",
+        "articletype": "200",
+        "name": "Caviar Platter",
+        "priceinclvat": "1200.00",
+        "category": "Starter",
+        "packaging": "Tray",
+        "producer": "Luxury Delights",
+        "countryoforiginlandname": "Russia"
+    }
+]

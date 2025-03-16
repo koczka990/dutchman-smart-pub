@@ -1,59 +1,63 @@
 <div class="dashboard-container">
   <div class="menu-container">
-    <h3 id="menu-title" class="translatable">Products</h3>
+    <h3 id="menu-title" class="header" data-translate-key="menu-title">
+      Products
+    </h3>
 
     <!-- Tabs for Food & Drinks -->
     <div class="menu-tabs">
-      <button id="food-tab" class="active">🍔 Food</button>
-      <button id="drinks-tab">🍹 Drinks</button>
+      <button id="food-tab" class="active">🍖 Food</button>
+      <div class="dropdown">
+        <button id="drinks-tab" class="dropbtn">🍻 Drinks</button>
+        <div id="drinks-subcategories" class="dropdown-content">
+          <button class="subcategory" id="Spirits">🥃 Spirits</button>
+          <button class="subcategory" id="Beer">🍺 Beer</button>
+          <button class="subcategory" id="Whisky">🥃 Whisky</button>
+          <button class="subcategory" id="Grappa">🍇 Grappa</button>
+        </div>
+      </div>
+      <button id="vip-food-tab" class="hidden">👑 VIP Food</button>
+      <button id="vip-drinks-tab" class="hidden">👑 VIP Drinks</button>
     </div>
 
     <div class="menus" id="menu-items"></div>
 
-    <div id="info-section" class="info-container">
-    </div>
+    <div id="info-section" class="info-container"></div>
   </div>
 
-  <div class="order-container">
+  <div class="menu-order-container">
     <div class="customer-container">
-      <h3>Customer Information</h3>
+      <div class="order-header header">
+        <h3>Customer Information</h3>
+      </div>
       <div class="customer-info">
         <div id="vip-info" class="hidden">
-          <p><strong>Customer Name: </strong><span id="display-customer-name">-</span></p>
+          <p>
+            <strong>Customer Name: </strong
+            ><span id="display-customer-name">-</span>
+          </p>
           <p><strong>Balance: </strong><span id="display-balance">-</span></p>
         </div>
-        <p><strong>Table Number: </strong><span id="display-table-number">-</span></p>
+        <p>
+          <strong>Table Number: </strong
+          ><span id="display-table-number">-</span>
+        </p>
       </div>
     </div>
 
-    <h3>Order Details</h3>
-    <ul class="order-list" id="order-list">
-      <!-- <li draggable="true">
-        <span>Pizza</span>
-        <span class="order-btn">
-          <button id="decrease-btn" type="button">-</button>
-          <span>1</span>
-          <button id="increase-btn" type="button">+</button>
-        </span>
-      </li>
-      <li draggable="true" ondragstart="drag(event)">
-        <span>Burger</span>
-        <span class="order-btn">
-          <button class="decrease-btn" type="button">-</button>
-          <span>1</span>
-          <button class="increase-btn" type="button">+</button>
-        </span>
-      </li> -->
-    </ul>
+    <div class="order-header header">
+      <h3>Order Details</h3>
+      <div class="undo-redo-buttons">
+        <button id="undo-btn">Undo</button>
+        <button id="redo-btn">Redo</button>
+      </div>
+    </div>
+    <ul class="order-list" id="order-list"></ul>
 
-    <hr />
-    <h3>Order Summary</h3>
     <div class="order-summary">
-      <h4>
-        <span>Subtotal:</span>
-        <span id="subtotal">$0.00</span>
-      </h4>
-      <hr />
+      <div class="order-header header">
+        <h3>Order Summary</h3>
+      </div>
       <h4>
         <span>Total:</span>
         <span id="total">$0.00</span>

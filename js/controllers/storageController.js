@@ -4,54 +4,76 @@ import StorageView from "../views/storageView.js";
 class StorageController {
   constructor(app) {
     this.app = app;
-    this.model = new StorageModel();
+    this.model = new StorageModel(app.database);
     this.view = new StorageView();
+
+    // Bind methods
+    this.view.onReorder = this.handleReorder.bind(this);
+    this.view.onUndo = this.handleUndo.bind(this);
+    this.view.onRedo = this.handleRedo.bind(this);
+
     this.init();
   }
 
   async init() {
-    await this.model.loadStorageData();
-    this.ensureStockValues();
-    // this.render();
+    // Load storage data from the database
+    await this.model.loadJSONStorage();
+    this.model.loadLocalStorageData();
+    // this.model.ensureStockValues();
   }
 
-  ensureStockValues() {
-    let stockUpdated = false;
-    this.model.beverages.forEach(beverage => {
-      if (beverage.stock === undefined) {
-        beverage.stock = 10;
-        stockUpdated = true;
-      }
-    });
-    this.model.foods.forEach(food => {
-      if (food.stock === undefined) {
-        food.stock = 10;
-        stockUpdated = true;
-      }
-    });
-    if (stockUpdated) {
-      this.model.saveStockData();
+  handleReorder(itemName) {
+    this.model.saveStateForUndo(); // Save the current state before reordering
+
+    const product = [
+      this.model.drinks,
+      this.model.foods,
+      this.model.vip_drinks,
+      this.model.vip_foods,
+    ]
+      .flatMap((arr) => arr)
+      .find((item) => item.name === itemName);
+
+    if (product) {
+      product.stock = 10; // Reset stock to 10
+      this.model.saveStockData(); // Save the updated stock data
+      this.model.addOrder(itemName); // Save stock reorder in history
+
+      this.render(); // Re-render UI with updated stock data and order log
     }
+  }
+
+  handleUndo() {
+    this.model.undo(); // Call the undo method from model
+    this.render(); // Re-render UI with the updated state
+  }
+
+  handleRedo() {
+    this.model.redo(); // Call the redo method from model
+    this.render(); // Re-render UI with the updated state
   }
 
   async render() {
     // Always load fresh data from the database
-    await this.model.loadStorageData();
-    this.ensureStockValues();
+    await this.model.loadJSONStorage();
+    this.model.loadLocalStorageData();
+    // this.ensureStockValues();
 
+    // Prepare storage items for rendering
     const storageItems = [
-      ...this.model.beverages.map(beverage => ({
-        name: beverage.name,
-        stock: beverage.stock,
-        reorderThreshold: 5 // can be changed later
-      })),
-      ...this.model.foods.map(food => ({
-        name: food.name,
-        stock: food.stock,
-        reorderThreshold: 5 // can be changed later
-      }))
-    ];
-    await this.view.render(storageItems);
+      this.model.drinks,
+      this.model.foods,
+      this.model.vip_drinks,
+      this.model.vip_foods,
+    ]
+      .flatMap((arr) => arr)
+      .map((item) => ({
+        name: item.name,
+        stock: item.stock,
+        reorderThreshold: 5,
+      }));
+
+    await this.view.render(storageItems, this.model.getOrderHistory());
   }
 }
 

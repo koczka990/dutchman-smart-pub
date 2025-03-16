@@ -1,10 +1,16 @@
+// Controllers
 import MenuController from "./controllers/menuController.js";
 import StorageController from "./controllers/storageController.js";
 import LoginController from "./controllers/loginController.js";
+import PaymentController from "./controllers/paymentController.js";
+import OrderController from "./controllers/orderController.js";
+
+// Database
+import Database from "./models/database.js";
+
+// Utils
 import LanguageSwitcher from "./utils/languageSwitcher.js";
 import Constructor from "./views/constructor.js";
-import Database from "./models/database.js";
-import PaymentController from "./controllers/paymentController.js";
 
 class App {
   constructor() {
@@ -13,6 +19,7 @@ class App {
     this.menuController = new MenuController(this);
     this.storageController = new StorageController(this);
     this.paymentController = new PaymentController(this);
+    this.orderController = new OrderController(this);
     this.languageSwitcher = new LanguageSwitcher();
     this.constructor = new Constructor();
 
@@ -26,31 +33,46 @@ class App {
   init() {
     this.loadContent();
     this.setupEventListeners();
+    this.toggleMenuVisibility();
   }
 
   // Load the dynamic content of the index page.
   // Also used when reloading.
   // Don't forget to empty the content before loading new content
   loadContent() {
-      // Populate language switcher options
-      const languageList = this.languageSwitcher.getLanguageList();
-      const currentLanguage = this.languageSwitcher.getCurrentLanguage();
-      const languageSwitcher = $("#languageSwitcher");
-      languageSwitcher.empty();
-      languageList.forEach((lang) => {
-        languageSwitcher.append(this.constructor.createSelectOption(lang, lang, lang === currentLanguage, 'lan-' + lang, "translatable"));
-      });
+    // Populate language switcher options
+    const languageList = this.languageSwitcher.getLanguageList();
+    const currentLanguage = this.languageSwitcher.getCurrentLanguage();
+    const languageSwitcher = $("#languageSwitcher");
+    languageSwitcher.empty();
+    languageList.forEach((lang) => {
+      languageSwitcher.append(
+        this.constructor.createSelectOption(
+          lang,
+          lang,
+          lang === currentLanguage,
+          "",
+          "",
+          "lan-" + lang
+        )
+      );
+    });
   }
 
   setupEventListeners() {
     $(document).ready(() => {
       $("#menuBtn").on("click", () => this.loadView("menu"));
       $("#storageBtn").on("click", () => this.loadView("storage"));
+      $("#orderBtn").on("click", () => this.loadView("order"));
+      $("#logoutBtn").on("click", () => {
+        this.loginController.model.clearUserSession("order");
+        this.loadView("login");
+      });
       $("#languageSwitcher").on("change", (event) => {
         const selectedLanguage = event.target.value;
         this.languageSwitcher.setLanguage(selectedLanguage);
         this.languageSwitcher.translateHTML();
-      })
+      });
     });
   }
 
@@ -69,7 +91,10 @@ class App {
         renderPromise = this.storageController.render();
         break;
       case "payment":
-        this.paymentController.render();
+        renderPromise = this.paymentController.render();
+        break;
+      case "order":
+        renderPromise = this.orderController.render();
         break;
       default:
         console.error("View not found:", view);
@@ -79,66 +104,28 @@ class App {
     // Translate the HTML content after rendering
     renderPromise.then(() => {
       this.languageSwitcher.translateHTML();
+      this.toggleMenuVisibility();
     });
+  }
+
+  toggleMenuVisibility() {
+    const sessionData = this.loginController.model.getUserData();
+
+    console.log("Checking session data:", sessionData);
+    if (sessionData) {
+      // User is logged in, show menu
+      $("#menuBtn").show();
+      $("#storageBtn").show();
+      $("#orderBtn").show();
+    } else {
+      // No session, hide menu
+      $("#menuBtn").hide();
+      $("#storageBtn").hide();
+      $("#orderBtn").hide();
+    }
   }
 }
 
 const app = new App();
 
 export default app;
-
-// import Database from "./models/database.js";
-// import MenuModel from "./models/menuModel.js";
-// import UserModel from "./models/userModel.js";
-
-// // Initialize sample data if the database is empty
-// if (!Database.load("menuItems")) {
-//   const sampleMenuItems = [
-//     {
-//       id: 1,
-//       name: "IPA Beer",
-//       type: "Beer",
-//       producer: "Brewery X",
-//       country: "USA",
-//       strength: "5.5%",
-//       servingSize: "500ml",
-//       price: 5.99,
-//       stock: 10,
-//     },
-//     {
-//       id: 2,
-//       name: "Cheese Platter",
-//       type: "Food",
-//       ingredients: ["Cheese", "Crackers", "Grapes"],
-//       price: 12.99,
-//       stock: 5,
-//     },
-//   ];
-//   MenuModel.saveMenuItems(sampleMenuItems);
-// }
-
-// if (!Database.load("users")) {
-//   const sampleUsers = [
-//     {
-//       id: 1,
-//       username: "vip_user",
-//       password: "vip123",
-//       role: "VIP",
-//       balance: 100.0,
-//     },
-//     {
-//       id: 2,
-//       username: "bartender",
-//       password: "bar123",
-//       role: "Bartender",
-//     },
-//   ];
-//   UserModel.saveUsers(sampleUsers);
-// }
-
-// console.log("Database initialized.");
-
-// $(document).ready(function() {
-//     // Initialize the login page
-//     console.log("Login Page Loaded");
-// });

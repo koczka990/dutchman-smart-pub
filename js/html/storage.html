@@ -1,5 +1,16 @@
 <div class="storage-container">
-  <h2 id="storage-title" class="storage-title translatable"></h2>
+  <div class="storage-header">
+    <h2
+      id="storage-title"
+      class="storage-title header"
+      data-translate-key="storage-title"
+    ></h2>
+    <!-- Undo/Redo Buttons -->
+    <div class="undo-redo-buttons">
+      <button id="undo-btn" data-translate-key="Undo">Undo</button>
+      <button id="redo-btn" data-translate-key="Redo">Redo</button>
+    </div>
+  </div>
 
   <!-- Storage Wrapper -->
   <div class="storage-wrapper">
@@ -7,9 +18,9 @@
       <table>
         <thead>
           <tr>
-            <th>Item</th>
-            <th>Quantity</th>
-            <th>Reorder</th>
+            <th data-translate-key="Item">Item</th>
+            <th data-translate-key="Quantity">Quantity</th>
+            <th data-translate-key="Reorder">Reorder</th>
           </tr>
         </thead>
         <tbody id="storage-list"></tbody>
@@ -18,9 +29,9 @@
 
     <!-- Recent Orders -->
     <div class="order-history">
-      <h3>Recent Orders</h3>
+      <h3 class="header" data-translate-key="Recent Orders">Recent Orders</h3>
       <ul id="order-log">
-        <li>No orders yet.</li>
+        <!-- <li>No orders yet.</li> -->
       </ul>
     </div>
   </div>

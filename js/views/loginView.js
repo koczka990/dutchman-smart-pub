@@ -1,13 +1,12 @@
 class LoginView {
-  constructor() {
-    this.appContent = document.getElementById("app-content");
-  }
+  constructor() {}
 
   async render(controller) {
+    const appContent = document.getElementById("app-content");
     try {
       const response = await fetch("js/html/login.html");
       const html = await response.text();
-      this.appContent.innerHTML = html;
+      appContent.innerHTML = html;
 
       // Call function to enable tab switching
       this.setupEventListeners();

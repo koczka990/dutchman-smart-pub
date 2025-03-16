@@ -1,27 +1,29 @@
-import Database from "./database.js";
-
 class UserModel {
-  constructor() {
+  constructor(database) {
+    this.database = database;
+
     this.users = [];
-    this.database = new Database();
-    // Get existing session ID or create a new one
-    this.sessionId = sessionStorage.getItem('current_session_id') || this.generateSessionId();
-    // Store the session ID if it's new
-    if (!sessionStorage.getItem('current_session_id')) {
-      sessionStorage.setItem('current_session_id', this.sessionId);
-    }
-    console.log("Using session ID:", this.sessionId);
+
+    this.sessionId = this.getSessionId();
   }
 
-  generateSessionId() {
-    return 'session_' + Math.random().toString(36).substr(2, 9);
+  getSessionId() {
+    let sessionId = sessionStorage.getItem("current_session_id");
+    if (!sessionId) {
+      // Generate a new session ID if none exists
+      sessionId = "session_" + Math.random().toString(36).substr(2, 9);
+      sessionStorage.setItem("current_session_id", sessionId);
+    }
+    return sessionId;
   }
 
   async loadUsers() {
+    if (this.users.length > 0) return this.users; // Use cached users
+
     try {
       console.log("Loading users from localStorage");
       // Load users from localStorage using Database class
-      this.users = this.database.load('users') || [];
+      this.users = this.database.load("users") || [];
       return this.users;
     } catch (error) {
       console.error("Error loading users:", error);
@@ -43,19 +45,25 @@ class UserModel {
     sessionStorage.setItem(sessionKey, JSON.stringify(userData));
   }
 
+  getUserData() {
+    const sessionKey = `${this.sessionId}_user`;
+    const userData = sessionStorage.getItem(sessionKey);
+    return userData;
+  }
+
   // Get current user information
   getCurrentUserInfo() {
     const sessionKey = `${this.sessionId}_user`;
     const userData = sessionStorage.getItem(sessionKey);
     console.log("Retrieved user session data:", { sessionKey, userData });
-    
+
     if (!userData) {
       console.log("No user data found in sessionStorage");
       return {
         username: null,
         tableNumber: "-",
         balance: null,
-        isVIP: false
+        isVIP: false,
       };
     }
 
@@ -65,7 +73,7 @@ class UserModel {
       username: parsedData.username || null,
       tableNumber: parsedData.tableNumber || "-",
       balance: parsedData.balance || null,
-      isVIP: parsedData.isVIP || false
+      isVIP: parsedData.isVIP || false,
     };
   }
 
@@ -73,7 +81,7 @@ class UserModel {
   clearUserSession() {
     const sessionKey = `${this.sessionId}_user`;
     sessionStorage.removeItem(sessionKey);
-    sessionStorage.removeItem('current_session_id');
+    sessionStorage.removeItem("current_session_id");
   }
 
   // Update user balance (for VIP users)
@@ -81,20 +89,23 @@ class UserModel {
     try {
       // Load current users
       const users = await this.loadUsers();
-      
+
       if (!users || !Array.isArray(users)) {
         throw new Error("Failed to load users data");
       }
-      
+
       // Find and update the user's balance
-      const userIndex = users.findIndex(user => user.username === username);
+      const userIndex = users.findIndex((user) => user.username === username);
       if (userIndex !== -1) {
-        users[userIndex].balance = parseFloat(users[userIndex].balance) + amount;
-        
+        users[userIndex].balance =
+          parseFloat(users[userIndex].balance) + amount;
+
         // Save updated users using the Database class
-        this.database.save('users', users);
-        
-        console.log(`Updated balance for ${username}: ${users[userIndex].balance}`);
+        this.database.save("users", users);
+
+        console.log(
+          `Updated balance for ${username}: ${users[userIndex].balance}`
+        );
       } else {
         throw new Error(`User ${username} not found`);
       }
@@ -103,35 +114,6 @@ class UserModel {
       throw error;
     }
   }
-
-  // // Save users to the database
-  // saveUsers(users) {
-  //   Database.save("users", users);
-  // }
-
-  // // Authenticate a user (for login)
-  // authenticate(username, password) {
-  //   const users = this.loadUsers();
-  //   return users.find(
-  //     (user) => user.username === username && user.password === password
-  //   );
-  // }
-
-  // // Add a new user
-  // addUser(user) {
-  //   const users = this.loadUsers();
-  //   users.push(user);
-  //   this.saveUsers(users);
-  // }
-
-
-
-  // // Remove a user
-  // removeUser(username) {
-  //   let users = this.loadUsers();
-  //   users = users.filter((user) => user.username !== username);
-  //   this.saveUsers(users);
-  // }
 }
 
 export default UserModel;

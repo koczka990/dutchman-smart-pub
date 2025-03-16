@@ -1,0 +1,50 @@
+[
+    {
+        "nr": "20013",
+        "articleid": "30053",
+        "name": "Glenfiddich 21 Year Old",
+        "priceinclvat": "1500.00",
+        "category": "Whiskey",
+        "countryoforigin": "Scotland",
+        "producer": "Glenfiddich",
+        "alcoholstrength": "40%",
+        "packaging": "Flaska",
+        "captype": "Naturkork"
+    },
+    {
+        "nr": "20014",
+        "articleid": "31073",
+        "name": "Macallan 18 Year Old Sherry Oak",
+        "priceinclvat": "3500.00",
+        "category": "Whiskey",
+        "countryoforigin": "Scotland",
+        "producer": "Macallan",
+        "alcoholstrength": "43%",
+        "packaging": "Flaska",
+        "captype": "Naturkork"
+    },
+    {
+        "nr": "20015",
+        "articleid": "32094",
+        "name": "Perrier-Jouët Belle Epoque",
+        "priceinclvat": "2900.00",
+        "category": "Champagne",
+        "countryoforigin": "France",
+        "producer": "Perrier-Jouët",
+        "alcoholstrength": "12%",
+        "packaging": "Flaska",
+        "captype": "Naturkork"
+    },
+    {
+        "nr": "20016",
+        "articleid": "33005",
+        "name": "Rémy Martin Louis XIII",
+        "priceinclvat": "35000.00",
+        "category": "Cognac",
+        "countryoforigin": "France",
+        "producer": "Rémy Martin",
+        "alcoholstrength": "40%",
+        "packaging": "Flaska",
+        "captype": "Naturkork"
+    }
+]
