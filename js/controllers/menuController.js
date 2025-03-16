@@ -8,7 +8,7 @@ class MenuController {
   constructor(app) {
     this.app = app;
     this.menuModel = new MenuModel();
-    this.userModel = new UserModel();
+    this.userModel = new UserModel(app.database);
     this.orderModel = new OrderModel(app.database);
     this.storageModel = new StorageModel(app.database);
     this.menuView = new MenuView(this);
