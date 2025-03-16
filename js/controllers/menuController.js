@@ -42,13 +42,13 @@ class MenuController {
     console.log("Handling order confirmation with user info:", userInfo);
 
     if (!items || items.length === 0) {
-      alert("No items in the order. Please add some items before confirming.");
+      alert(this.app.languageSwitcher.translate("No items in the order. Please add some items before confirming."));
       return;
     }
 
     if (!userInfo) {
       console.error("No user information available");
-      alert("Session error. Please log in again.");
+      alert(this.app.languageSwitcher.translate("Session error. Please log in again."));
       this.app.loadView("login");
       return;
     }
@@ -79,7 +79,7 @@ class MenuController {
         console.log(`Checking stock for ${item.name}:`, product);
 
         if (!product) {
-          alert(`Error: Product "${item.name}" not found in inventory.`);
+          alert(this.app.languageSwitcher.translate("Error: Product not found in inventory:") + item.name + ".");
           return;
         }
 

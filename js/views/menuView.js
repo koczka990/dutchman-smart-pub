@@ -355,16 +355,14 @@ class MenuView {
     const orderList = document.getElementById("order-list").children;
 
     if (orderList.length === 0) {
-      alert("No items in the order. Please add some items before confirming.");
+      alert(this.controller.app.languageSwitcher.translate("No items in the order. Please add some items before confirming."));
       return;
     }
 
     let items = [];
     [...orderList].forEach((item) => {
       const itemName = item.dataset.name;
-      const quantity = parseInt(
-        item.querySelector(".order-btn span").textContent
-      );
+      const quantity = parseInt(item.querySelector(".order-btn span").textContent);
       const itemPrice = parseFloat(item.dataset.price || "0");
       items.push({ name: itemName, quantity, price: itemPrice });
     });
@@ -374,70 +372,46 @@ class MenuView {
     console.log("Confirming order with user info:", userInfo);
 
     // Calculate total amount
-    const totalAmount = items.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
+    const totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
     // Create and show confirmation popup
     const popup = document.createElement("div");
     popup.className = "order-confirmation-popup";
     popup.innerHTML = `
-      <div class="popup-content">
-        <h2>Confirm Order</h2>
-        <div class="order-summary">
-          <h3>Order Summary:</h3>
-          <ul>
-            ${items
-              .map(
-                (item) => `
-              <li>${item.name} x${item.quantity} - $${(
-                  item.price * item.quantity
-                ).toFixed(2)}</li>
-            `
-              )
-              .join("")}
-          </ul>
-          <p class="total">Total: $${totalAmount.toFixed(2)}</p>
-          ${
-            userInfo.isVIP
-              ? `
-            <p class="balance-info">Current Balance: $${parseFloat(
-              userInfo.balance
-            ).toFixed(2)}</p>
-            <p class="new-balance">New Balance: $${(
-              parseFloat(userInfo.balance) - totalAmount
-            ).toFixed(2)}</p>
-          `
-              : ""
-          }
-        </div>
-        <div class="popup-buttons">
-          <button class="cancel-btn">Cancel</button>
-          <button class="confirm-btn">Confirm Order</button>
-        </div>
+    <div class="popup-content">
+      <h2 data-translate-key="Confirm Order">${this.controller.app.languageSwitcher.translate("Confirm Order")}</h2>
+      <div class="order-summary">
+        <h3 data-translate-key="Order Summary:">${this.controller.app.languageSwitcher.translate("Order Summary:")}</h3>
+        <ul>
+          ${items.map(item => `
+            <li>${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}</li>
+          `).join("")}
+        </ul>
+        <p class="total"><span data-translate-key="Total:">${this.controller.app.languageSwitcher.translate("Total:")}</span> &nbsp;${totalAmount.toFixed(2)}</p>
+        ${userInfo.isVIP ? `
+          <p class="balance-info"><span data-translate-key="Current Balance:">${this.controller.app.languageSwitcher.translate("Current Balance:")}</span> &nbsp;$${parseFloat(userInfo.balance).toFixed(2)}</p>
+          <p class="new-balance"><span data-translate-key="New Balance:">${this.controller.app.languageSwitcher.translate("New Balance:")}</span> &nbsp;$${(parseFloat(userInfo.balance) - totalAmount).toFixed(2)}</p>
+        ` : ""}
       </div>
-    `;
+      <div class="popup-buttons">
+        <button class="cancel-btn" data-translate-key="Cancel">${this.controller.app.languageSwitcher.translate("Cancel")}</button>
+        <button class="confirm-btn" data-translate-key="Confirm Order">${this.controller.app.languageSwitcher.translate("Confirm Order")}</button>
+      </div>
+    </div>
+  `;
 
-    // Add popup to the page
     document.body.appendChild(popup);
 
-    // Handle button clicks
     popup.querySelector(".cancel-btn").addEventListener("click", () => {
       document.body.removeChild(popup);
     });
 
     popup.querySelector('.confirm-btn').addEventListener('click', () => {
-      // For VIP customers, handle the order through the controller
       if (userInfo.isVIP) {
         this.controller.handleConfirmOrder(items, userInfo);
         document.body.removeChild(popup);
       } else {
-        // For regular customers, redirect to payment page through the controller
-        // The controller will handle storing the order details
         document.body.removeChild(popup);
-        
-        // Let the controller handle the redirection to payment page
         this.controller.handleRegularCustomerOrder(items, userInfo);
       }
     });
@@ -473,31 +447,52 @@ class MenuView {
           // If the item is food, display food-related details
           if (selectedItem.articletype === "200") {
             detailsHTML += `
-                        <p><strong>Category:</strong> ${
-                          selectedItem.category || "N/A"
-                        }</p>
-                        <p><strong>Producer:</strong> ${
-                          selectedItem.producer || "N/A"
-                        }</p>
-                        <p><strong>Packaging:</strong> ${
-                          selectedItem.packaging || "N/A"
-                        }</p>
+                <p>
+                  <strong data-translate-key="info-category-field">
+                    ${this.controller.app.languageSwitcher.translate("info-producer-field")}
+                  </strong>
+                  ${selectedItem.category || "N/A"}
+                </p>
+                <p>
+                  <strong data-translate-key="info-producer-field">
+                    ${this.controller.app.languageSwitcher.translate("info-producer-field")}
+                  </strong> 
+                  ${selectedItem.producer || "N/A"}
+                </p>
+                <p>
+                  <strong data-translate-key="info-packaging-field">
+                    ${this.controller.app.languageSwitcher.translate("info-packaging-field")}
+                  </strong> 
+                  ${selectedItem.packaging || "N/A"
+                }</p>
                     `;
           } else {
             detailsHTML += `
-                        <p><strong>Producer:</strong> ${
-                          selectedItem.producer || "N/A"
-                        }</p>
-                        <p><strong>Country:</strong> ${
-                          selectedItem.countryoforigin || "N/A"
-                        } ml</p>
-                        <p><strong>Strength:</strong> ${
-                          selectedItem.alcoholstrength || "N/A"
-                        }%</p>
-                        <p><strong>Serving size:</strong> ${
-                          selectedItem.packaging || "N/A"
-                        }</p>
-                    `;
+              <p>
+                <strong data-translate-key="info-category-field">
+                  ${this.controller.app.languageSwitcher.translate("info-producer-field")}
+                </strong>
+                ${selectedItem.category || "N/A"}
+              </p>
+              <p>
+                <strong data-translate-key="info-country-field">
+                  ${this.controller.app.languageSwitcher.translate("info-country-field")}
+                </strong>
+                ${selectedItem.countryoforigin || "N/A"}
+              </p>
+              <p>
+                <strong data-translate-key="info-strength-field">
+                  ${this.controller.app.languageSwitcher.translate("info-strength-field")}
+                </strong> 
+                ${selectedItem.alcoholstrength || "N/A"}
+              </p>
+              <p>
+                <strong data-translate-key="info-serving-size-field">
+                  ${this.controller.app.languageSwitcher.translate("info-serving-size-field")}
+                </strong> 
+                ${selectedItem.packaging || "N/A"}
+              </p>
+            `;
           }
 
           infoSection.innerHTML = detailsHTML;
