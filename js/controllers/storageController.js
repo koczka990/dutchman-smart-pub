@@ -5,7 +5,7 @@ class StorageController {
   constructor(app) {
     this.app = app;
     this.model = new StorageModel(app.database);
-    this.view = new StorageView();
+    this.view = new StorageView(this);
 
     // Bind methods
     this.view.onReorder = this.handleReorder.bind(this);
@@ -39,18 +39,18 @@ class StorageController {
       this.model.saveStockData(); // Save the updated stock data
       this.model.addOrder(itemName); // Save stock reorder in history
 
-      this.render(); // Re-render UI with updated stock data and order log
+      this.app.loadView("storage"); // Re-render UI with updated stock data and order log
     }
   }
 
   handleUndo() {
     this.model.undo(); // Call the undo method from model
-    this.render(); // Re-render UI with the updated state
+    this.app.loadView("storage"); // Re-render UI with the updated state
   }
 
   handleRedo() {
     this.model.redo(); // Call the redo method from model
-    this.render(); // Re-render UI with the updated state
+    this.app.loadView("storage"); // Re-render UI with the updated state
   }
 
   async render() {

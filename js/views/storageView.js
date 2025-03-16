@@ -1,5 +1,6 @@
 class StorageView {
-  constructor() {
+  constructor(controller) {
+    this.controller = controller;
     // Callback functions
     this.onReorder = () => {};
     this.onUndo = () => {};
@@ -80,10 +81,16 @@ class StorageView {
     if (!orderLog) return;
 
     if (orderHistory.length === 0) {
-      orderLog.innerHTML = "<li>No orders placed yet</li>";
+      orderLog.innerHTML = "<li data-translate-key='No orders placed yet'>No orders placed yet</li>";
     } else
       orderLog.innerHTML = orderHistory
-        .map((order) => `<li>✅ Reordered ${order.name} - ${order.time}</li>`)
+        .map((order) =>
+          `<li>
+            <span data-translate-key="✅ Reordered">
+              ${this.controller.app.languageSwitcher.translate("✅ Reordered")}
+            </span> 
+            &nbsp;${order.name} - ${order.time}
+          </li>`)
         .join("");
   }
 }
