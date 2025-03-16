@@ -55,7 +55,16 @@ class PaymentController {
         const returnToMenuBtn = document.getElementById("return-to-menu");
         if (returnToMenuBtn) {
             returnToMenuBtn.addEventListener("click", () => {
-                this.app.loadView("menu");
+                // Navigate to login view
+                this.app.loadView("login");
+                // After the login view is rendered, show ONLY the regular customer login form
+                setTimeout(() => {
+                    // Hide all other forms first
+                    document.getElementById("vip-login-form")?.classList.add("hidden");
+                    document.getElementById("employee-login-form")?.classList.add("hidden");
+                    // Show only the regular customer login form
+                    document.getElementById("regular-customer-login-form")?.classList.remove("hidden");
+                }, 100);
             });
         }
     }
