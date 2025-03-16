@@ -110,6 +110,9 @@ class StorageModel {
       this.foods = await foodsResponse.json();
       this.vip_drinks = await vipDrinksResponse.json();
       this.vip_foods = await vipFoodsResponse.json();
+
+      // After loading JSON data, ensure stock values are properly initialized
+      this.loadLocalStorageData();
     } catch (error) {
       console.error("Error loading storage data:", error);
     }
@@ -123,12 +126,15 @@ class StorageModel {
     // Load order history from localStorage
     this.orderHistory = this.loadLocalStorageOrderHistory();
 
-    // If no stock data is available, initialize with random values
-    if (Object.keys(stockData).length === 0) {
+    // If no stock data is available or if it's empty, initialize with random values
+    if (!stockData || Object.keys(stockData).length === 0) {
       this.initializeStockData();
     } else {
       this.applyStockData(stockData);
     }
+
+    // Ensure all products have stock values
+    this.ensureStockValues();
   }
 
   // Load stock data from localStorage

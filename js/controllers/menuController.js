@@ -158,8 +158,9 @@ class MenuController {
     try {
       // Check stock availability for all items
       for (const item of items) {
-        const product = this.storageModel.beverages.find(b => b.name === item.name) || 
-                       this.storageModel.foods.find(f => f.name === item.name);
+        const product = 
+          this.storageModel.drinks.find(b => b.name === item.name) || 
+          this.storageModel.foods.find(f => f.name === item.name);
         
         if (!product) {
           alert(`Error: Product "${item.name}" not found in inventory.`);

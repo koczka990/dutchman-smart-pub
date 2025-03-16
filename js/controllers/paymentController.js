@@ -1,6 +1,7 @@
 import PaymentModel from "../models/paymentModel.js";
 import PaymentView from "../views/paymentView.js";
 import OrderModel from "../models/orderModel.js";
+import StorageModel from "../models/storageModel.js";
 
 class PaymentController {
     constructor(app) {
@@ -8,6 +9,7 @@ class PaymentController {
         this.paymentModel = new PaymentModel();
         this.paymentView = new PaymentView();
         this.orderModel = new OrderModel(app.database);
+        this.storageModel = new StorageModel(app.database);
         this.selectedTable = null;
         this.selectedItems = [];
 
@@ -15,23 +17,28 @@ class PaymentController {
     }
 
     async init() {
-        // Any initialization logic
+        // Load storage data
+        await this.storageModel.loadJSONStorage();
     }
 
     render() {
-        // Get order details from localStorage (via OrderModel)
-        this.selectedTable = localStorage.getItem("selectedTable");
-        this.selectedItems = JSON.parse(localStorage.getItem("orderDetails") || "[]");
-        
-        if (!this.selectedTable || !this.selectedItems.length) {
-            alert("No order details found! Returning to menu.");
-            this.app.loadView("menu");
-            return;
-        }
-        
-        // Render the payment view
-        this.paymentView.render(this.selectedTable, this.selectedItems, () => {
-            this.setupEventListeners();
+        return new Promise((resolve) => {
+            // Get order details from localStorage (via OrderModel)
+            this.selectedTable = localStorage.getItem("selectedTable");
+            this.selectedItems = JSON.parse(localStorage.getItem("orderDetails") || "[]");
+            
+            if (!this.selectedTable || !this.selectedItems.length) {
+                alert("No order details found! Returning to menu.");
+                this.app.loadView("menu");
+                resolve();
+                return;
+            }
+            
+            // Render the payment view
+            this.paymentView.render(this.selectedTable, this.selectedItems, () => {
+                this.setupEventListeners();
+                resolve();
+            });
         });
     }
 
@@ -83,13 +90,24 @@ class PaymentController {
             // Create a copy of the original items
             const remainingItems = [...this.selectedItems];
             
-            // For each selected expanded item, decrement the quantity of the corresponding original item
+            // For each selected expanded item, decrement the quantity and update stock
             selectedExpandedItems.forEach(expandedItem => {
                 // Find the matching original item
                 const originalItem = remainingItems.find(item => item.name === expandedItem.name);
                 if (originalItem) {
                     // Decrement the quantity
                     originalItem.quantity -= 1;
+                    
+                    // Update stock in storage
+                    const product = 
+                        this.storageModel.drinks.find(b => b.name === expandedItem.name) ||
+                        this.storageModel.foods.find(f => f.name === expandedItem.name) ||
+                        this.storageModel.vip_drinks.find(v => v.name === expandedItem.name) ||
+                        this.storageModel.vip_foods.find(v => v.name === expandedItem.name);
+
+                    if (product) {
+                        this.storageModel.updateStock(product.nr, -1); // Decrease stock by 1
+                    }
                     
                     // If quantity reaches 0, remove the item
                     if (originalItem.quantity <= 0) {
