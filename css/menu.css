@@ -260,15 +260,22 @@
   padding: 20px;
   margin: 10px;
   border-radius: 10px;
-  overflow-y: auto; /* Enable vertical scrolling */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Prevent container from scrolling */
 }
 
 /*Customer Information*/
+.customer-container {
+  flex-shrink: 0;
+}
+
 .customer-info {
   background-color: #1A2B45;
   padding: 1rem;
   border-radius: 5px;
   margin-bottom: 1.5rem;
+  flex-shrink: 0; /* Prevent customer info from shrinking */
 }
 
 .customer-info p {
@@ -285,11 +292,9 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  /* Pushes elements to opposite ends */
   align-items: center;
-  /* Aligns items vertically */
   padding: 10px;
-  /* Optional: Adds a separator */
+  flex-shrink: 0; /* Prevent header from shrinking */
 }
 
 .undo-redo-buttons {
@@ -339,11 +344,15 @@
 
 #order-list {
   list-style: none;
-  min-height: 100px;
+  min-height: 50px;
+  max-height: calc(80vh - 500px); /* Add max height to prevent list from growing too large */
   border: dashed 1px #F5C142;
   border-radius: 10px;
   padding: 10px;
   margin-top: 10px;
+  overflow-y: auto; /* Enable vertical scrolling for the list */
+  flex: 0 1 auto; /* Don't grow, allow shrink, auto basis */
+  margin-bottom: 10px;
 }
 
 #order-list li {
@@ -393,19 +402,32 @@
   background-color: #3C9D9B;
 }
 
+.order-summary {
+  flex-shrink: 0; /* Prevent summary from shrinking */
+  margin-top: 10px;
+  margin-bottom: 10px; /* Add margin to separate from buttons */
+}
+
 .order-summary h4 {
   display: flex;
   justify-content: space-between;
   color: #F5C142;
+  margin-bottom: 15px;
 }
 
 #total {
   color: #F5C142;
 }
 
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px; /* Add gap between buttons */
+  flex-shrink: 0; /* Prevent button container from shrinking */
+}
+
 #confirm-btn {
-  width: 40%;
-  margin-top: 20px;
+  width: 45%;
   padding: 10px;
   background: #3C9D9B;
   color: white;
@@ -416,8 +438,7 @@
 }
 
 #clear-btn {
-  width: 40%;
-  margin-top: 20px;
+  width: 45%;
   padding: 10px;
   background: #B34C43;
   color: white;
@@ -425,4 +446,13 @@
   border: none;
   border-radius: 15px;
   cursor: pointer;
+}
+
+#confirm-btn:hover, #clear-btn:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+#confirm-btn:active, #clear-btn:active {
+  transform: scale(0.98);
 }
