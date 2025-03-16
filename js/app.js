@@ -113,10 +113,20 @@ class App {
 
     console.log("Checking session data:", sessionData);
     if (sessionData) {
-      // User is logged in, show menu
-      $("#menuBtn").show();
-      $("#storageBtn").show();
-      $("#orderBtn").show();
+      const userData = JSON.parse(sessionData);
+      console.log("User data:", userData);
+      
+      if (userData.isVIP === true) {
+        // VIP user is logged in, hide menu
+        $("#menuBtn").hide();
+        $("#storageBtn").hide();
+        $("#orderBtn").hide();
+      } else {
+        // Non-VIP user is logged in, show menu
+        $("#menuBtn").show();
+        $("#storageBtn").show();
+        $("#orderBtn").show();
+      }
     } else {
       // No session, hide menu
       $("#menuBtn").hide();
