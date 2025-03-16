@@ -6,18 +6,18 @@
 
     <!-- Tabs for Food & Drinks -->
     <div class="menu-tabs">
-      <button id="food-tab" class="active">🍖 Food</button>
+      <button id="food-tab" class="active" data-translate-key="food-tab">🍖 Food</button>
       <div class="dropdown">
-        <button id="drinks-tab" class="dropbtn">🍻 Drinks</button>
+        <button id="drinks-tab" class="dropbtn" data-translate-key="drinks-tab">🍻 Drinks</button>
         <div id="drinks-subcategories" class="dropdown-content">
-          <button class="subcategory" id="Spirits">🥃 Spirits</button>
-          <button class="subcategory" id="Beer">🍺 Beer</button>
-          <button class="subcategory" id="Whisky">🥃 Whisky</button>
-          <button class="subcategory" id="Grappa">🍇 Grappa</button>
+          <button class="subcategory" id="Spirits" data-translate-key="spirits-tab">🥃 Spirits</button>
+          <button class="subcategory" id="Beer" data-translate-key="beer-tab">🍺 Beer</button>
+          <button class="subcategory" id="Whisky" data-translate-key="whisky-tab">🥃 Whisky</button>
+          <button class="subcategory" id="Grappa" data-translate-key="grappa-tab">🍇 Grappa</button>
         </div>
       </div>
-      <button id="vip-food-tab" class="hidden">👑 VIP Food</button>
-      <button id="vip-drinks-tab" class="hidden">👑 VIP Drinks</button>
+      <button id="vip-food-tab" class="hidden" data-translate-key="vip-food-tab">👑 VIP Food</button>
+      <button id="vip-drinks-tab" class="hidden" data-translate-key="vip-drinks-tab">👑 VIP Drinks</button>
     </div>
 
     <div class="menus" id="menu-items"></div>
@@ -28,45 +28,45 @@
   <div class="menu-order-container">
     <div class="customer-container">
       <div class="order-header header">
-        <h3>Customer Information</h3>
+        <h3 data-translate-key="customer-info-title">Customer Information</h3>
       </div>
       <div class="customer-info">
         <div id="vip-info" class="hidden">
           <p>
-            <strong>Customer Name: </strong
+            <strong data-translate-key="customer-name-field">Customer Name: </strong
             ><span id="display-customer-name">-</span>
           </p>
-          <p><strong>Balance: </strong><span id="display-balance">-</span></p>
+          <p><strong data-translate-key="balance-field">Balance: </strong><span id="display-balance">-</span></p>
         </div>
         <p>
-          <strong>Table Number: </strong
+          <strong data-translate-key="table-number-field">Table Number: </strong
           ><span id="display-table-number">-</span>
         </p>
       </div>
     </div>
 
     <div class="order-header header">
-      <h3>Order Details</h3>
+      <h3 data-translate-key="order-detail-title">Order Details</h3>
       <div class="undo-redo-buttons">
-        <button id="undo-btn">Undo</button>
-        <button id="redo-btn">Redo</button>
+        <button id="undo-btn" data-translate-key="Undo">Undo</button>
+        <button id="redo-btn" data-translate-key="Redo">Redo</button>
       </div>
     </div>
     <ul class="order-list" id="order-list"></ul>
 
     <div class="order-summary">
       <div class="order-header header">
-        <h3>Order Summary</h3>
+        <h3 data-translate-key="order-summary-title">Order Summary</h3>
       </div>
       <h4>
-        <span>Total:</span>
+        <span data-translate-key="total-field">Total:</span>
         <span id="total">$0.00</span>
       </h4>
     </div>
 
     <div class="button-container">
-      <button id="confirm-btn" type="button">Confirm</button>
-      <button id="clear-btn" type="button">Clear</button>
+      <button id="confirm-btn" type="button" data-translate-key="Confirm">Confirm</button>
+      <button id="clear-btn" type="button" data-translate-key="Clear">Clear</button>
     </div>
   </div>
 </div>
