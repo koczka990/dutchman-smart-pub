@@ -92,6 +92,7 @@ class StorageModel {
   // Load storage data from JSON files
   async loadJSONStorage() {
     try {
+      console.log("Loading JSON storage data...");
       // Fetch all necessary data in parallel using Promise.all
       const [
         drinksResponse,
@@ -111,6 +112,12 @@ class StorageModel {
       this.vip_drinks = await vipDrinksResponse.json();
       this.vip_foods = await vipFoodsResponse.json();
 
+      console.log("JSON data loaded successfully");
+      console.log("Drinks:", this.drinks.length);
+      console.log("Foods:", this.foods.length);
+      console.log("VIP Drinks:", this.vip_drinks.length);
+      console.log("VIP Foods:", this.vip_foods.length);
+
       // After loading JSON data, ensure stock values are properly initialized
       this.loadLocalStorageData();
     } catch (error) {
@@ -120,21 +127,30 @@ class StorageModel {
 
   // Load stock data and order history from localStorage
   loadLocalStorageData() {
+    console.log("Loading local storage data...");
     // Load stock data from localStorage
     const stockData = this.loadLocalStorageStockData();
+    console.log("Loaded stock data from localStorage:", stockData);
 
     // Load order history from localStorage
     this.orderHistory = this.loadLocalStorageOrderHistory();
 
     // If no stock data is available or if it's empty, initialize with random values
     if (!stockData || Object.keys(stockData).length === 0) {
+      console.log("No stock data found, initializing with random values");
       this.initializeStockData();
     } else {
+      console.log("Applying stock data from localStorage");
       this.applyStockData(stockData);
     }
 
     // Ensure all products have stock values
     this.ensureStockValues();
+    
+    // Log the stock values after initialization
+    console.log("Stock values after initialization:");
+    console.log("Drinks stock:", this.drinks.map(d => ({ name: d.name, stock: d.stock })));
+    console.log("Foods stock:", this.foods.map(f => ({ name: f.name, stock: f.stock })));
   }
 
   // Load stock data from localStorage
@@ -173,36 +189,60 @@ class StorageModel {
 
   // Apply stock data to products
   applyStockData(stockData) {
-    const allItems = [
-      ...this.drinks,
-      ...this.foods,
-      ...this.vip_drinks,
-      ...this.vip_foods,
-    ];
-
-    allItems.forEach((item) => {
-      item.stock = stockData[item.nr] || 0;
-    });
+    console.log("Applying stock data:", stockData);
+    
+    // Create a function to apply stock to a collection
+    const applyStockToCollection = (collection) => {
+      collection.forEach((item) => {
+        if (item.nr && stockData[item.nr] !== undefined) {
+          item.stock = stockData[item.nr];
+          console.log(`Applied stock for ${item.name} (${item.nr}): ${item.stock}`);
+        } else {
+          // If no stock data found for this item, set a default value
+          item.stock = 10; // Default value
+          console.log(`No stock data for ${item.name} (${item.nr}), setting default: ${item.stock}`);
+        }
+      });
+    };
+    
+    // Apply stock to all collections
+    applyStockToCollection(this.drinks);
+    applyStockToCollection(this.foods);
+    applyStockToCollection(this.vip_drinks);
+    applyStockToCollection(this.vip_foods);
+    
+    // Save the updated stock data
+    this.saveStockData();
   }
 
   // Ensure that all products have a stock value
   ensureStockValues() {
+    console.log("Ensuring all products have stock values");
     let stockUpdated = false;
-    [
-      ...this.drinks,
-      ...this.foods,
-      ...this.vip_drinks,
-      ...this.vip_foods,
-    ].forEach((item) => {
-      if (item.stock === undefined) {
-        item.stock = 10; // Default value for stock
-        stockUpdated = true;
-      }
-    });
+    
+    // Create a function to ensure stock values for a collection
+    const ensureCollectionStock = (collection, collectionName) => {
+      collection.forEach((item) => {
+        if (item.stock === undefined) {
+          item.stock = 10; // Default value for stock
+          console.log(`Set default stock for ${collectionName} item ${item.name}: ${item.stock}`);
+          stockUpdated = true;
+        }
+      });
+    };
+    
+    // Apply to all collections
+    ensureCollectionStock(this.drinks, "drinks");
+    ensureCollectionStock(this.foods, "foods");
+    ensureCollectionStock(this.vip_drinks, "vip_drinks");
+    ensureCollectionStock(this.vip_foods, "vip_foods");
 
     // Save changes if stock values were updated
     if (stockUpdated) {
+      console.log("Stock values were updated, saving to localStorage");
       this.saveStockData();
+    } else {
+      console.log("No stock values needed updating");
     }
   }
 
@@ -213,18 +253,36 @@ class StorageModel {
   // Save stock data to localStorage
   saveStockData() {
     const stockData = {};
-    [this.drinks, this.foods, this.vip_drinks, this.vip_foods].forEach(
-      (items) => {
-        items.forEach((item) => {
-          stockData[item.nr] = item.stock;
-        });
-      }
-    );
+    
+    // Function to add items from a collection to stockData
+    const addCollectionToStockData = (collection, collectionName) => {
+      collection.forEach((item) => {
+        if (item.nr) {
+          stockData[item.nr] = item.stock || 0;
+          console.log(`Saving stock for ${collectionName} item ${item.name} (${item.nr}): ${item.stock || 0}`);
+        } else {
+          console.warn(`Item ${item.name} has no product number (nr), cannot save stock`);
+        }
+      });
+    };
+    
+    // Add all collections to stockData
+    addCollectionToStockData(this.drinks, "drinks");
+    addCollectionToStockData(this.foods, "foods");
+    addCollectionToStockData(this.vip_drinks, "vip_drinks");
+    addCollectionToStockData(this.vip_foods, "vip_foods");
+    
     console.log("Saving stock data to Local Storage:", stockData);
     this.database.save(this.stockKey, stockData);
   }
 
   updateStock(productNr, amount) {
+    console.log(`Updating stock for product ${productNr} by ${amount}`);
+    
+    // Save current state for undo functionality
+    this.saveStateForUndo();
+    
+    // Find the product in all collections
     const product = [
       ...this.drinks,
       ...this.foods,
@@ -233,8 +291,16 @@ class StorageModel {
     ].find((item) => item.nr === productNr);
 
     if (product) {
-      product.stock = (product.stock || 0) + amount;
+      // Ensure stock is a number before updating
+      if (product.stock === undefined) {
+        product.stock = 0;
+      }
+      
+      product.stock = Math.max(0, (product.stock || 0) + amount);
+      console.log(`Updated stock for ${product.name} (${productNr}): ${product.stock}`);
       this.saveStockData();
+    } else {
+      console.error(`Product with nr ${productNr} not found in any collection`);
     }
   }
 

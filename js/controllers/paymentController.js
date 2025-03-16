@@ -12,6 +12,7 @@ class PaymentController {
         this.storageModel = new StorageModel(app.database);
         this.selectedTable = null;
         this.selectedItems = [];
+        this.originalOrderDetails = []; // Store the original order details
 
         this.init();
     }
@@ -26,6 +27,10 @@ class PaymentController {
             // Get order details from localStorage (via OrderModel)
             this.selectedTable = localStorage.getItem("selectedTable");
             this.selectedItems = JSON.parse(localStorage.getItem("orderDetails") || "[]");
+            
+            // Store the original order details for later use
+            // Create a deep copy to ensure quantities are preserved
+            this.originalOrderDetails = this.selectedItems.map(item => ({...item}));
             
             if (!this.selectedTable || !this.selectedItems.length) {
                 alert("No order details found! Returning to menu.");
@@ -116,6 +121,9 @@ class PaymentController {
 
                     if (product) {
                         this.storageModel.updateStock(product.nr, -1); // Decrease stock by 1
+                        console.log(`Updated stock for ${expandedItem.name} (${product.nr}): ${product.stock}`);
+                    } else {
+                        console.error(`Product not found for ${expandedItem.name}`);
                     }
                     
                     // If quantity reaches 0, remove the item
@@ -146,8 +154,36 @@ class PaymentController {
     }
     
     completeOrder() {
-        // Delete the order from the database
-        this.paymentModel.deleteOrder(this.selectedTable);
+        // Use the stored original order details instead of trying to get them from localStorage
+        const tableNumber = this.selectedTable;
+        
+        // Calculate the total amount of the order
+        const totalAmount = this.originalOrderDetails.reduce(
+            (sum, item) => sum + parseFloat(item.price) * item.quantity,
+            0
+        );
+        
+        console.log("Creating order with original details:");
+        console.log("originalOrderDetails:", this.originalOrderDetails);
+        console.log("tableNumber:", tableNumber);
+        console.log("totalAmount:", totalAmount);
+
+        // Only create an order if there were items to begin with
+        if (this.originalOrderDetails && this.originalOrderDetails.length > 0) {
+            // Create an order in the orders list for regular customers
+            this.orderModel.createOrder({
+                items: this.originalOrderDetails,
+                tableNumber: tableNumber,
+                isVIP: false,
+                totalAmount: totalAmount,
+                status: "completed" // Mark as completed since payment is done
+            });
+            
+            console.log(`✅ Regular customer order created for table ${tableNumber} with ${this.originalOrderDetails.length} items`);
+        }
+        
+        // Delete the order from localStorage
+        this.paymentModel.deleteOrder(tableNumber);
         
         // Show completion message
         this.paymentView.showPaymentComplete();
