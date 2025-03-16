@@ -8,6 +8,45 @@
     padding: 20px;
 }
 
+/* Order Filter Tabs */
+.order-filter-tabs {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    gap: 10px;
+}
+
+.order-tab {
+    padding: 10px 20px;
+    background-color: #1A2B45;
+    color: #D2B99B;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.order-tab:hover {
+    background-color: #2c3e50;
+}
+
+.order-tab.active {
+    background-color: #F5C142;
+    color: #1A2B45;
+}
+
+/* No orders message */
+.no-orders-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 20px;
+    background-color: #1A2B45;
+    color: #D2B99B;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
 .employee-table-card {
     background-color: #1A2B45;
     padding: 15px;
@@ -52,4 +91,25 @@
 
 .order-time {
     color: #ffffff
+}
+
+.complete-order-btn {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+.complete-order-btn:hover {
+    background-color: #218838;
+}
+
+.complete-order-btn:active {
+    background-color: #1e7e34;
 }

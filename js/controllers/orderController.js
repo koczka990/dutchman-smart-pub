@@ -9,11 +9,29 @@ class OrderController {
     this.init();
   }
 
-  init() {}
+  init() {
+    // Set up the callback for completing orders
+    this.view.setCompleteOrderCallback(this.completeOrder.bind(this));
+  }
 
   async render() {
     const orderData = this.model.getOrderData();
     await this.view.render(orderData);
+  }
+
+  // Handle order completion
+  completeOrder(orderId) {
+    // Update the order status to "done"
+    this.model.updateOrder(orderId, { status: "done" });
+    
+    // Get the updated order data
+    const updatedOrderData = this.model.getOrderData();
+    
+    // Update the view's allOrders property
+    this.view.allOrders = updatedOrderData;
+    
+    // Apply the current filter to refresh the view
+    this.view.applyFilter();
   }
 }
 
