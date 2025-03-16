@@ -427,11 +427,19 @@ class MenuView {
       document.body.removeChild(popup);
     });
 
-    popup.querySelector(".confirm-btn").addEventListener("click", () => {
-      this.controller.handleConfirmOrder(items, userInfo);
-      document.body.removeChild(popup);
-      // // Refresh the menu view
-      // this.render(this.drinks, this.foods, userInfo);
+    popup.querySelector('.confirm-btn').addEventListener('click', () => {
+      // For VIP customers, handle the order through the controller
+      if (userInfo.isVIP) {
+        this.controller.handleConfirmOrder(items, userInfo);
+        document.body.removeChild(popup);
+      } else {
+        // For regular customers, redirect to payment page through the controller
+        // The controller will handle storing the order details
+        document.body.removeChild(popup);
+        
+        // Let the controller handle the redirection to payment page
+        this.controller.handleRegularCustomerOrder(items, userInfo);
+      }
     });
   }
 
