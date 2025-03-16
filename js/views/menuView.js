@@ -436,7 +436,7 @@ class MenuView {
         // For regular customers, redirect to payment page through the controller
         // The controller will handle storing the order details
         document.body.removeChild(popup);
-        
+
         // Let the controller handle the redirection to payment page
         this.controller.handleRegularCustomerOrder(items, userInfo);
       }
@@ -473,31 +473,52 @@ class MenuView {
           // If the item is food, display food-related details
           if (selectedItem.articletype === "200") {
             detailsHTML += `
-                        <p><strong>Category:</strong> ${
-                          selectedItem.category || "N/A"
-                        }</p>
-                        <p><strong>Producer:</strong> ${
-                          selectedItem.producer || "N/A"
-                        }</p>
-                        <p><strong>Packaging:</strong> ${
-                          selectedItem.packaging || "N/A"
-                        }</p>
+                <p>
+                  <strong data-translate-key="info-category-field">
+                    ${this.controller.app.languageSwitcher.translate("info-producer-field")}
+                  </strong>
+                  ${selectedItem.category || "N/A"}
+                </p>
+                <p>
+                  <strong data-translate-key="info-producer-field">
+                    ${this.controller.app.languageSwitcher.translate("info-producer-field")}
+                  </strong> 
+                  ${selectedItem.producer || "N/A"}
+                </p>
+                <p>
+                  <strong data-translate-key="info-packaging-field">
+                    ${this.controller.app.languageSwitcher.translate("info-packaging-field")}
+                  </strong> 
+                  ${selectedItem.packaging || "N/A"
+                }</p>
                     `;
           } else {
             detailsHTML += `
-                        <p><strong>Producer:</strong> ${
-                          selectedItem.producer || "N/A"
-                        }</p>
-                        <p><strong>Country:</strong> ${
-                          selectedItem.countryoforigin || "N/A"
-                        } ml</p>
-                        <p><strong>Strength:</strong> ${
-                          selectedItem.alcoholstrength || "N/A"
-                        }%</p>
-                        <p><strong>Serving size:</strong> ${
-                          selectedItem.packaging || "N/A"
-                        }</p>
-                    `;
+              <p>
+                <strong data-translate-key="info-category-field">
+                  ${this.controller.app.languageSwitcher.translate("info-producer-field")}
+                </strong>
+                ${selectedItem.category || "N/A"}
+              </p>
+              <p>
+                <strong data-translate-key="info-country-field">
+                  ${this.controller.app.languageSwitcher.translate("info-country-field")}
+                </strong>
+                ${selectedItem.countryoforigin || "N/A"}
+              </p>
+              <p>
+                <strong data-translate-key="info-strength-field">
+                  ${this.controller.app.languageSwitcher.translate("info-strength-field")}
+                </strong> 
+                ${selectedItem.alcoholstrength || "N/A"}
+              </p>
+              <p>
+                <strong data-translate-key="info-serving-size-field">
+                  ${this.controller.app.languageSwitcher.translate("info-serving-size-field")}
+                </strong> 
+                ${selectedItem.packaging || "N/A"}
+              </p>
+            `;
           }
 
           infoSection.innerHTML = detailsHTML;
