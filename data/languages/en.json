@@ -67,7 +67,16 @@
   "Current Balance:": "Current Balance:",
   "New Balance:": "New Balance:",
   "Cancel": "Cancel",
+
+  "//": "Alerts",
   "No items in the order. Please add some items before confirming.": "No items in the order. Please add some items before confirming.",
+  "Session error. Please log in again.": "Session error. Please log in again.",
+  "Error: Product not found in inventory:": "Error: Product not found in inventory:",
+  "Sorry, we only have {stock} units of \"{item}\" in stock.": "Sorry, we only have {stock} units of \"{item}\" in stock.",
+  "Insufficient balance. Please add more funds to your account.": "Insufficient balance. Please add more funds to your account.",
+  "Order confirmed! Your new balance is ${balance}": "Order confirmed! Your new balance is ${balance}",
+  "Order confirmed! Your order will be delivered to your table shortly.": "Order confirmed! Your order will be delivered to your table shortly.",
+  "There was an error processing your order. Please try again.": "There was an error processing your order. Please try again."
 
   "//": "Misc",
   "Undo": "Undo",
