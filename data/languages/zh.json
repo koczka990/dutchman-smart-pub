@@ -55,11 +55,18 @@
   "No orders placed yet": "尚未有订单",
   "✅ Reordered": "✅ 订购",
 
+  "//": "Order confirmation popup",
+  "Confirm Order": "确认订单",
+  "Order Summary:": "订单摘要：",
+  "Total:": "总计：",
+  "Current Balance:": "当前余额：",
+  "New Balance:": "新余额：",
+  "Cancel": "取消",
+  "No items in the order. Please add some items before confirming.": "订单中没有商品, 请在确认前添加一些商品。",
 
   "//": "Misc",
   "Undo": "撤销",
   "Redo": "恢复",
-
 
   "//": "end of file"
 }

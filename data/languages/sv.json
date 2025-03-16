@@ -55,6 +55,15 @@
   "No orders placed yet": "Inga beställningar lagda ännu",
   "✅ Reordered": "✅ Beställt igen",
 
+  "//": "Order confirmation popup",
+  "Confirm Order": "Bekräfta beställning",
+  "Order Summary:": "Beställningsöversikt:",
+  "Total:": "Totalt:",
+  "Current Balance:": "Nuvarande saldo:",
+  "New Balance:": "Nytt saldo:",
+  "Cancel": "Avbryt",
+  "No items in the order. Please add some items before confirming.": "Inga artiklar i beställningen. Vänligen lägg till några artiklar innan du bekräftar.",
+
   "//": "Misc",
   "Undo": "Ångra",
   "Redo": "Gör om",

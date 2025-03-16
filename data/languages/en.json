@@ -60,6 +60,15 @@
   "No orders placed yet": "No orders placed yet",
   "✅ Reordered": "✅ Reordered",
 
+  "//": "Order confirmation popup",
+  "Confirm Order": "Confirm Order",
+  "Order Summary:": "Order Summary:",
+  "Total:": "Total:",
+  "Current Balance:": "Current Balance:",
+  "New Balance:": "New Balance:",
+  "Cancel": "Cancel",
+  "No items in the order. Please add some items before confirming.": "No items in the order. Please add some items before confirming.",
+
   "//": "Misc",
   "Undo": "Undo",
   "Redo": "Redo",
