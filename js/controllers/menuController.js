@@ -62,11 +62,21 @@ class MenuController {
     try {
       // Check stock availability for all items
       for (const item of items) {
+        // Log the storage model state to debug
+        console.log("Storage model state:", {
+          drinks: this.storageModel.drinks,
+          foods: this.storageModel.foods,
+          vip_drinks: this.storageModel.vip_drinks,
+          vip_foods: this.storageModel.vip_foods
+        });
+        
         const product =
           this.storageModel.drinks.find((b) => b.name === item.name) ||
           this.storageModel.foods.find((f) => f.name === item.name) ||
           this.storageModel.vip_drinks.find((v) => v.name === item.name) ||
           this.storageModel.vip_foods.find((v) => v.name === item.name);
+
+        console.log(`Checking stock for ${item.name}:`, product);
 
         if (!product) {
           alert(this.app.languageSwitcher.translate("Error: Product not found in inventory:") + item.name + ".");
@@ -114,16 +124,11 @@ class MenuController {
         );
         this.render();
       } else {
-        // Handle regular customer order
-        const order = this.orderModel.createOrder({
-          items: items,
-          tableNumber: userInfo.tableNumber,
-          isVIP: false,
-          totalAmount: totalAmount,
-        });
-
+        // Handle regular customer order - no need to create order here
+        // The order will be created after payment is complete
+        
         alert(
-          "Order confirmed! Your order will be delivered to your table shortly."
+          "Order confirmed! Please proceed to payment."
         );
       }
 
@@ -158,9 +163,17 @@ class MenuController {
     try {
       // Check stock availability for all items
       for (const item of items) {
+        // Log the storage model state to debug
+        console.log("Storage model state for regular customer order:", {
+          drinks: this.storageModel.drinks.length,
+          foods: this.storageModel.foods.length
+        });
+        
         const product = 
           this.storageModel.drinks.find(b => b.name === item.name) || 
           this.storageModel.foods.find(f => f.name === item.name);
+        
+        console.log(`Checking stock for ${item.name}:`, product);
         
         if (!product) {
           alert(`Error: Product "${item.name}" not found in inventory.`);
