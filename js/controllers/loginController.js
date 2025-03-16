@@ -21,47 +21,34 @@ class LoginController {
     await this.view.render(this);
   }
 
-  // Handle customer login
-  handleCustomerLogin(event) {
+  // Handle VIP customer login
+  handleVIPLogin(event) {
     event.preventDefault();
 
     // Get input values
     const tableNumber = $("#table-number").val();
-    const isVIP = $("#vip-toggle").is(":checked");
     const username = $("#username").val();
     const password = $("#password").val();
 
-    if (isVIP) {
-      // Authenticate VIP user
-      const user = this.model.authenticate(username, password);
-      console.log("VIP Login attempt:", { username, user });
-      if (user) {
-        console.log("VIP Login Successful:", user);
-        // Store user session data with all necessary VIP information
-        const userSessionData = {
-          username: user.username,
-          tableNumber: tableNumber,
-          balance: user.balance,
-          role: user.role,
-          isVIP: true,
-        };
-        console.log("Storing VIP session data:", userSessionData);
-        this.model.storeUserSession(userSessionData);
-        this.redirectToMenu();
-      } else {
-        alert("Invalid username or password.");
-      }
-    } else {
-      // Handle regular customer login
-      console.log("Customer Login:", { tableNumber });
-      // Store user session data
+    // Authenticate VIP user
+    const user = this.model.authenticate(username, password);
+    console.log("VIP Login attempt:", { username, user });
+    
+    if (user) {
+      console.log("VIP Login Successful:", user);
+      // Store user session data with all necessary VIP information
       const userSessionData = {
+        username: user.username,
         tableNumber: tableNumber,
-        isVIP: false,
+        balance: user.balance,
+        role: user.role,
+        isVIP: true,
       };
-      console.log("Storing customer session data:", userSessionData);
+      console.log("Storing VIP session data:", userSessionData);
       this.model.storeUserSession(userSessionData);
       this.redirectToMenu();
+    } else {
+      alert("Invalid username or password.");
     }
   }
 
@@ -75,17 +62,36 @@ class LoginController {
 
     // Authenticate employee user
     const user = this.model.authenticate(username, password);
-    if (user) {
+    if (user && user.role === "Bartender" || user.role === "Waiter") {
       console.log("Employee Login Successful:", user);
       // Store user session data
       this.model.storeUserSession({
         username: user.username,
         role: user.role,
       });
-      this.redirectToMenu();
+      
+      // Show regular customer login form
+      this.view.showRegularCustomerLogin();
     } else {
-      alert("Invalid username or password.");
+      alert("Invalid username or password or not an employee.");
     }
+  }
+
+  // Handle regular customer login (only accessible after employee login)
+  handleRegularCustomerLogin(event) {
+    event.preventDefault();
+
+    // Get input values
+    const tableNumber = $("#regular-table-number").val();
+
+    // Store user session data
+    const userSessionData = {
+      tableNumber: tableNumber,
+      isVIP: false,
+    };
+    console.log("Storing regular customer session data:", userSessionData);
+    this.model.storeUserSession(userSessionData);
+    this.redirectToMenu();
   }
 
   // Redirect to the menu view
