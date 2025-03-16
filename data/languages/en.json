@@ -76,7 +76,7 @@
   "Insufficient balance. Please add more funds to your account.": "Insufficient balance. Please add more funds to your account.",
   "Order confirmed! Your new balance is ${balance}": "Order confirmed! Your new balance is ${balance}",
   "Order confirmed! Your order will be delivered to your table shortly.": "Order confirmed! Your order will be delivered to your table shortly.",
-  "There was an error processing your order. Please try again.": "There was an error processing your order. Please try again."
+  "There was an error processing your order. Please try again.": "There was an error processing your order. Please try again.",
 
   "//": "Misc",
   "Undo": "Undo",
