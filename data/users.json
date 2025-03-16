@@ -18,5 +18,11 @@
       "username": "bartender",
       "password": "bar123",
       "role": "Bartender"
+    },
+    {
+      "id": 3,
+      "username": "waitress",
+      "password": "wait123",
+      "role": "Waitress"
     }
 ]
