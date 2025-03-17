@@ -115,7 +115,7 @@ class App {
     if (sessionData) {
       const userData = JSON.parse(sessionData);
       console.log("User data:", userData);
-      
+
       if (userData.isVIP === true) {
         // VIP user is logged in, hide menu
         $("#menuBtn").hide();

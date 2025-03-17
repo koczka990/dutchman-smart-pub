@@ -17,6 +17,14 @@
   "Table Number": "Table Number",
   "table-number-placeholder": "Enter table number",
   "vip-toggle": "VIP User",
+
+  "vip-login-heading": "VIP Customer Login",
+  "employee-link": "Are you an employee?",
+  "employee-login-heading": "Employee Login",
+  "vip-link": "VIP User Login",
+  "regular-customer-login-heading": "Regular Customer Login",
+  "back-to-employee": "Back to Employee Login", 
+
   "Username": "Username",
   "username-placeholder": "Enter username",
   "Password": "Password",
@@ -59,6 +67,11 @@
   "Recent Orders": "Recent Orders",
   "No orders placed yet": "No orders placed yet",
   "✅ Reordered": "✅ Reordered",
+  
+  "//": "Order view",
+  "all-orders": "All Orders",
+  "pending-orders": "Pending Orders",
+  "completed-orders": "Completed Orders",
 
   "//": "Order confirmation popup",
   "Confirm Order": "Confirm Order",
