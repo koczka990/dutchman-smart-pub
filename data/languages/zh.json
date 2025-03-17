@@ -17,6 +17,12 @@
   "Password": "密码",
   "password-placeholder": "请输入密码",
   "Login": "登录",
+  "vip-login-heading": "会员客户登录",
+  "employee-link": "你是员工吗？",
+  "employee-login-heading": "员工登录",
+  "vip-link": "返回会员登录",
+  "regular-customer-login-heading": "普通客户登录",
+  "back-to-employee": "返回员工登陆界面",
 
   "//": "Menu view",
   "menu-title": "产品",

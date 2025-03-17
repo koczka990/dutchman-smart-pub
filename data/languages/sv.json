@@ -17,6 +17,12 @@
   "Password": "Lösenord",
   "password-placeholder": "Ange lösenord",
   "Login": "Logga in",
+  "vip-login-heading": "VIP-kundinloggning",
+  "employee-link": "Är du anställd?",
+  "employee-login-heading": "Anställd inloggning",
+  "vip-link": "Tillbaka till VIP-inloggning",
+  "regular-customer-login-heading": "Vanlig kundinloggning",
+  "back-to-employee": "Tillbaka till anställd instrumentpanel",
 
   "//": "Menu view",
   "menu-title": "Produkter",
