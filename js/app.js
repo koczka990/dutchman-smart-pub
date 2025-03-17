@@ -10,7 +10,6 @@ import Database from "./models/database.js";
 
 // Utils
 import LanguageSwitcher from "./utils/languageSwitcher.js";
-import Constructor from "./views/constructor.js";
 
 class App {
   constructor() {
@@ -21,7 +20,6 @@ class App {
     this.paymentController = new PaymentController(this);
     this.orderController = new OrderController(this);
     this.languageSwitcher = new LanguageSwitcher();
-    this.constructor = new Constructor();
 
     this.init();
 
@@ -31,32 +29,8 @@ class App {
 
   // Initialize the index page
   init() {
-    this.loadContent();
     this.setupEventListeners();
     this.toggleMenuVisibility();
-  }
-
-  // Load the dynamic content of the index page.
-  // Also used when reloading.
-  // Don't forget to empty the content before loading new content
-  loadContent() {
-    // Populate language switcher options
-    const languageList = this.languageSwitcher.getLanguageList();
-    const currentLanguage = this.languageSwitcher.getCurrentLanguage();
-    const languageSwitcher = $("#languageSwitcher");
-    languageSwitcher.empty();
-    languageList.forEach((lang) => {
-      languageSwitcher.append(
-        this.constructor.createSelectOption(
-          lang,
-          lang,
-          lang === currentLanguage,
-          "",
-          "",
-          "lan-" + lang
-        )
-      );
-    });
   }
 
   setupEventListeners() {

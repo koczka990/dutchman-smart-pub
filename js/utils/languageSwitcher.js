@@ -1,3 +1,4 @@
+import Constructor from "./constructor.js";
 /* how to use:
     1. Create a new instance of LanguageSwitcher
     2. Use the setLanguage method to set the current language
@@ -14,12 +15,37 @@ class LanguageSwitcher {
   dictionaryDir;
 
   constructor() {
+    this.constructor = new Constructor();
     this.languageList = ["en", "sv", "zh"];
     this.defaultLanguage = "en";
     this.dictionaries = {};
     this.dictionaryDir = "data/languages/";
     this.setLanguage(this.defaultLanguage);
     this.loadDictionaries();
+    this.loadContent();
+  }
+
+  // Load the dynamic content of the index page.
+  // Also used when reloading.
+  // Don't forget to empty the content before loading new content
+  loadContent() {
+    // Populate language switcher options
+    const languageList = this.getLanguageList();
+    const currentLanguage = this.getCurrentLanguage();
+    const languageSwitcher = $("#languageSwitcher");
+    languageSwitcher.empty();
+    languageList.forEach((lang) => {
+      languageSwitcher.append(
+        this.constructor.createSelectOption(
+          lang,
+          lang,
+          lang === currentLanguage,
+          "",
+          "",
+          "lan-" + lang
+        )
+      );
+    });
   }
 
   // Load dictionary files synchronously
@@ -60,7 +86,10 @@ class LanguageSwitcher {
 
     if (this.dictionaries[lang] && this.dictionaries[lang][key]) {
       return this.dictionaries[lang][key];
-    } else if (this.dictionaries[defaultLang] && this.dictionaries[defaultLang][key]) {
+    } else if (
+      this.dictionaries[defaultLang] &&
+      this.dictionaries[defaultLang][key]
+    ) {
       return this.dictionaries[defaultLang][key];
     } else {
       console.error("Translation key not found:", key);
@@ -74,7 +103,10 @@ class LanguageSwitcher {
       let key = $(element).data("translate-key");
 
       // Translate different types of elements differently
-      if (element.tagName.toLowerCase() === "input" && $(element).attr("placeholder")) {
+      if (
+        element.tagName.toLowerCase() === "input" &&
+        $(element).attr("placeholder")
+      ) {
         $(element).attr("placeholder", this.translate(key));
       } else {
         $(element).html(this.translate(key));
