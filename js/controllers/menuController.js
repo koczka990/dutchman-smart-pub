@@ -122,7 +122,7 @@ class MenuController {
             parseFloat(userInfo.balance) - totalAmount
           ).toFixed(2)}`
         );
-        this.render();
+        this.app.loadView("menu");
       } else {
         // Handle regular customer order - no need to create order here
         // The order will be created after payment is complete
