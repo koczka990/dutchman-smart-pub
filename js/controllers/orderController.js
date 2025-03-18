@@ -5,7 +5,7 @@ class OrderController {
   constructor(app) {
     this.app = app;
     this.model = new OrderModel(app.database);
-    this.view = new OrderView();
+    this.view = new OrderView(this);
     this.init();
   }
 
