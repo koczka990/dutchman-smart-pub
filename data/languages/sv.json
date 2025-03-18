@@ -68,7 +68,11 @@
   "Current Balance:": "Nuvarande saldo:",
   "New Balance:": "Nytt saldo:",
   "Cancel": "Avbryt",
+
+  "//": "Alerts",
   "No items in the order. Please add some items before confirming.": "Inga artiklar i beställningen. Vänligen lägg till några artiklar innan du bekräftar.",
+  "Session error. Please log in again.": "Sessionsfel. Vänligen logga in igen.",
+  "Error: Product not found in inventory:": "Fel: Produkten hittades inte i lagret:",
 
   "//": "Misc",
   "Undo": "Ångra",

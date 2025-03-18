@@ -68,7 +68,11 @@
   "Current Balance:": "当前余额：",
   "New Balance:": "新余额：",
   "Cancel": "取消",
-  "No items in the order. Please add some items before confirming.": "订单中没有商品, 请在确认前添加一些商品。",
+
+  "//": "Alerts",
+  "No items in the order. Please add some items before confirming.": "订单中没有商品。请在确认前添加一些商品。",
+  "Session error. Please log in again.": "会话错误。请重新登录。",
+  "Error: Product not found in inventory:": "错误：库存中未找到产品：",
 
   "//": "Misc",
   "Undo": "撤销",
