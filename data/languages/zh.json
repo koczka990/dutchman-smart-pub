@@ -61,6 +61,11 @@
   "No orders placed yet": "尚未有订单",
   "✅ Reordered": "✅ 订购",
 
+  "//": "Order view",
+  "all-orders": "所有订单",
+  "pending-orders": "待处理订单",
+  "completed-orders": "已完成订单",
+
   "//": "Order confirmation popup",
   "Confirm Order": "确认订单",
   "Order Summary:": "订单摘要：",

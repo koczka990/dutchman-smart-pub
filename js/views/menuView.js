@@ -178,7 +178,7 @@ class MenuView {
     });
   }
 
-  setupOrderListDropZone(items) {
+  setupOrderListDropZone() {
     const orderList = document.getElementById("order-list");
 
     orderList.addEventListener("dragover", (event) => {
@@ -355,14 +355,20 @@ class MenuView {
     const orderList = document.getElementById("order-list").children;
 
     if (orderList.length === 0) {
-      alert(this.controller.app.languageSwitcher.translate("No items in the order. Please add some items before confirming."));
+      alert(
+        this.controller.app.languageSwitcher.translate(
+          "No items in the order. Please add some items before confirming."
+        )
+      );
       return;
     }
 
     let items = [];
     [...orderList].forEach((item) => {
       const itemName = item.dataset.name;
-      const quantity = parseInt(item.querySelector(".order-btn span").textContent);
+      const quantity = parseInt(
+        item.querySelector(".order-btn span").textContent
+      );
       const itemPrice = parseFloat(item.dataset.price || "0");
       items.push({ name: itemName, quantity, price: itemPrice });
     });
@@ -372,30 +378,59 @@ class MenuView {
     console.log("Confirming order with user info:", userInfo);
 
     // Calculate total amount
-    const totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const totalAmount = items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
 
     // Create and show confirmation popup
     const popup = document.createElement("div");
     popup.className = "order-confirmation-popup";
     popup.innerHTML = `
     <div class="popup-content">
-      <h2 data-translate-key="Confirm Order">${this.controller.app.languageSwitcher.translate("Confirm Order")}</h2>
+      <h2 data-translate-key="Confirm Order">${this.controller.app.languageSwitcher.translate(
+        "Confirm Order"
+      )}</h2>
       <div class="order-summary">
-        <h3 data-translate-key="Order Summary:">${this.controller.app.languageSwitcher.translate("Order Summary:")}</h3>
+        <h3 data-translate-key="Order Summary:">${this.controller.app.languageSwitcher.translate(
+          "Order Summary:"
+        )}</h3>
         <ul>
-          ${items.map(item => `
-            <li>${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}</li>
-          `).join("")}
+          ${items
+            .map(
+              (item) => `
+            <li>${item.name} x${item.quantity} - $${(
+                item.price * item.quantity
+              ).toFixed(2)}</li>
+          `
+            )
+            .join("")}
         </ul>
-        <p class="total"><span data-translate-key="Total:">${this.controller.app.languageSwitcher.translate("Total:")}</span> &nbsp;${totalAmount.toFixed(2)}</p>
-        ${userInfo.isVIP ? `
-          <p class="balance-info"><span data-translate-key="Current Balance:">${this.controller.app.languageSwitcher.translate("Current Balance:")}</span> &nbsp;$${parseFloat(userInfo.balance).toFixed(2)}</p>
-          <p class="new-balance"><span data-translate-key="New Balance:">${this.controller.app.languageSwitcher.translate("New Balance:")}</span> &nbsp;$${(parseFloat(userInfo.balance) - totalAmount).toFixed(2)}</p>
-        ` : ""}
+        <p class="total"><span data-translate-key="Total:">${this.controller.app.languageSwitcher.translate(
+          "Total:"
+        )}</span> &nbsp;${totalAmount.toFixed(2)}</p>
+        ${
+          userInfo.isVIP
+            ? `
+          <p class="balance-info"><span data-translate-key="Current Balance:">${this.controller.app.languageSwitcher.translate(
+            "Current Balance:"
+          )}</span> &nbsp;$${parseFloat(userInfo.balance).toFixed(2)}</p>
+          <p class="new-balance"><span data-translate-key="New Balance:">${this.controller.app.languageSwitcher.translate(
+            "New Balance:"
+          )}</span> &nbsp;$${(
+                parseFloat(userInfo.balance) - totalAmount
+              ).toFixed(2)}</p>
+        `
+            : ""
+        }
       </div>
       <div class="popup-buttons">
-        <button class="cancel-btn" data-translate-key="Cancel">${this.controller.app.languageSwitcher.translate("Cancel")}</button>
-        <button class="confirm-btn" data-translate-key="Confirm Order">${this.controller.app.languageSwitcher.translate("Confirm Order")}</button>
+        <button class="cancel-btn" data-translate-key="Cancel">${this.controller.app.languageSwitcher.translate(
+          "Cancel"
+        )}</button>
+        <button class="confirm-btn" data-translate-key="Confirm Order">${this.controller.app.languageSwitcher.translate(
+          "Confirm Order"
+        )}</button>
       </div>
     </div>
   `;
@@ -406,7 +441,7 @@ class MenuView {
       document.body.removeChild(popup);
     });
 
-    popup.querySelector('.confirm-btn').addEventListener('click', () => {
+    popup.querySelector(".confirm-btn").addEventListener("click", () => {
       if (userInfo.isVIP) {
         this.controller.handleConfirmOrder(items, userInfo);
         document.body.removeChild(popup);
@@ -449,46 +484,59 @@ class MenuView {
             detailsHTML += `
                 <p>
                   <strong data-translate-key="info-category-field">
-                    ${this.controller.app.languageSwitcher.translate("info-producer-field")}
+                    ${this.controller.app.languageSwitcher.translate(
+                      "info-producer-field"
+                    )}
                   </strong>
                   ${selectedItem.category || "N/A"}
                 </p>
                 <p>
                   <strong data-translate-key="info-producer-field">
-                    ${this.controller.app.languageSwitcher.translate("info-producer-field")}
+                    ${this.controller.app.languageSwitcher.translate(
+                      "info-producer-field"
+                    )}
                   </strong> 
                   ${selectedItem.producer || "N/A"}
                 </p>
                 <p>
                   <strong data-translate-key="info-packaging-field">
-                    ${this.controller.app.languageSwitcher.translate("info-packaging-field")}
+                    ${this.controller.app.languageSwitcher.translate(
+                      "info-packaging-field"
+                    )}
                   </strong> 
-                  ${selectedItem.packaging || "N/A"
-                }</p>
+                  ${selectedItem.packaging || "N/A"}</p>
                     `;
           } else {
             detailsHTML += `
               <p>
                 <strong data-translate-key="info-category-field">
-                  ${this.controller.app.languageSwitcher.translate("info-producer-field")}
+                  ${this.controller.app.languageSwitcher.translate(
+                    "info-producer-field"
+                  )}
                 </strong>
                 ${selectedItem.category || "N/A"}
               </p>
               <p>
                 <strong data-translate-key="info-country-field">
-                  ${this.controller.app.languageSwitcher.translate("info-country-field")}
+                  ${this.controller.app.languageSwitcher.translate(
+                    "info-country-field"
+                  )}
                 </strong>
                 ${selectedItem.countryoforigin || "N/A"}
               </p>
               <p>
                 <strong data-translate-key="info-strength-field">
-                  ${this.controller.app.languageSwitcher.translate("info-strength-field")}
+                  ${this.controller.app.languageSwitcher.translate(
+                    "info-strength-field"
+                  )}
                 </strong> 
                 ${selectedItem.alcoholstrength || "N/A"}
               </p>
               <p>
                 <strong data-translate-key="info-serving-size-field">
-                  ${this.controller.app.languageSwitcher.translate("info-serving-size-field")}
+                  ${this.controller.app.languageSwitcher.translate(
+                    "info-serving-size-field"
+                  )}
                 </strong> 
                 ${selectedItem.packaging || "N/A"}
               </p>

@@ -17,6 +17,7 @@
   "Table Number": "Table Number",
   "table-number-placeholder": "Enter table number",
   "vip-toggle": "VIP User",
+
   "Username": "Username",
   "username-placeholder": "Enter username",
   "Password": "Password",
@@ -65,6 +66,11 @@
   "Recent Orders": "Recent Orders",
   "No orders placed yet": "No orders placed yet",
   "✅ Reordered": "✅ Reordered",
+  
+  "//": "Order view",
+  "all-orders": "All Orders",
+  "pending-orders": "Pending Orders",
+  "completed-orders": "Completed Orders",
 
   "//": "Order confirmation popup",
   "Confirm Order": "Confirm Order",

@@ -60,6 +60,11 @@
   "Recent Orders": "Senaste beställningar",
   "No orders placed yet": "Inga beställningar lagda ännu",
   "✅ Reordered": "✅ Beställt igen",
+  
+  "//": "Order view",
+  "all-orders": "Alla Ordrar",
+  "pending-orders": "Väntande Ordrar",
+  "completed-orders": "Färdigställda Ordrar",
 
   "//": "Order confirmation popup",
   "Confirm Order": "Bekräfta beställning",
