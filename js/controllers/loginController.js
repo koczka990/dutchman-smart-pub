@@ -62,7 +62,7 @@ class LoginController {
 
     // Authenticate employee user
     const user = this.model.authenticate(username, password);
-    if (user && (user.role === "Bartender" || user.role === "Waitress")) {
+    if (user && (user.role === "Bartender" || user.role === "Waiter")) {
       console.log("Employee Login Successful:", user);
       // Store user session data
       this.model.storeUserSession({
