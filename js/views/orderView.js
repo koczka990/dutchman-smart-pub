@@ -1,5 +1,6 @@
 class OrderView {
-  constructor() {
+  constructor(controller) {
+    this.controller = controller;
     this.completeOrderCallback = null;
     this.currentFilter = 'all'; // Default filter
     this.allOrders = []; // Store all orders for filtering
@@ -74,7 +75,7 @@ class OrderView {
     container.innerHTML = ""; // Clear previous content
 
     if (orderData.length === 0) {
-      container.innerHTML = "<p class='no-orders-message'>No orders found.</p>";
+      container.innerHTML = `<p class="no-orders-message" data-translate-key="no-order-message">${this.controller.app.languageSwitcher.translate("no-order-message")}</p>`;
       return;
     }
 
@@ -85,20 +86,20 @@ class OrderView {
 
       // Add a complete button only for pending orders
       const completeButton = order.status === "pending" 
-        ? `<button class="complete-order-btn" data-order-id="${order.id}">Complete Order</button>` 
+        ? `<button class="complete-order-btn" data-order-id="${order.id}" data-translate-key="complete-order-btn">${this.controller.app.languageSwitcher.translate("complete-order-btn")}</button>`
         : '';
 
       orderCard.innerHTML = `
-          <h3>Table ${order.tableNumber} (${order.status})</h3>
+          <h3><span data-translate-key="table-number-field">${this.controller.app.languageSwitcher.translate("table-number-field")}</span> &nbsp;${order.tableNumber} (${order.status})</h3>
           <ul class="employee-order-list">
               ${order.items
                 .map((item) => `<li>${item.name} - ${item.quantity}</li>`)
                 .join("")}
           </ul>
-          <p><strong class="order-total">Total: $${
+          <p><strong class="order-total"><span data-translate-key="total-field">${this.controller.app.languageSwitcher.translate("total-field")}</span> &nbsp;$${
             order.totalAmount
           }</strong></p>
-          <small class="order-time">Ordered at: ${new Date(
+          <small class="order-time"><span data-translate-key="order-time">${this.controller.app.languageSwitcher.translate("order-time")}</span> &nbsp;${new Date(
             order.timestamp
           ).toLocaleString()}</small>
           ${completeButton}
