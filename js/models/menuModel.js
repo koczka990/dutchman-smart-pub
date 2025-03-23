@@ -40,7 +40,7 @@ class MenuModel {
     return this.drinks.map((drink) => ({
       name: drink.name,
       producer: drink.producer,
-      countryoforigin: drink.countryoforigin,
+      countryoforiginlandname: drink.countryoforiginlandname,
       category: drink.category,
       alcoholstrength: drink.alcoholstrength,
       packaging: drink.packaging,
@@ -69,7 +69,7 @@ class MenuModel {
     return this.vip_drinks.map((vipDrink) => ({
       name: vipDrink.name,
       producer: vipDrink.producer,
-      countryoforigin: vipDrink.countryoforigin,
+      countryoforiginlandname: vipDrink.countryoforiginlandname,
       category: vipDrink.category,
       alcoholstrength: vipDrink.alcoholstrength,
       packaging: vipDrink.packaging,
