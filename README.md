@@ -41,7 +41,9 @@ The Dutchman Smart Pub is a web application designed to modernize the pub experi
 ## Getting Started
 1. Clone the repository
 2. Open `index.html` in a modern web browser
-3. Log in with the provided credentials
+3. Log in with the provided credentials 
+ (Note that regular customers are not able to log in, an employee must be logged in first then enter the table 
+for regular customers)
 
 ## Development
 This project follows the Model-View-Controller (MVC) pattern:

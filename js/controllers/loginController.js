@@ -27,8 +27,8 @@ class LoginController {
 
     // Get input values
     const tableNumber = $("#table-number").val();
-    const username = $("#username").val();
-    const password = $("#password").val();
+    const username = $("#username").val().trim().toLowerCase();
+    const password = $("#password").val().trim().toLowerCase();
 
     // Authenticate VIP user
     const user = this.model.authenticate(username, password);
@@ -57,8 +57,8 @@ class LoginController {
     event.preventDefault();
 
     // Get input values
-    const username = $("#employee-username").val();
-    const password = $("#employee-password").val();
+    const username = $("#employee-username").val().trim().toLowerCase();
+    const password = $("#employee-password").val().trim().toLowerCase();
 
     // Authenticate employee user
     const user = this.model.authenticate(username, password);

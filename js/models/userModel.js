@@ -18,12 +18,16 @@ class UserModel {
   }
 
   async loadUsers() {
-    if (this.users.length > 0) return this.users; // Use cached users
+    if (this.users.length > 0) {
+      return this.users;
+    }
 
     try {
-      console.log("Loading users from localStorage");
+      console.log("Loading users");
       // Load users from localStorage using Database class
-      this.users = this.database.load("users") || [];
+      const response = await fetch("data/users.json");
+      this.users = await response.json();
+      console.log("this.users:", this.users);
       return this.users;
     } catch (error) {
       console.error("Error loading users:", error);
@@ -34,7 +38,7 @@ class UserModel {
   authenticate(username, password) {
     console.log("authenticating from user model");
     return this.users.find(
-      (user) => user.username === username && user.password === password
+      (user) => user.username.toLowerCase() === username && user.password.toLowerCase() === password
     );
   }
 
